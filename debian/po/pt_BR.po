@@ -1,0 +1,47 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dash\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-01-29 07:27+0100\n"
+"PO-Revision-Date: 2006-12-19 21:23-0200\n"
+"Last-Translator: André Luís Lopes <andrelop@debian.org>\n"
+"Language-Team: Debian-BR Project <debian-l10n-portuguese@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid "Install dash as /bin/sh?"
+msgstr "Instalar dash como /bin/sh?"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid ""
+"Bash is the default /bin/sh on a Debian system.  However, since the Debian "
+"policy requires all shell scripts using /bin/sh to be POSIX compliant, any "
+"shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX "
+"compliant, it can be used as /bin/sh.  You may wish to do this because dash "
+"is faster and smaller than bash."
+msgstr ""
+"O bash é o /bin/sh padrão em um sistema Debian. Porém, uma vez que nossa "
+"política requer que todos os scripts shell usando /bin/sh sejam compatíveis "
+"com o padrão POSIX, qualquer shell que esteja em conformidade com o padrão "
+"POSIX pode servir como /bin/sh. Uma vez que o dash é compatível com o padrão "
+"POSIX, o mesmo pode ser usado como /bin/sh. Você pode desejar usar o dash "
+"devido ao mesmo ser mais rápido e menor que o bash."

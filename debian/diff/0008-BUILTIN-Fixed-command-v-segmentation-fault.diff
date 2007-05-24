@@ -1,0 +1,61 @@
+From 7035bdb3cfd26abe25c09b6845e2ea691ad82ccc Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 22 Oct 2006 19:55:00 +1000
+Subject: [PATCH] [BUILTIN] Fixed command -v segmentation fault
+
+On Sat, Oct 21, 2006 at 02:19:18PM +0000, Gerrit Pape wrote:
+> Hi Herbert, please see
+>  http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=387458
+>
+> On Thu, Sep 14, 2006 at 03:50:02PM +0200, Julien Danjou wrote:
+> > I just found this bug which is easily reproductible:
+> >
+> > % dash -c 'command -v'
+> > zsh: segmentation fault  dash -c 'command -v'
+
+Since bash's behaviour is minimalist here, I've decided to adopt its
+behaviour here as well which is to return success silently.
+---
+ ChangeLog  |    4 ++++
+ src/exec.c |    6 ++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index a4db7de..ecaff93 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2006-10-22  Gerrit Pape <pape@smarden.org>
++
++	* Fixed command -v segmentation fault.
++
+ 2006-10-13  Alexey Gladkov <legion@altlinux.org>
+ 
+ 	* Check return code for getgroups and fwrite.
+diff --git a/src/exec.c b/src/exec.c
+index 417ba8a..c55683d 100644
+--- a/src/exec.c
++++ b/src/exec.c
+@@ -846,6 +846,7 @@ commandcmd(argc, argv)
+ 	int argc;
+ 	char **argv;
+ {
++	char *cmd;
+ 	int c;
+ 	enum {
+ 		VERIFY_BRIEF = 1,
+@@ -862,8 +863,9 @@ #ifdef DEBUG
+ 			abort();
+ #endif
+ 
+-	if (verify)
+-		return describe_command(out1, *argptr, verify - VERIFY_BRIEF);
++	cmd = *argptr;
++	if (verify && cmd)
++		return describe_command(out1, cmd, verify - VERIFY_BRIEF);
+ 
+ 	return 0;
+ }
+-- 
+1.4.3.1
+

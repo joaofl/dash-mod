@@ -1,0 +1,64 @@
+From 13537aaa484b1f3ea914c0dc4f71070602003880 Mon Sep 17 00:00:00 2001
+From: Alexey Gladkov <legion@altlinux.org>
+Date: Tue, 23 May 2006 20:52:23 +1000
+Subject: [PATCH] [BUILD] Added --with-libedit option to configure
+
+Add to the configure.ac new option:
+--with-libedit - Compile with libedit support.
+---
+ ChangeLog       |    4 ++++
+ configure.ac    |   13 +++++++++++++
+ src/Makefile.am |    2 +-
+ 3 files changed, 18 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 7e71afc..9970489 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2006-05-23  Alexey Gladkov <legion@altlinux.org>
++
++	* Added --with-libedit option to configure.
++
+ 2006-03-29  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Removed useless parsebackquote flag.
+diff --git a/configure.ac b/configure.ac
+index 9bd021b..01cac17 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -42,5 +42,18 @@ AC_CHECK_FUNC(stat64,, [
+ 	AC_DEFINE(open64, open, [64-bit operations are the same as 32-bit])
+ ])
+ 
++AC_ARG_WITH(libedit, AS_HELP_STRING(--with-libedit, [Compile with libedit support]))
++use_libedit=
++if test "$with_libedit" = "yes"; then
++	AC_CHECK_LIB(edit, history_init, [
++		AC_CHECK_HEADER([histedit.h], [use_libedit="yes"],
++				AC_MSG_ERROR(
++					[Can't find required header files.]))])
++fi
++if test "$use_libedit" != "yes"; then
++	AC_DEFINE([SMALL], 1, [Define if you build with -DSMALL])
++else
++	export LIBS="$LIBS -ledit"
++fi
+ AC_CONFIG_FILES([Makefile src/Makefile])
+ AC_OUTPUT
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 0fe4db1..37d6d3c 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -3,7 +3,7 @@ AM_YFLAGS = -d
+ COMMON_CFLAGS = -Wall
+ COMMON_CPPFLAGS = \
+ 	-include $(top_builddir)/config.h \
+-	-DBSD=1 -DSMALL -DSHELL \
++	-DBSD=1 -DSHELL \
+ 	-DGLOB_BROKEN -DFNMATCH_BROKEN -DIFS_BROKEN
+ 
+ AM_CFLAGS = $(COMMON_CFLAGS)
+-- 
+1.4.3.1
+

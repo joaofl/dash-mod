@@ -1,0 +1,38 @@
+# dash -- Italian debconf messages
+# This file is distributed under the same license as the dash package.
+# Andrea Bolognani <eof@kiyuko.org>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dash 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-01-29 07:27+0100\n"
+"PO-Revision-Date: 2006-03-01 14:28+0200\n"
+"Last-Translator: Andrea Bolognani <eof@kiyuko.org>\n"
+"Language-Team: Italian <it@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid "Install dash as /bin/sh?"
+msgstr "Installare dash come /bin/sh?"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+#, fuzzy
+msgid ""
+"Bash is the default /bin/sh on a Debian system.  However, since the Debian "
+"policy requires all shell scripts using /bin/sh to be POSIX compliant, any "
+"shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX "
+"compliant, it can be used as /bin/sh.  You may wish to do this because dash "
+"is faster and smaller than bash."
+msgstr ""
+"Bash è la shell di default in un sistema Debian. Tuttavia, dal momento che "
+"la nostra policy richiede che gli script della shell che usano /bin/sh siano "
+"conformi a POSIX, ogni shell che sia conforme a POSIX può essere usata come /"
+"bin/sh. Siccome dash è conforme a POSIX, può essere usata come /bin/sh. "
+"Potresti volerla usare perchè è più piccola e veloce di bash."

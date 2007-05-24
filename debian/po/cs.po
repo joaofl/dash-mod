@@ -1,0 +1,35 @@
+# Czech translation of dash templates
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dash\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-01-29 07:27+0100\n"
+"PO-Revision-Date: 2007-01-29 08:45+0100\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid "Install dash as /bin/sh?"
+msgstr "Nainstalovat dash jako /bin/sh?"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid ""
+"Bash is the default /bin/sh on a Debian system.  However, since the Debian "
+"policy requires all shell scripts using /bin/sh to be POSIX compliant, any "
+"shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX "
+"compliant, it can be used as /bin/sh.  You may wish to do this because dash "
+"is faster and smaller than bash."
+msgstr ""
+"V Debianu je jako výchozí /bin/sh nastaven bash. Protože však naše politika "
+"vyžaduje, aby byly všechny shellové skripty využívající /bin/sh kompatibilní "
+"s POSIXem, můžete jako /bin/sh použít jakýkoliv shell splňující normu POSIX. "
+"Protože dash tuto normu splňuje, může být použit jako /bin/sh, což stojí za "
+"vyzkoušení, protože dash je rychlejší a menší než bash."

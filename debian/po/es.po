@@ -1,0 +1,35 @@
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: dash 0.4.18\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-01-29 07:27+0100\n"
+"PO-Revision-Date: 2006-12-08 23:49+0100\n"
+"Last-Translator: Fernando Cerezal López <kryptos21@gmail.com>\n"
+"Language-Team: Debian L10n Spanish <debian-l10n-spanish@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid "Install dash as /bin/sh?"
+msgstr "¿Instalar dash como /bin/sh?"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid ""
+"Bash is the default /bin/sh on a Debian system.  However, since the Debian "
+"policy requires all shell scripts using /bin/sh to be POSIX compliant, any "
+"shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX "
+"compliant, it can be used as /bin/sh.  You may wish to do this because dash "
+"is faster and smaller than bash."
+msgstr ""
+"Bash es el intérprete de órdenes /bin/sh predeterminado de los sistemas "
+"Debian. Sin embargo, dado que nuestras normas obligan a que todos los "
+"scripts para el intérprete de órdenes se atengan a las normas POSIX, "
+"cualquier intérprete compatible con POSIX puede servir como /bin/sh. Puesto "
+"que dash lo es, puede usarse como /bin/sh, con la ventaja de ser más rápido "
+"y pequeño que bash."

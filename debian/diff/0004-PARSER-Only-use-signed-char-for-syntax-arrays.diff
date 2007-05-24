@@ -1,0 +1,491 @@
+From d8014392bc291504997c65b3b44a7f21a60b0e07 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 23 Apr 2006 16:01:05 +1000
+Subject: [PATCH] [PARSER] Only use signed char for syntax arrays
+
+The existing scheme of using the native char for syntax array indicies
+makes cross-compiling difficult.  Therefore it makes sense to choose
+one specific sign for everyone.
+
+Since signed chars are native to most platforms and i386, it makes more
+sense to use that if we are to choose one type for everyone.
+---
+ ChangeLog      |    1 +
+ src/expand.c   |   32 ++++++++--------
+ src/input.c    |    4 +-
+ src/input.h    |    3 +-
+ src/jobs.c     |    3 +-
+ src/mksyntax.c |  108 +++++++------------------------------------------------
+ src/parser.c   |    2 +-
+ src/parser.h   |   20 +++++-----
+ src/show.c     |    4 +-
+ 9 files changed, 50 insertions(+), 127 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 6295fe9..7e71afc 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -2,6 +2,7 @@
+ 
+ 	* Removed useless parsebackquote flag.
+ 	* Use alloca to get rid of setjmp in parse.c.
++	* Only use signed char for syntax arrays.
+ 
+ 2006-01-12  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/expand.c b/src/expand.c
+index dafb51f..cf64921 100644
+--- a/src/expand.c
++++ b/src/expand.c
+@@ -171,7 +171,7 @@ STATIC size_t
+ esclen(const char *start, const char *p) {
+ 	size_t esc = 0;
+ 
+-	while (p > start && *--p == CTLESC) {
++	while (p > start && *--p == (char)CTLESC) {
+ 		esc++;
+ 	}
+ 	return esc;
+@@ -296,7 +296,7 @@ argstr(char *p, int flag)
+ 		flag &= ~EXP_TILDE;
+ tilde:
+ 		q = p;
+-		if (*q == CTLESC && (flag & EXP_QWORD))
++		if (*q == (char)CTLESC && (flag & EXP_QWORD))
+ 			q++;
+ 		if (*q == '~')
+ 			p = exptilde(p, q, flag);
+@@ -305,7 +305,7 @@ start:
+ 	startloc = expdest - (char *)stackblock();
+ 	for (;;) {
+ 		length += strcspn(p + length, reject);
+-		c = p[length];
++		c = (signed char)p[length];
+ 		if (c && (!(c & 0x80) || c == CTLENDARI)) {
+ 			/* c == '=' || c == ':' || c == CTLENDARI */
+ 			length++;
+@@ -352,9 +352,9 @@ start:
+ 			if (
+ 				!inquotes &&
+ 				!memcmp(p, dolatstr, DOLATSTRLEN) &&
+-				(p[4] == CTLQUOTEMARK || (
+-					p[4] == CTLENDVAR &&
+-					p[5] == CTLQUOTEMARK
++				(p[4] == (char)CTLQUOTEMARK || (
++					p[4] == (char)CTLENDVAR &&
++					p[5] == (char)CTLQUOTEMARK
+ 				))
+ 			) {
+ 				p = evalvar(p + 1, flag) + 1;
+@@ -394,7 +394,7 @@ breakloop:
+ STATIC char *
+ exptilde(char *startp, char *p, int flag)
+ {
+-	char c;
++	signed char c;
+ 	char *name;
+ 	const char *home;
+ 	int quotes = flag & QUOTES_ESC;
+@@ -503,7 +503,7 @@ expari(int quotes)
+ 	do {
+ 		int esc;
+ 
+-		while (*p != CTLARI) {
++		while (*p != (char)CTLARI) {
+ 			p--;
+ #ifdef DEBUG
+ 			if (p < start) {
+@@ -626,7 +626,7 @@ scanleft(
+ 		*loc2 = c;
+ 		if (match)
+ 			return loc;
+-		if (quotes && *loc == CTLESC)
++		if (quotes && *loc == (char)CTLESC)
+ 			loc++;
+ 		loc++;
+ 		loc2++;
+@@ -860,7 +860,7 @@ end:
+ 	if (subtype != VSNORMAL) {	/* skip to end of alternative */
+ 		int nesting = 1;
+ 		for (;;) {
+-			if ((c = *p++) == CTLESC)
++			if ((c = (signed char)*p++) == CTLESC)
+ 				p++;
+ 			else if (c == CTLBACKQ || c == (CTLBACKQ|CTLQUOTE)) {
+ 				if (varlen >= 0)
+@@ -892,7 +892,7 @@ memtodest(const char *p, size_t len, con
+ 	q = makestrspace(len * 2, expdest);
+ 
+ 	do {
+-		int c = (unsigned char)*p++;
++		int c = (signed char)*p++;
+ 		if (c) {
+ 			if ((quotes & QUOTES_ESC) &&
+ 			    (syntax[c] == CCTL || syntax[c] == CBACK))
+@@ -1078,7 +1078,7 @@ ifsbreakup(char *string, struct arglist 
+ 			ifsspc = 0;
+ 			while (p < string + ifsp->endoff) {
+ 				q = p;
+-				if (*p == CTLESC)
++				if (*p == (char)CTLESC)
+ 					p++;
+ 				if (strchr(ifs, *p)) {
+ 					if (!nulonly)
+@@ -1101,7 +1101,7 @@ ifsbreakup(char *string, struct arglist 
+ 								break;
+ 							}
+ 							q = p;
+-							if (*p == CTLESC)
++							if (*p == (char)CTLESC)
+ 								p++;
+ 							if (strchr(ifs, *p) == NULL ) {
+ 								p = q;
+@@ -1658,7 +1658,7 @@ _rmescapes(char *str, int flag)
+ 	globbing = flag & RMESCAPE_GLOB;
+ 	notescaped = globbing;
+ 	while (*p) {
+-		if (*p == CTLQUOTEMARK) {
++		if (*p == (char)CTLQUOTEMARK) {
+ 			inquotes = ~inquotes;
+ 			p++;
+ 			notescaped = globbing;
+@@ -1669,7 +1669,7 @@ _rmescapes(char *str, int flag)
+ 			notescaped = 0;
+ 			goto copy;
+ 		}
+-		if (*p == CTLESC) {
++		if (*p == (char)CTLESC) {
+ 			p++;
+ 			if (notescaped && inquotes && *p != '/') {
+ 				*q++ = '\\';
+@@ -1734,7 +1734,7 @@ varunset(const char *end, const char *va
+ 	tail = nullstr;
+ 	msg = "parameter not set";
+ 	if (umsg) {
+-		if (*end == CTLENDVAR) {
++		if (*end == (char)CTLENDVAR) {
+ 			if (varflags & VSNUL)
+ 				tail = " or null";
+ 		} else
+diff --git a/src/input.c b/src/input.c
+index 639c023..057da71 100644
+--- a/src/input.c
++++ b/src/input.c
+@@ -263,7 +263,7 @@ #endif
+ 		}
+ 		popstring();
+ 		if (--parsenleft >= 0)
+-			return (*parsenextc++);
++			return (signed char)*parsenextc++;
+ 	}
+ 	if (unlikely(parsenleft == EOF_NLEFT || parsefile->buf == NULL))
+ 		return PEOF;
+@@ -346,7 +346,7 @@ #endif
+ 
+ 	*q = savec;
+ 
+-	return *parsenextc++;
++	return (signed char)*parsenextc++;
+ }
+ 
+ /*
+diff --git a/src/input.h b/src/input.h
+index 7675653..1ed9ddf 100644
+--- a/src/input.h
++++ b/src/input.h
+@@ -64,4 +64,5 @@ void popfile(void);
+ void popallfiles(void);
+ void closescript(void);
+ 
+-#define pgetc_macro()	(--parsenleft >= 0? *parsenextc++ : preadbuffer())
++#define pgetc_macro() \
++	(--parsenleft >= 0 ? (signed char)*parsenextc++ : preadbuffer())
+diff --git a/src/jobs.c b/src/jobs.c
+index 0113354..9e28adb 100644
+--- a/src/jobs.c
++++ b/src/jobs.c
+@@ -1357,8 +1357,9 @@ STATIC void
+ cmdputs(const char *s)
+ {
+ 	const char *p, *str;
+-	char c, cc[2] = " ";
++	char cc[2] = " ";
+ 	char *nextc;
++	signed char c;
+ 	int subtype = 0;
+ 	int quoted = 0;
+ 	static const char vstype[VSTYPE + 1][4] = {
+diff --git a/src/mksyntax.c b/src/mksyntax.c
+index 5e65bdd..7a8a9ae 100644
+--- a/src/mksyntax.c
++++ b/src/mksyntax.c
+@@ -92,34 +92,20 @@ static char writer[] = "\
+ static FILE *cfile;
+ static FILE *hfile;
+ static char *syntax[513];
+-static int base;
+-static int size;	/* number of values which a char variable can have */
+-static int nbits;	/* number of bits in a character */
+-static int digit_contig;/* true if digits are contiguous */
+ 
+ static void filltable(char *);
+ static void init(void);
+ static void add(char *, char *);
+ static void print(char *);
+-static void output_type_macros(int);
+-static void digit_convert(void);
++static void output_type_macros(void);
+ int main(int, char **);
+ 
+ int
+ main(int argc, char **argv)
+ {
+-#ifdef	TARGET_CHAR
+-	TARGET_CHAR c;
+-	TARGET_CHAR d;
+-#else
+-	char c;
+-	char d;
+-#endif
+-	int sign;
+ 	int i;
+ 	char buf[80];
+ 	int pos;
+-	static char digit[] = "0123456789";
+ 
+ 	/* Create output files */
+ 	if ((cfile = fopen("syntax.c", "w")) == NULL) {
+@@ -133,32 +119,6 @@ #endif
+ 	fputs(writer, hfile);
+ 	fputs(writer, cfile);
+ 
+-	/* Determine the characteristics of chars. */
+-	c = -1;
+-	if (c <= 0)
+-		sign = 1;
+-	else
+-		sign = 0;
+-	for (nbits = 1 ; ; nbits++) {
+-		d = (1 << nbits) - 1;
+-		if (d == c)
+-			break;
+-	}
+-	printf("%s %d bit chars\n", sign? "signed" : "unsigned", nbits);
+-	if (nbits > 9) {
+-		fputs("Characters can't have more than 9 bits\n", stderr);
+-		exit(2);
+-	}
+-	size = (1 << nbits) + 1;
+-	base = 2;
+-	if (sign)
+-		base += 1 << (nbits - 1);
+-	digit_contig = 1;
+-	for (i = 0 ; i < 10 ; i++) {
+-		if (digit[i] != '0' + i)
+-			digit_contig = 0;
+-	}
+-
+ 	fputs("#include <ctype.h>\n", hfile);
+ 	fputs("\n", hfile);
+ 	fputs("#ifdef CEOF\n", hfile);
+@@ -185,16 +145,16 @@ #endif
+ 		fprintf(hfile, "/* %s */\n", is_entry[i].comment);
+ 	}
+ 	putc('\n', hfile);
+-	fprintf(hfile, "#define SYNBASE %d\n", base);
+-	fprintf(hfile, "#define PEOF %d\n\n", -base);
+-	fprintf(hfile, "#define PEOA %d\n\n", -base + 1);
++	fprintf(hfile, "#define SYNBASE %d\n", 130);
++	fprintf(hfile, "#define PEOF %d\n\n", -130);
++	fprintf(hfile, "#define PEOA %d\n\n", -129);
+ 	putc('\n', hfile);
+ 	fputs("#define BASESYNTAX (basesyntax + SYNBASE)\n", hfile);
+ 	fputs("#define DQSYNTAX (dqsyntax + SYNBASE)\n", hfile);
+ 	fputs("#define SQSYNTAX (sqsyntax + SYNBASE)\n", hfile);
+ 	fputs("#define ARISYNTAX (arisyntax + SYNBASE)\n", hfile);
+ 	putc('\n', hfile);
+-	output_type_macros(sign);		/* is_digit, etc. */
++	output_type_macros();		/* is_digit, etc. */
+ 	putc('\n', hfile);
+ 
+ 	/* Generate the syntax tables. */
+@@ -248,8 +208,6 @@ #endif
+ 	add("_", "ISUNDER");
+ 	add("#?$!-*@", "ISSPECL");
+ 	print("is_type");
+-	if (! digit_contig)
+-		digit_convert();
+ 	exit(0);
+ 	/* NOTREACHED */
+ }
+@@ -265,7 +223,7 @@ filltable(char *dftval)
+ {
+ 	int i;
+ 
+-	for (i = 0 ; i < size ; i++)
++	for (i = 0 ; i < 257; i++)
+ 		syntax[i] = dftval;
+ }
+ 
+@@ -283,11 +241,7 @@ init(void)
+ 	syntax[0] = "CEOF";
+ 	syntax[1] = "CIGN";
+ 	for (ctl = CTL_FIRST; ctl <= CTL_LAST; ctl++ )
+-#ifdef TARGET_CHAR
+-		syntax[base + (TARGET_CHAR)ctl ] = "CCTL";
+-#else
+-		syntax[base + ctl] = "CCTL";
+-#endif /* TARGET_CHAR */
++		syntax[130 + ctl] = "CCTL";
+ }
+ 
+ 
+@@ -299,7 +253,7 @@ static void
+ add(char *p, char *type)
+ {
+ 	while (*p)
+-		syntax[*p++ + base] = type;
++		syntax[(signed char)*p++ + 130] = type;
+ }
+ 
+ 
+@@ -315,9 +269,9 @@ print(char *name)
+ 	int col;
+ 
+ 	fprintf(hfile, "extern const char %s[];\n", name);
+-	fprintf(cfile, "const char %s[%d] = {\n", name, size);
++	fprintf(cfile, "const char %s[%d] = {\n", name, 257);
+ 	col = 0;
+-	for (i = 0 ; i < size ; i++) {
++	for (i = 0 ; i < 257; i++) {
+ 		if (i == 0) {
+ 			fputs("      ", cfile);
+ 		} else if ((i & 03) == 0) {
+@@ -342,7 +296,7 @@ print(char *name)
+  */
+ 
+ static char *macro[] = {
+-	"#define is_digit(c)\t((is_type+SYNBASE)[(signed char)(c)] & ISDIGIT)\n",
++	"#define is_digit(c)\t((unsigned)((c) - '0') <= 9)\n",
+ 	"#define is_alpha(c)\tisalpha((unsigned char)(c))\n",
+ 	"#define is_name(c)\t((c) == '_' || isalpha((unsigned char)(c)))\n",
+ 	"#define is_in_name(c)\t((c) == '_' || isalnum((unsigned char)(c)))\n",
+@@ -351,45 +305,11 @@ static char *macro[] = {
+ };
+ 
+ static void
+-output_type_macros(int sign)
++output_type_macros(void)
+ {
+ 	char **pp;
+ 
+-	if (digit_contig)
+-		macro[0] = "#define is_digit(c)\t((unsigned)((c) - '0') <= 9)\n";
+ 	for (pp = macro ; *pp ; pp++)
+-		fprintf(hfile, *pp, sign ? "char" : "unsigned char");
+-	if (digit_contig)
+-		fputs("#define digit_val(c)\t((c) - '0')\n", hfile);
+-	else
+-		fputs("#define digit_val(c)\t(digit_value[(unsigned char)(c)])\n", hfile);
+-}
+-
+-
+-
+-/*
+- * Output digit conversion table (if digits are not contiguous).
+- */
+-
+-static void
+-digit_convert(void)
+-{
+-	int maxdigit;
+-	static char digit[] = "0123456789";
+-	char *p;
+-	int i;
+-
+-	maxdigit = 0;
+-	for (p = digit ; *p ; p++)
+-		if (*p > maxdigit)
+-			maxdigit = *p;
+-	fputs("extern const char digit_value[];\n", hfile);
+-	fputs("\n\nconst char digit_value[] = {\n", cfile);
+-	for (i = 0 ; i <= maxdigit ; i++) {
+-		for (p = digit ; *p && *p != i ; p++);
+-		if (*p == '\0')
+-			p = digit;
+-		fprintf(cfile, "      %ld,\n", (long)(p - digit));
+-	}
+-	fputs("};\n", cfile);
++		fputs(*pp, hfile);
++	fputs("#define digit_val(c)\t((c) - '0')\n", hfile);
+ }
+diff --git a/src/parser.c b/src/parser.c
+index 4362f6a..deea702 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -1414,7 +1414,7 @@ STATIC int
+ noexpand(char *text)
+ {
+ 	char *p;
+-	char c;
++	signed char c;
+ 
+ 	p = text;
+ 	while ((c = *p++) != '\0') {
+diff --git a/src/parser.h b/src/parser.h
+index fa58ed7..d0cf440 100644
+--- a/src/parser.h
++++ b/src/parser.h
+@@ -35,17 +35,17 @@
+  */
+ 
+ /* control characters in argument strings */
+-#define CTL_FIRST '\201'	/* first 'special' character */
+-#define CTLESC '\201'		/* escape next character */
+-#define CTLVAR '\202'		/* variable defn */
+-#define CTLENDVAR '\203'
+-#define CTLBACKQ '\204'
++#define CTL_FIRST -127		/* first 'special' character */
++#define CTLESC -127		/* escape next character */
++#define CTLVAR -126		/* variable defn */
++#define CTLENDVAR -125
++#define CTLBACKQ -124
+ #define CTLQUOTE 01		/* ored with CTLBACKQ code if in quotes */
+-/*	CTLBACKQ | CTLQUOTE == '\205' */
+-#define	CTLARI	'\206'		/* arithmetic expression */
+-#define	CTLENDARI '\207'
+-#define	CTLQUOTEMARK '\210'
+-#define	CTL_LAST '\210'		/* last 'special' character */
++/*	CTLBACKQ | CTLQUOTE == 133 */
++#define	CTLARI -122		/* arithmetic expression */
++#define	CTLENDARI -121
++#define	CTLQUOTEMARK -120
++#define	CTL_LAST -120		/* last 'special' character */
+ 
+ /* variable substitution byte (follows CTLVAR) */
+ #define VSTYPE	0x0f		/* type of variable substitution */
+diff --git a/src/show.c b/src/show.c
+index 05af328..1b58de1 100644
+--- a/src/show.c
++++ b/src/show.c
+@@ -165,7 +165,7 @@ sharg(union node *arg, FILE *fp)
+ 	}
+ 	bqlist = arg->narg.backquote;
+ 	for (p = arg->narg.text ; *p ; p++) {
+-		switch (*p) {
++		switch ((signed char)*p) {
+ 		case CTLESC:
+ 			putc(*++p, fp);
+ 			break;
+@@ -306,7 +306,7 @@ trstring(char *s)
+ 		return;
+ 	putc('"', tracefile);
+ 	for (p = s ; *p ; p++) {
+-		switch (*p) {
++		switch ((signed char)*p) {
+ 		case '\n':  c = 'n';  goto backslash;
+ 		case '\t':  c = 't';  goto backslash;
+ 		case '\r':  c = 'r';  goto backslash;
+-- 
+1.4.3.1
+
