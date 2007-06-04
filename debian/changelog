@@ -1,4 +1,4 @@
-dash (0.5.3-7.1) unstable; urgency=low
+dash (0.5.3-8) unstable; urgency=low
 
   * debian/diff/0009..0017-*.diff: new; from upstream master branch.
     * 0009-BUILTIN-Fix-mkbuiltin-sort-order.diff: Fix mkbuiltin sort
@@ -8,7 +8,7 @@ dash (0.5.3-7.1) unstable; urgency=low
   * debian/po/it.po: [INTL:it] Italian debconf templates translation
     (thx Luca Monducci; closes: #418174).
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 04 Jun 2007 09:53:47 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 04 Jun 2007 18:46:04 +0000
 
 dash (0.5.3-7) unstable; urgency=medium
 
