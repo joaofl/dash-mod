@@ -5,8 +5,10 @@ dash (0.5.3-7.1) unstable; urgency=low
       order (closes: #415119).
     * 0016-REDIR-Fix-redirect-restore-on-saved-file-descriptor.diff:
       Fix redirect restore on saved file descriptors (closes: #357091).
+  * debian/po/it.po: [INTL:it] Italian debconf templates translation
+    (thx Luca Monducci; closes: #418174).
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 04 Jun 2007 09:53:01 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 04 Jun 2007 09:53:47 +0000
 
 dash (0.5.3-7) unstable; urgency=medium
 
