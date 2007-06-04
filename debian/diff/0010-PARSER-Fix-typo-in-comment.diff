@@ -1,0 +1,39 @@
+From 17597c644c414ad67f30ea25de93bba9b61a3b6c Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 5 May 2007 17:57:18 +1000
+Subject: [PATCH] [PARSER] Fix typo in comment
+
+The value for CTLBACKQ | CTLQUOTE is now -123, not 133.
+---
+ ChangeLog    |    4 ++++
+ src/parser.h |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 1867b7a..1b91c8c 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-05-05  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fixed typo in parser.h comment.
++
+ 2007-04-28  Dan Nicholson <dbn.lists@gmail.com>
+ 
+ 	* Set LC_COLLATE for sort in mkbuiltin.
+diff --git a/src/parser.h b/src/parser.h
+index d0cf440..76ec839 100644
+--- a/src/parser.h
++++ b/src/parser.h
+@@ -41,7 +41,7 @@
+ #define CTLENDVAR -125
+ #define CTLBACKQ -124
+ #define CTLQUOTE 01		/* ored with CTLBACKQ code if in quotes */
+-/*	CTLBACKQ | CTLQUOTE == 133 */
++/*	CTLBACKQ | CTLQUOTE == -123 */
+ #define	CTLARI -122		/* arithmetic expression */
+ #define	CTLENDARI -121
+ #define	CTLQUOTEMARK -120
+-- 
+1.5.2.1
+

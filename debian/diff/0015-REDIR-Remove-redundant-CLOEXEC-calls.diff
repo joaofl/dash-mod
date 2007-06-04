@@ -1,0 +1,104 @@
+From 5abe895bd25a9e07b7d98617d145dbf048e44a21 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 6 May 2007 19:28:56 +1000
+Subject: [PATCH] [REDIR] Remove redundant CLOEXEC calls
+
+Now that we're marking file descriptors as CLOEXEC in savefd, we no longer
+need to close them on exec or in setinputfd.
+---
+ ChangeLog   |    1 +
+ src/exec.c  |    1 -
+ src/input.c |    1 -
+ src/redir.c |   19 ++++++-------------
+ src/redir.h |    2 +-
+ 5 files changed, 8 insertions(+), 16 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index a7635fb..ccf8e2d 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -4,6 +4,7 @@
+ 	* Invoke sh_error on error in copyfd.
+ 	* Use dup2 instead of copyfd in evalbackcmd.
+ 	* Replace copyfd by savefd and dup2.
++	* Removed redundant CLOEXEC calls.
+ 
+ 2007-05-05  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/exec.c b/src/exec.c
+index c55683d..8a1f722 100644
+--- a/src/exec.c
++++ b/src/exec.c
+@@ -110,7 +110,6 @@ shellexec(char **argv, const char *path, int idx)
+ 	char **envp;
+ 	int exerrno;
+ 
+-	clearredir(1);
+ 	envp = environment();
+ 	if (strchr(argv[0], '/') != NULL) {
+ 		tryexec(argv[0], argv, envp);
+diff --git a/src/input.c b/src/input.c
+index 7f99d4a..11f7a3f 100644
+--- a/src/input.c
++++ b/src/input.c
+@@ -452,7 +452,6 @@ out:
+ void
+ setinputfd(int fd, int push)
+ {
+-	(void) fcntl(fd, F_SETFD, FD_CLOEXEC);
+ 	if (push) {
+ 		pushfile();
+ 		parsefile->buf = 0;
+diff --git a/src/redir.c b/src/redir.c
+index 9e0fae5..6ffde0c 100644
+--- a/src/redir.c
++++ b/src/redir.c
+@@ -345,26 +345,19 @@ popredir(int drop)
+ INCLUDE "redir.h"
+ 
+ RESET {
+-	clearredir(0);
+-}
+-
+-#endif
+-
+-/*
+- * Discard all saved file descriptors.
+- */
+-
+-void
+-clearredir(int drop)
+-{
++	/*
++	 * Discard all saved file descriptors.
++	 */
+ 	for (;;) {
+ 		nullredirs = 0;
+ 		if (!redirlist)
+ 			break;
+-		popredir(drop);
++		popredir(0);
+ 	}
+ }
+ 
++#endif
++
+ 
+ 
+ /*
+diff --git a/src/redir.h b/src/redir.h
+index 2c43511..a8e6630 100644
+--- a/src/redir.h
++++ b/src/redir.h
+@@ -44,7 +44,7 @@
+ union node;
+ void redirect(union node *, int);
+ void popredir(int);
+-void clearredir(int);
++void clearredir(void);
+ int savefd(int);
+ int redirectsafe(union node *, int);
+ 
+-- 
+1.5.2.1
+

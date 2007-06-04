@@ -1,3 +1,13 @@
+dash (0.5.3-7.1) unstable; urgency=low
+
+  * debian/diff/0009..0017-*.diff: new; from upstream master branch.
+    * 0009-BUILTIN-Fix-mkbuiltin-sort-order.diff: Fix mkbuiltin sort
+      order (closes: #415119).
+    * 0016-REDIR-Fix-redirect-restore-on-saved-file-descriptor.diff:
+      Fix redirect restore on saved file descriptors (closes: #357091).
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 04 Jun 2007 09:53:01 +0000
+
 dash (0.5.3-7) unstable; urgency=medium
 
   * Debconf translation updates (thx Christian Perrier for the patch):

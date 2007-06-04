@@ -1,0 +1,40 @@
+From 01e163ddd1afa14d64f432bacb967e9217010d38 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 6 May 2007 15:00:57 +1000
+Subject: [PATCH] [EVAL] Use dup2 instead of copyfd in evalbackcmd
+
+Since we know that dup2 must succeed here we can call it directly.
+---
+ ChangeLog  |    1 +
+ src/eval.c |    3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 98702d5..20c55d1 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -2,6 +2,7 @@
+ 
+ 	* Removed unnecessary inclusion of redir.h from parser.c.
+ 	* Invoke sh_error on error in copyfd.
++	* Use dup2 instead of copyfd in evalbackcmd.
+ 
+ 2007-05-05  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/eval.c b/src/eval.c
+index 07e7ee2..fed82d5 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -625,8 +625,7 @@ evalbackcmd(union node *n, struct backcmd *result)
+ 			FORCEINTON;
+ 			close(pip[0]);
+ 			if (pip[1] != 1) {
+-				close(1);
+-				copyfd(pip[1], 1);
++				dup2(pip[1], 1);
+ 				close(pip[1]);
+ 			}
+ 			eflag = 0;
+-- 
+1.5.2.1
+

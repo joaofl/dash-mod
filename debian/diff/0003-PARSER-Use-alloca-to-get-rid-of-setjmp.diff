@@ -34,7 +34,7 @@ index 375fd54..4362f6a 100644
  #include <stdlib.h>
  
  #include "shell.h"
-@@ -846,19 +847,6 @@ readtoken1(int firstc, char const *synta
+@@ -846,19 +847,6 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
  	int dqvarnest;	/* levels of variables expansion within double quotes */
  	int oldstyle;
  	char const *prevsyntax;	/* syntax before arithmetic */
@@ -102,5 +102,5 @@ index 375fd54..4362f6a 100644
  		USTPUTC(CTLBACKQ | CTLQUOTE, out);
  	else
 -- 
-1.4.3.1
+1.5.2.1
 

@@ -51,7 +51,7 @@ index c62a950..375fd54 100644
  	union node *n;
  	char *volatile str;
  	struct jmploc jmploc;
-@@ -1274,11 +1272,9 @@ #ifdef __GNUC__
+@@ -1274,11 +1272,9 @@ parsebackq: {
  	(void) &saveprompt;
  #endif
  
@@ -80,5 +80,5 @@ index c62a950..375fd54 100644
  	if (arinest || dblquote)
  		USTPUTC(CTLBACKQ | CTLQUOTE, out);
 -- 
-1.4.3.1
+1.5.2.1
 

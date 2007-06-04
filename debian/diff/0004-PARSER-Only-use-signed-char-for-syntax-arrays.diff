@@ -113,7 +113,7 @@ index dafb51f..cf64921 100644
  				p++;
  			else if (c == CTLBACKQ || c == (CTLBACKQ|CTLQUOTE)) {
  				if (varlen >= 0)
-@@ -892,7 +892,7 @@ memtodest(const char *p, size_t len, con
+@@ -892,7 +892,7 @@ memtodest(const char *p, size_t len, const char *syntax, int quotes) {
  	q = makestrspace(len * 2, expdest);
  
  	do {
@@ -122,7 +122,7 @@ index dafb51f..cf64921 100644
  		if (c) {
  			if ((quotes & QUOTES_ESC) &&
  			    (syntax[c] == CCTL || syntax[c] == CBACK))
-@@ -1078,7 +1078,7 @@ ifsbreakup(char *string, struct arglist 
+@@ -1078,7 +1078,7 @@ ifsbreakup(char *string, struct arglist *arglist)
  			ifsspc = 0;
  			while (p < string + ifsp->endoff) {
  				q = p;
@@ -131,7 +131,7 @@ index dafb51f..cf64921 100644
  					p++;
  				if (strchr(ifs, *p)) {
  					if (!nulonly)
-@@ -1101,7 +1101,7 @@ ifsbreakup(char *string, struct arglist 
+@@ -1101,7 +1101,7 @@ ifsbreakup(char *string, struct arglist *arglist)
  								break;
  							}
  							q = p;
@@ -158,7 +158,7 @@ index dafb51f..cf64921 100644
  			p++;
  			if (notescaped && inquotes && *p != '/') {
  				*q++ = '\\';
-@@ -1734,7 +1734,7 @@ varunset(const char *end, const char *va
+@@ -1734,7 +1734,7 @@ varunset(const char *end, const char *var, const char *umsg, int varflags)
  	tail = nullstr;
  	msg = "parameter not set";
  	if (umsg) {
@@ -171,7 +171,7 @@ diff --git a/src/input.c b/src/input.c
 index 639c023..057da71 100644
 --- a/src/input.c
 +++ b/src/input.c
-@@ -263,7 +263,7 @@ #endif
+@@ -263,7 +263,7 @@ preadbuffer(void)
  		}
  		popstring();
  		if (--parsenleft >= 0)
@@ -180,7 +180,7 @@ index 639c023..057da71 100644
  	}
  	if (unlikely(parsenleft == EOF_NLEFT || parsefile->buf == NULL))
  		return PEOF;
-@@ -346,7 +346,7 @@ #endif
+@@ -346,7 +346,7 @@ again:
  
  	*q = savec;
  
@@ -255,7 +255,7 @@ index 5e65bdd..7a8a9ae 100644
  
  	/* Create output files */
  	if ((cfile = fopen("syntax.c", "w")) == NULL) {
-@@ -133,32 +119,6 @@ #endif
+@@ -133,32 +119,6 @@ main(int argc, char **argv)
  	fputs(writer, hfile);
  	fputs(writer, cfile);
  
@@ -288,7 +288,7 @@ index 5e65bdd..7a8a9ae 100644
  	fputs("#include <ctype.h>\n", hfile);
  	fputs("\n", hfile);
  	fputs("#ifdef CEOF\n", hfile);
-@@ -185,16 +145,16 @@ #endif
+@@ -185,16 +145,16 @@ main(int argc, char **argv)
  		fprintf(hfile, "/* %s */\n", is_entry[i].comment);
  	}
  	putc('\n', hfile);
@@ -309,7 +309,7 @@ index 5e65bdd..7a8a9ae 100644
  	putc('\n', hfile);
  
  	/* Generate the syntax tables. */
-@@ -248,8 +208,6 @@ #endif
+@@ -248,8 +208,6 @@ main(int argc, char **argv)
  	add("_", "ISUNDER");
  	add("#?$!-*@", "ISSPECL");
  	print("is_type");
@@ -487,5 +487,5 @@ index 05af328..1b58de1 100644
  		case '\t':  c = 't';  goto backslash;
  		case '\r':  c = 'r';  goto backslash;
 -- 
-1.4.3.1
+1.5.2.1
 
