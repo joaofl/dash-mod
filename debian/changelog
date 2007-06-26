@@ -1,3 +1,10 @@
+dash (0.5.3-8.1) unstable; urgency=low
+
+  * debian/rules: target patch, clean: apply diffs from debian/diff/ in
+    alphabetical order.
+
+ -- Gerrit Pape <pape@smarden.org>  Tue, 26 Jun 2007 12:56:19 +0000
+
 dash (0.5.3-8) unstable; urgency=low
 
   * debian/diff/0009..0017-*.diff: new; from upstream master branch.

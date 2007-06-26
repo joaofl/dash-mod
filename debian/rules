@@ -25,7 +25,7 @@ DIRA =$(shell pwd)/debian/ash
 
 patch: deb-checkdir patch-stamp
 patch-stamp:
-	for i in `ls -t debian/diff/*.diff || :`; do \
+	for i in `ls -1 debian/diff/*.diff || :`; do \
 	  patch -p1 <$$i || exit 1; \
 	done
 	touch patch-stamp
@@ -60,7 +60,7 @@ po-templates-stamp: deb-checkdir
 clean: deb-checkdir deb-checkuid
 	rm -rf build-tmp build-udeb-tmp
 	test ! -e patch-stamp || \
-	  for i in `ls -tr debian/diff/*.diff || :`; do patch -p1 -R <$$i; done
+	  for i in `ls -1r debian/diff/*.diff || :`; do patch -p1 -R <$$i; done
 	rm -f configure-stamp configure-udeb-stamp patch-stamp build-stamp \
 	  build-udeb-stamp po-templates-stamp
 	rm -rf '$(DIR)' '$(DIR)'-udeb '$(DIRA)'
