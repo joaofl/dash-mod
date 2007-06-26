@@ -2,8 +2,11 @@ dash (0.5.3-8.1) unstable; urgency=low
 
   * debian/rules: target patch, clean: apply diffs from debian/diff/ in
     alphabetical order.
+  * debian/diff/0018-Restore-pgrp-on-exit-fix-backgrounded-MC-bug.diff:
+    new; Restore pgrp on exit (fix "backgrounded MC" bug) (thx Denis
+    Vlasenko, closes: #381878).
 
- -- Gerrit Pape <pape@smarden.org>  Tue, 26 Jun 2007 12:56:19 +0000
+ -- Gerrit Pape <pape@smarden.org>  Tue, 26 Jun 2007 13:07:23 +0000
 
 dash (0.5.3-8) unstable; urgency=low
 
