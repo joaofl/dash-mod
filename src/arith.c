@@ -110,7 +110,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "../../src/arith.y"
+#line 1 "arith.y"
 
 /*-
  * Copyright (c) 1993
@@ -1133,99 +1133,99 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 70 "../../src/arith.y"
+#line 70 "arith.y"
     {
 			return (yyvsp[0]);
 	}
     break;
 
   case 3:
-#line 76 "../../src/arith.y"
+#line 76 "arith.y"
     { yyval = yyvsp[-1]; }
     break;
 
   case 4:
-#line 77 "../../src/arith.y"
+#line 77 "arith.y"
     { yyval = yyvsp[-2] || yyvsp[0]; }
     break;
 
   case 5:
-#line 78 "../../src/arith.y"
+#line 78 "arith.y"
     { yyval = yyvsp[-2] && yyvsp[0]; }
     break;
 
   case 6:
-#line 79 "../../src/arith.y"
+#line 79 "arith.y"
     { yyval = yyvsp[-2] | yyvsp[0]; }
     break;
 
   case 7:
-#line 80 "../../src/arith.y"
+#line 80 "arith.y"
     { yyval = yyvsp[-2] ^ yyvsp[0]; }
     break;
 
   case 8:
-#line 81 "../../src/arith.y"
+#line 81 "arith.y"
     { yyval = yyvsp[-2] & yyvsp[0]; }
     break;
 
   case 9:
-#line 82 "../../src/arith.y"
+#line 82 "arith.y"
     { yyval = yyvsp[-2] == yyvsp[0]; }
     break;
 
   case 10:
-#line 83 "../../src/arith.y"
+#line 83 "arith.y"
     { yyval = yyvsp[-2] > yyvsp[0]; }
     break;
 
   case 11:
-#line 84 "../../src/arith.y"
+#line 84 "arith.y"
     { yyval = yyvsp[-2] >= yyvsp[0]; }
     break;
 
   case 12:
-#line 85 "../../src/arith.y"
+#line 85 "arith.y"
     { yyval = yyvsp[-2] < yyvsp[0]; }
     break;
 
   case 13:
-#line 86 "../../src/arith.y"
+#line 86 "arith.y"
     { yyval = yyvsp[-2] <= yyvsp[0]; }
     break;
 
   case 14:
-#line 87 "../../src/arith.y"
+#line 87 "arith.y"
     { yyval = yyvsp[-2] != yyvsp[0]; }
     break;
 
   case 15:
-#line 88 "../../src/arith.y"
+#line 88 "arith.y"
     { yyval = yyvsp[-2] << yyvsp[0]; }
     break;
 
   case 16:
-#line 89 "../../src/arith.y"
+#line 89 "arith.y"
     { yyval = yyvsp[-2] >> yyvsp[0]; }
     break;
 
   case 17:
-#line 90 "../../src/arith.y"
+#line 90 "arith.y"
     { yyval = yyvsp[-2] + yyvsp[0]; }
     break;
 
   case 18:
-#line 91 "../../src/arith.y"
+#line 91 "arith.y"
     { yyval = yyvsp[-2] - yyvsp[0]; }
     break;
 
   case 19:
-#line 92 "../../src/arith.y"
+#line 92 "arith.y"
     { yyval = yyvsp[-2] * yyvsp[0]; }
     break;
 
   case 20:
-#line 93 "../../src/arith.y"
+#line 93 "arith.y"
     {
 			if (yyvsp[0] == 0)
 				yyerror("division by zero");
@@ -1234,7 +1234,7 @@ yyreduce:
     break;
 
   case 21:
-#line 98 "../../src/arith.y"
+#line 98 "arith.y"
     {
 			if (yyvsp[0] == 0)
 				yyerror("division by zero");
@@ -1243,22 +1243,22 @@ yyreduce:
     break;
 
   case 22:
-#line 103 "../../src/arith.y"
+#line 103 "arith.y"
     { yyval = !(yyvsp[0]); }
     break;
 
   case 23:
-#line 104 "../../src/arith.y"
+#line 104 "arith.y"
     { yyval = ~(yyvsp[0]); }
     break;
 
   case 24:
-#line 105 "../../src/arith.y"
+#line 105 "arith.y"
     { yyval = -(yyvsp[0]); }
     break;
 
   case 25:
-#line 106 "../../src/arith.y"
+#line 106 "arith.y"
     { yyval = yyvsp[0]; }
     break;
 
@@ -1491,7 +1491,7 @@ yyreturn:
 }
 
 
-#line 109 "../../src/arith.y"
+#line 109 "arith.y"
 
 int
 arith(s)

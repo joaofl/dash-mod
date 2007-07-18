@@ -1,3 +1,54 @@
+2007-07-12  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Release 0.5.4.
+
+2007-05-12  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix redirect restore on closed file descriptors.
+	* Size optimisations in redir.c.
+
+2007-05-06  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Removed unnecessary inclusion of redir.h from parser.c.
+	* Invoke sh_error on error in copyfd.
+	* Use dup2 instead of copyfd in evalbackcmd.
+	* Replace copyfd by savefd and dup2.
+	* Removed redundant CLOEXEC calls.
+
+2007-05-05  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed typo in parser.h comment.
+
+2007-04-28  Dan Nicholson <dbn.lists@gmail.com>
+
+	* Set LC_COLLATE for sort in mkbuiltin.
+
+2006-10-22  Gerrit Pape <pape@smarden.org>
+
+	* Fixed command -v segmentation fault.
+
+2006-10-13  Alexey Gladkov <legion@altlinux.org>
+
+	* Check return code for getgroups and fwrite.
+
+2006-10-04  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed inverted char class matching.
+
+2006-05-23  Alexey Gladkov <legion@altlinux.org>
+
+	* Added --with-libedit option to configure.
+
+2006-03-29  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Removed useless parsebackquote flag.
+	* Use alloca to get rid of setjmp in parse.c.
+	* Only use signed char for syntax arrays.
+
+2006-01-12  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed eval exit status with empty arguments.
+
 2005-11-26  Herbert Xu <herbert@gondor.apana.org.au>
 
 	* Release 0.5.3.
