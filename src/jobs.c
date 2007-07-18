@@ -188,18 +188,14 @@ setjobctl(int on)
 	if (on == jobctl || rootshell == 0)
 		return;
 	if (on) {
-		int ofd;
-		ofd = fd = open(_PATH_TTY, O_RDWR);
+		fd = open(_PATH_TTY, O_RDWR);
 		if (fd < 0) {
 			fd += 3;
-			while (!isatty(fd) && --fd >= 0)
-				;
+			while (!isatty(fd))
+				if (--fd < 0)
+					goto out;
 		}
-		fd = fcntl(fd, F_DUPFD, 10);
-		close(ofd);
-		if (fd < 0)
-			goto out;
-		fcntl(fd, F_SETFD, FD_CLOEXEC);
+		fd = savefd(fd);
 		do { /* while we are in the background */
 			if ((pgrp = tcgetpgrp(fd)) < 0) {
 out:
@@ -1357,8 +1353,9 @@ STATIC void
 cmdputs(const char *s)
 {
 	const char *p, *str;
-	char c, cc[2] = " ";
+	char cc[2] = " ";
 	char *nextc;
+	signed char c;
 	int subtype = 0;
 	int quoted = 0;
 	static const char vstype[VSTYPE + 1][4] = {
