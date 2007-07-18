@@ -33,11 +33,13 @@ patch-stamp:
 configure: deb-checkdir configure-stamp configure-udeb-stamp
 configure-stamp: patch-stamp
 	mkdir -p build-tmp
+	touch configure
 	(cd build-tmp && CC='$(CC)' CFLAGS='$(CFLAGS)' \
 	  exec ../configure --host='$(DEB_HOST_GNU_TYPE)')
 	touch configure-stamp
 configure-udeb-stamp: patch-stamp
 	mkdir -p build-udeb-tmp
+	touch configure
 	(cd build-udeb-tmp && CC='$(CCUDEB)' CFLAGS='$(CFLAGSUDEB)' \
 	  exec ../configure --host='$(DEB_HOST_GNU_TYPE)')
 	touch configure-udeb-stamp
@@ -45,11 +47,13 @@ configure-udeb-stamp: patch-stamp
 build: deb-checkdir build-stamp build-udeb-stamp
 build-stamp: configure-stamp
 	-gcc -v
-	(cd build-tmp && exec $(MAKE) CFLAGS='$(CFLAGS)')
+	(cd build-tmp && exec $(MAKE) CFLAGS='$(CFLAGS)') || \
+	  (cat build-tmp/config.log; exit 1) || exit 1
 	touch build-stamp
 build-udeb-stamp: configure-udeb-stamp
 	-gcc -v
-	(cd build-udeb-tmp && exec $(MAKE) CFLAGS='$(CFLAGSUDEB)')
+	(cd build-udeb-tmp && exec $(MAKE) CFLAGS='$(CFLAGSUDEB)') || \
+	  (cat build-udeb-tmp/config.log; exit 1) || exit 1
 	touch build-udeb-stamp
 
 po-templates: po-templates-stamp

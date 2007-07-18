@@ -1,10 +1,11 @@
-dash (0.5.4-0) unstable; urgency=low
+dash (0.5.4-1) unstable; urgency=low
 
   * new upstream version.
   * debian/diff/????-*.diff: remove all but
     ????-Restore-pgrp-on-exit-fix-backgrounded-MC-bug.diff; obsolete.
+  * debian/rules: dump config.log on build failure.
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 18 Jul 2007 08:43:04 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 18 Jul 2007 09:33:06 +0000
 
 dash (0.5.3-9) unstable; urgency=low
 
