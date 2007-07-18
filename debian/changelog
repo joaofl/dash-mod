@@ -1,3 +1,9 @@
+dash (0.5.4-0) unstable; urgency=low
+
+  * new upstream version.
+
+ -- Gerrit Pape <pape@smarden.org>  Wed, 18 Jul 2007 08:41:26 +0000
+
 dash (0.5.3-9) unstable; urgency=low
 
   * debian/rules: target patch, clean: apply diffs from debian/diff/ in
