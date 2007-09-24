@@ -1,0 +1,65 @@
+From e012d409f2decef77d21b4ee3ba3854c75869722 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 22 Sep 2007 20:49:42 +0800
+Subject: [PATCH] [SHELL] Restore foreground process group on exit
+
+On Thu, Jun 07, 2007 at 12:20:27PM +0200, Denis Vlasenko wrote:
+>
+> When I start dash under Midnight Commander and then type 'exit', dash
+> exits all right, but then MC is sent to background. It happens because
+> dash does not restore current process group on exit.
+>
+> Attached patch fixes this. It also fixes another bug: setjobctl(0)
+> must ignore tcsetpgrp errors, because there are cases when tty is
+> destroyed under dash.
+>
+> Patch is run-tested.
+
+I've fixed this slightly differently so that we don't need the
+xtcsetpgrp change.
+---
+ ChangeLog  |    4 ++++
+ src/trap.c |    8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 6ce16c6..295fa66 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-09-21  Denis Vlasenko <vda.linux@googlemail.com>
++
++	* Restore foreground process group on exit.
++
+ 2007-07-12  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Release 0.5.4.
+diff --git a/src/trap.c b/src/trap.c
+index eae6186..c386db7 100644
+--- a/src/trap.c
++++ b/src/trap.c
+@@ -357,7 +357,7 @@ exitshell(void)
+ 	TRACE(("pid %d, exitshell(%d)\n", getpid(), status));
+ 	if (setjmp(loc.loc)) {
+ 		if (exception == EXEXIT)
+-			_exit(exitstatus);
++			status = exitstatus;
+ 		goto out;
+ 	}
+ 	handler = &loc;
+@@ -367,6 +367,12 @@ exitshell(void)
+ 	}
+ 	flushall();
+ out:
++	/*
++	 * Disable job control so that whoever had the foreground before we
++	 * started can get it back.
++	 */
++	if (likely(!setjmp(loc.loc)))
++		setjobctl(0);
+ 	_exit(status);
+ 	/* NOTREACHED */
+ }
+-- 
+1.5.3.2
+
