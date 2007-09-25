@@ -7,8 +7,11 @@ dash (0.5.4-2) unstable; urgency=low
     debian/diff/0003-BUILTIN-test-White-space-fixes.diff,
     debian/diff/0004-BUILTIN-test-little-size-and-speed-optimizations.diff:
     new; from upstream git (closes: #431320).
+  * debian/diff/0005-dash.1-clarify-description-of-nt-ot-options-to-te.diff:
+    new; dash.1: clarify description of -nt, -ot options to test builtin
+    (closes: #373611).
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 24 Sep 2007 08:46:04 +0000
+ -- Gerrit Pape <pape@smarden.org>  Tue, 25 Sep 2007 07:38:41 +0000
 
 dash (0.5.4-1) unstable; urgency=low
 

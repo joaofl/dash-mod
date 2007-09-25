@@ -1,0 +1,45 @@
+From 6ee664bc5b944e6b616c98aefc9982177a3a8d93 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Mon, 24 Sep 2007 11:05:31 +0000
+Subject: [PATCH] dash.1: clarify description of -nt, -ot options to test builtin
+
+Have the man page explicitely state how the test builtin behaves on
+-nt and -ot options if file2 does not exist.  The case where file1
+does not exist was already documented properly.
+
+This was noticed by Sven Mueller and reported through
+ http://bugs.debian.org/373611
+---
+ src/dash.1 |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/src/dash.1 b/src/dash.1
+index 00f40bd..3aefe21 100644
+--- a/src/dash.1
++++ b/src/dash.1
+@@ -1934,12 +1934,20 @@ exists and is a socket.
+ .It Ar file1 Fl nt Ar file2
+ True if
+ .Ar file1
+-exists and is newer than
++and
++.Ar file2
++exist and
++.Ar file1
++is newer than
+ .Ar file2 .
+ .It Ar file1 Fl ot Ar file2
+ True if
+ .Ar file1
+-exists and is older than
++and
++.Ar file2
++exist and
++.Ar file1
++is older than
+ .Ar file2 .
+ .It Ar file1 Fl ef Ar file2
+ True if
+-- 
+1.5.3.2
+
