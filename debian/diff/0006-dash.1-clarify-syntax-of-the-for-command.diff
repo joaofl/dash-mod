@@ -1,0 +1,44 @@
+From ef9ea71eb2d08e00d474c4e4f4cfdd18a40ef24d Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Mon, 24 Sep 2007 11:25:22 +0000
+Subject: [PATCH] dash.1: clarify syntax of the for command
+
+Document that in a for loop 'in word ...' is optional, and if omitted,
+'in "$@"' is used.
+
+Lars Wilke noticed this, and reported through
+ http://bugs.debian.org/387441
+---
+ src/dash.1 |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/dash.1 b/src/dash.1
+index 3aefe21..9b8ab0e 100644
+--- a/src/dash.1
++++ b/src/dash.1
+@@ -640,17 +640,20 @@ repeat until the exit status of the first list is zero.
+ .Pp
+ The syntax of the for command is
+ .Bd -literal -offset indent
+-for variable in word ...
++for variable [ in [ word ... ] ]
+ do   list
+ done
+ .Ed
+ .Pp
+-The words are expanded, and then the list is executed repeatedly with the
++The words following
++.Pa in
++are expanded, and then the list is executed repeatedly with the
+ variable set to each word in turn.
+ do and done may be replaced with
+ .Dq {
+ and
+ .Dq } .
++Omitting in word ... is equivalent to in "$@".
+ .Pp
+ The syntax of the break and continue command is
+ .Bd -literal -offset indent
+-- 
+1.5.3.2
+
