@@ -15,9 +15,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: dash 0.4.17\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-29 07:27+0100\n"
-"PO-Revision-Date: 2006-10-27 09:40+0200\n"
+"Report-Msgid-Bugs-To: Source: dash@packages.debian.org\n"
+"POT-Creation-Date: 2007-11-11 19:37+0000\n"
+"PO-Revision-Date: 2007-11-11 21:15+0100\n"
 "Last-Translator: Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,23 +26,27 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
+#: ../dash.templates.in:2001
 msgid "Install dash as /bin/sh?"
 msgstr "Faut-il mettre en place un lien de /bin/sh vers dash ?"
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
+#: ../dash.templates.in:2001
+msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
+msgstr "Par défaut, sur un système Debian, /bin/sh est un lien vers bash."
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:2001
 msgid ""
-"Bash is the default /bin/sh on a Debian system.  However, since the Debian "
-"policy requires all shell scripts using /bin/sh to be POSIX compliant, any "
-"shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX "
-"compliant, it can be used as /bin/sh.  You may wish to do this because dash "
-"is faster and smaller than bash."
+"However, since the distribution policy requires all shell scripts using /bin/"
+"sh to be POSIX compliant, any shell that conforms to POSIX, such as dash, "
+"can serve as /bin/sh. You may wish to do this because dash is faster and "
+"smaller than bash."
 msgstr ""
-"Sur un système Debian, /bin/sh est, par défaut, un lien vers bash. "
 "Cependant, comme la charte Debian impose que tous les scripts utilisant /bin/"
 "sh soient conformes à la norme POSIX, /bin/sh peut être n'importe quel "
-"interpréteur de commandes (« shell ») conforme à cette norme. Puisque dash "
-"l'est, il peut être utilisé en tant que /bin/sh. La taille réduite et la "
-"rapidité de dash sont deux bonnes raisons pour choisir cette option."
+"interpréteur de commandes (« shell ») conforme à cette norme, tel que dash. "
+"Vous pouvez vouloir choisir cette option puisque dash est plus rapide et "
+"plus petit que bash."

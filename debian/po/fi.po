@@ -1,29 +1,30 @@
-# Czech translation of dash templates
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: dash\n"
+"Project-Id-Version: dash 0.5.4-3\n"
 "Report-Msgid-Bugs-To: Source: dash@packages.debian.org\n"
 "POT-Creation-Date: 2007-11-11 19:37+0000\n"
-"PO-Revision-Date: 2007-11-18 20:08+0100\n"
-"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
-"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
+"PO-Revision-Date: 2007-11-12 23:49+0200\n"
+"Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
+"Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Finnish\n"
+"X-Poedit-Country: FINLAND\n"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:2001
 msgid "Install dash as /bin/sh?"
-msgstr "Nainstalovat dash jako /bin/sh?"
+msgstr "Asennetaanko dash linkitettynä tiedostoon /bin/sh?"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:2001
 msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
 msgstr ""
-"Výchozím shellem /bin/sh je v Debianu a systémech z něj odvozených bash."
+"Debianissa ja Debianiin pohjautuvissa järjestelmissä /bin/sh:na toimii "
+"oletuksena bash."
 
 #. Type: boolean
 #. Description
@@ -34,7 +35,7 @@ msgid ""
 "can serve as /bin/sh. You may wish to do this because dash is faster and "
 "smaller than bash."
 msgstr ""
-"Protože však politika distribuce vyžaduje, aby byly všechny shellové skripty "
-"využívající /bin/sh kompatibilní s POSIXem, můžete jako /bin/sh použít "
-"jakýkoliv shell splňující normu POSIX, například shell dash. Určitě to stojí "
-"za vyzkoušení, protože dash je rychlejší a menší než bash."
+"Koska jakelupolitiikkana kuitenkin on, että kaikkien /bin/sh:ta käyttävien "
+"komentotiedostojen tulee olla POSIX-yhteensopivia, mikä tahansa POSIXin "
+"vaatimukset täyttävä kuori, esimerkiksi dash, voi toimia /bin/sh:na. Saatat "
+"haluta käyttää dashia, koska se on nopeampi ja pienempi kuin bash."

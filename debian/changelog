@@ -9,8 +9,21 @@ dash (0.5.4-3) unstable; urgency=low
     Salvador, closes: #439139, #431312).
   * debian/control: no longer Build-Depends: dietlibc; remove dash.udeb
     package.
+  * Debconf templates and debian/control reviewed by the debian-l10n-
+    english team as part of the Smith review project (thx Christian Perrier
+    for the patch, closes: #449517):
+    * Convert debian/changelog to UTF-8 (closes: #451080, #453962, #453960).
+    * [Debconf translation updates]
+    * Galician (closes: #450864).
+    * Finnish (closes: #451015).
+    * Korean (closes: #451419).
+    * Italian (closes: #451607).
+    * Czech (closes: #451826).
+    * German (closes: #452173).
+    * Russian (closes: #452733).
+    * Portuguese (closes: #453038).
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 10 Dec 2007 13:01:33 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 10 Dec 2007 13:18:14 +0000
 
 dash (0.5.4-2) unstable; urgency=low
 
@@ -431,7 +444,7 @@ dash (0.4.11) unstable; urgency=low
    . Improved option parsing of command(1).
    . Added rudimentary support for PS4.
   * Moved builtin flags into builtins.def.
-  * Updated Spanish debconf template (Carlos Valdivia Yagüe, closes: #178359).
+  * Updated Spanish debconf template (Carlos Valdivia YagÃ¼e, closes: #178359).
   * Fixed ordering of redirection versus assignment substitution.
   * Fixed potential setvareq memory leaks.
   * Use bison instead of byacc.
@@ -742,7 +755,7 @@ ash (0.3.8-16) unstable; urgency=low
 
 ash (0.3.8-15) unstable; urgency=low
 
-  * Added Swedish translation of templates (Martin Sjögren, closes: #103158).
+  * Added Swedish translation of templates (Martin Sj?n, closes: #103158).
   * Restored escape code support in echo.
   * Removed assignment builtins since it is at best undefined by the SuS and
     also can't be implemented consistently.
@@ -756,7 +769,7 @@ ash (0.3.8-14) unstable; urgency=low
 
   * Divert sh.1.gz to sh.distrib.1.gz (closes: #102251).
   * Added HETIO support for ^D and ^U (Aaron Lehmann, closes: #102215).
-  * Added Spaniash translation of debconf templates (Carlos Valdivia Yagüe,
+  * Added Spaniash translation of debconf templates (Carlos Valdivia Yag e,
     closes: #103040).
   * Added versioned build-time dependency on groff.
 

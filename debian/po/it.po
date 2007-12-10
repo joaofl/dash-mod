@@ -5,34 +5,39 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dash 0.5.3\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-29 07:27+0100\n"
-"PO-Revision-Date: 2007-04-07 17:18+0200\n"
+"Project-Id-Version: dash 0.5.4 italian debconf templates\n"
+"Report-Msgid-Bugs-To: Source: dash@packages.debian.org\n"
+"POT-Creation-Date: 2007-11-11 19:37+0000\n"
+"PO-Revision-Date: 2007-11-17 13:33+0100\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
-"Language-Team: Italian <it@li.org>\n"
+"Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
+#: ../dash.templates.in:2001
 msgid "Install dash as /bin/sh?"
 msgstr "Installare dash come /bin/sh?"
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
-msgid ""
-"Bash is the default /bin/sh on a Debian system.  However, since the Debian "
-"policy requires all shell scripts using /bin/sh to be POSIX compliant, any "
-"shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX "
-"compliant, it can be used as /bin/sh.  You may wish to do this because dash "
-"is faster and smaller than bash."
+#: ../dash.templates.in:2001
+msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
 msgstr ""
-"In un sistema Debian la shell predefinita per /bin/sh è Bash. Tuttavia, dal "
-"momento che la policy Debian richiede che tutti gli script della shell che "
-"usano /bin/sh siano conformi a POSIX, ogni shell conforme a POSIX può essere "
-"usata come /bin/sh. Siccome dash è conforme a POSIX, può essere usata come /"
-"bin/sh. La si può preferire perché è più piccola e veloce di bash."
+"La shell predefinita per /bin/sh su sistemi Debian o basati su Debian Ã¨ bash."
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:2001
+msgid ""
+"However, since the distribution policy requires all shell scripts using /bin/"
+"sh to be POSIX compliant, any shell that conforms to POSIX, such as dash, "
+"can serve as /bin/sh. You may wish to do this because dash is faster and "
+"smaller than bash."
+msgstr ""
+"Tuttavia, poichÃ© la politica della distribuzione richiede che tutti gli "
+"script che usano /bin/sh siano conformi a POSIX, qualunque shell conforme "
+"con POSIX, come dash, puÃ² essere usata come /bin/sh. Si puÃ² preferire dash "
+"perchÃ© Ã¨ piÃ¹ piccola e veloce di bash."

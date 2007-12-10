@@ -1,22 +1,13 @@
-#
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
+# Translation of dash debconf templates to German
+# Copyright (C) Helge Kreutzmann <debian@helgefjell.de>, 2006, 2007.
+# This file is distributed under the same license as the dash package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dash \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-29 07:27+0100\n"
-"PO-Revision-Date: 2006-11-09 21:26+0100\n"
+"Project-Id-Version: dash 0.5.4-3\n"
+"Report-Msgid-Bugs-To: Source: dash@packages.debian.org\n"
+"POT-Creation-Date: 2007-11-11 19:37+0000\n"
+"PO-Revision-Date: 2007-11-20 20:44+0100\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,23 +16,28 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
+#: ../dash.templates.in:2001
 msgid "Install dash as /bin/sh?"
 msgstr "Dash als /bin/sh installieren?"
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
-msgid ""
-"Bash is the default /bin/sh on a Debian system.  However, since the Debian "
-"policy requires all shell scripts using /bin/sh to be POSIX compliant, any "
-"shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX "
-"compliant, it can be used as /bin/sh.  You may wish to do this because dash "
-"is faster and smaller than bash."
+#: ../dash.templates.in:2001
+msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
 msgstr ""
-"Bash ist die Standard-Shell (/bin/sh) auf einem Debian-System. Da die Debian-"
-"Richtlinien allerdings von allen Shellskripten, die /bin/sh benutzen, POSIX-"
-"Kompatibilität verlangt, kann für /bin/sh jede POSIX-kompatible Shell "
-"benutzt werden. Da Dash POSIX-kompatibel ist, kann sie daher als /bin/sh "
-"verwendet werden. Eventuell wollen Sie Dash verwenden, da Dash schneller und "
-"kleiner als Bash ist."
+"Standardmäßig ist bash als /bin/sh in Debian und auf Debian-basierten "
+"Systemen installiert."
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:2001
+msgid ""
+"However, since the distribution policy requires all shell scripts using /bin/"
+"sh to be POSIX compliant, any shell that conforms to POSIX, such as dash, "
+"can serve as /bin/sh. You may wish to do this because dash is faster and "
+"smaller than bash."
+msgstr ""
+"Da die Richtlinien der Distribution allerdings von allen Shellskripten, die /"
+"bin/sh benutzen, POSIX-Kompatibilität verlangt, kann für /bin/sh jede POSIX-"
+"kompatible Shell (wie Dash) benutzt werden. Eventuell wollen Sie Dash "
+"verwenden, da Dash schneller und kleiner als Bash ist."

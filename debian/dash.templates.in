@@ -1,9 +1,19 @@
+# These templates have been reviewed by the debian-l10n-english
+# team
+#
+# If modifications/additions/rewording are needed, please ask
+# debian-l10n-english@lists.debian.org for advice.
+#
+# Even minor modifications require translation updates and such
+# changes should be coordinated with translators and reviewers.
+
 Template: dash/sh
 Type: boolean
 Default: false
 _Description: Install dash as /bin/sh?
- Bash is the default /bin/sh on a Debian system.  However, since the Debian
- policy requires all shell scripts using /bin/sh to be POSIX compliant, any
- shell that conforms to POSIX can serve as /bin/sh.  Since dash is POSIX
- compliant, it can be used as /bin/sh.  You may wish to do this because
- dash is faster and smaller than bash.
+ The default /bin/sh shell on Debian and Debian-based systems is bash.
+ .
+ However, since the distribution policy requires all shell scripts
+ using /bin/sh to be POSIX compliant, any shell that conforms to
+ POSIX, such as dash, can serve as /bin/sh. You may wish to do this
+ because dash is faster and smaller than bash.
