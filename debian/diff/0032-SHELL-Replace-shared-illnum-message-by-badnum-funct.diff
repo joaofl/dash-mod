@@ -1,0 +1,104 @@
+From 20beddb0ec3afe37d97af02e77f05468049f25df Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Wed, 17 Oct 2007 12:51:08 +0800
+Subject: [PATCH] [SHELL] Replace shared illnum message by badnum function.
+
+This patch adds the badnum function and uses it to mostly replace the use
+of illnum except in miscbltin where the current code turns out to be smaller
+because of the twin sh_error calls.
+---
+ ChangeLog      |    4 ++++
+ src/eval.c     |    2 +-
+ src/mystring.c |   14 +++++++++-----
+ src/mystring.h |    1 +
+ 4 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 47a4bb0..ba9d5d5 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-10-15  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Replace shared illnum message by badnum function.
++
+ 2007-10-17  Oleg Verych <olecom@flower.upol.cz>
+ 
+ 	* Disallow completely blank strings in non-arithmetic context.
+diff --git a/src/eval.c b/src/eval.c
+index 1e0edd9..17b558d 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -1028,7 +1028,7 @@ breakcmd(int argc, char **argv)
+ 	int n = argc > 1 ? number(argv[1]) : 1;
+ 
+ 	if (n <= 0)
+-		sh_error(illnum, argv[1]);
++		badnum(argv[1]);
+ 	if (n > loopnest)
+ 		n = loopnest;
+ 	if (n > 0) {
+diff --git a/src/mystring.c b/src/mystring.c
+index 8e1200a..ce48c82 100644
+--- a/src/mystring.c
++++ b/src/mystring.c
+@@ -108,6 +108,10 @@ prefix(const char *string, const char *pfx)
+ 	return (char *) string;
+ }
+ 
++void badnum(const char *s)
++{
++	sh_error(illnum, s);
++}
+ 
+ /*
+  * Convert a string into an integer of type intmax_t.  Alow trailing spaces.
+@@ -121,20 +125,20 @@ intmax_t atomax(const char *s, int base)
+ 	r = strtoimax(s, &p, base);
+ 
+ 	if (errno != 0)
+-		sh_error(illnum, s);
++		badnum(s);
+ 
+ 	/*
+ 	 * Disallow completely blank strings in non-arithmetic (base != 0)
+ 	 * contexts.
+ 	 */
+-	if (base && (p == s))
+-		sh_error(illnum, s);
++	if (p == s && base)
++		badnum(s);
+ 
+ 	while (isspace((unsigned char)*p))
+ 	      p++;
+ 
+ 	if (*p)
+-		sh_error(illnum, s);
++		badnum(s);
+ 
+ 	return r;
+ }
+@@ -155,7 +159,7 @@ number(const char *s)
+ 	intmax_t n = atomax10(s);
+ 
+ 	if (n < 0 || n > INT_MAX)
+-		sh_error(illnum, s);
++		badnum(s);
+ 
+ 	return n;
+ }
+diff --git a/src/mystring.h b/src/mystring.h
+index 477cd16..2e0540a 100644
+--- a/src/mystring.h
++++ b/src/mystring.h
+@@ -48,6 +48,7 @@ extern const char homestr[];
+ void scopyn(const char *, char *, int);
+ #endif
+ char *prefix(const char *, const char *);
++void badnum(const char *s) __attribute__ ((noreturn));
+ intmax_t atomax(const char *, int);
+ intmax_t atomax10(const char *);
+ int number(const char *);
+-- 
+1.5.3.4
+

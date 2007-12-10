@@ -1,4 +1,4 @@
-From da675aca4ea59057df2512485324e4fc3ebe0b73 Mon Sep 17 00:00:00 2001
+From bdaf5dfb387cbd054aaaeb7a45cab0bae98b68f3 Mon Sep 17 00:00:00 2001
 From: Oleg Verych <olecom@flower.upol.cz>
 Date: Sat, 22 Sep 2007 21:08:32 +0800
 Subject: [PATCH] [BUILTIN] test: White space fixes
@@ -72,5 +72,5 @@ index f16c819..fd24fae 100644
  	return (int) r;
  }
 -- 
-1.5.3.2
+1.5.3.4
 

@@ -1,4 +1,4 @@
-From e012d409f2decef77d21b4ee3ba3854c75869722 Mon Sep 17 00:00:00 2001
+From 30019feefb55bce16dbd9aa5ec9026d7760c7d0c Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 22 Sep 2007 20:49:42 +0800
 Subject: [PATCH] [SHELL] Restore foreground process group on exit
@@ -61,5 +61,5 @@ index eae6186..c386db7 100644
  	/* NOTREACHED */
  }
 -- 
-1.5.3.2
+1.5.3.4
 

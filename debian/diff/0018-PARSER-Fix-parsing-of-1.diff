@@ -1,0 +1,90 @@
+From 93983e541b7e0ecc7c3ca68360382100f412e1a0 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Thu, 4 Oct 2007 22:15:10 +0800
+Subject: [PATCH] [PARSER] Fix parsing of ${##1}
+
+Previously dash treated ${##1} as a length operation.  This patch fixes that.
+
+Test case:
+
+	set -- a
+	echo ${##1}OK
+
+Old result:
+
+	1OK
+
+New result:
+
+	OK
+---
+ ChangeLog    |    4 ++++
+ src/parser.c |   31 ++++++++++++++++++++++---------
+ 2 files changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index ac717c5..3352429 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-10-04  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fix parsing of ${##1}.
++
+ 2007-10-04  Alexey Gladkov <legion@altlinux.org>
+ 
+ 	* Add --enable-static option to configure.
+diff --git a/src/parser.c b/src/parser.c
+index cac0aa5..9edb824 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -1167,15 +1167,9 @@ parsesub: {
+ 		subtype = VSNORMAL;
+ 		if (c == '{') {
+ 			c = pgetc();
+-			if (c == '#') {
+-				if ((c = pgetc()) == '}')
+-					c = '#';
+-				else
+-					subtype = VSLENGTH;
+-			}
+-			else
+-				subtype = 0;
++			subtype = 0;
+ 		}
++varname:
+ 		if (c > PEOA && is_name(c)) {
+ 			do {
+ 				STPUTC(c, out);
+@@ -1188,8 +1182,27 @@ parsesub: {
+ 			} while (is_digit(c));
+ 		}
+ 		else if (is_special(c)) {
+-			USTPUTC(c, out);
++			int cc = c;
++
+ 			c = pgetc();
++
++			if (!subtype && cc == '#') {
++				subtype = VSLENGTH;
++
++				if (c == '_' || isalnum(c))
++					goto varname;
++
++				cc = c;
++				c = pgetc();
++				if (cc == '}' || c != '}') {
++					pungetc();
++					subtype = 0;
++					c = cc;
++					cc = '#';
++				}
++			}
++
++			USTPUTC(cc, out);
+ 		}
+ 		else
+ badsub:			synerror("Bad substitution");
+-- 
+1.5.3.4
+

@@ -1,0 +1,194 @@
+From 22157b7bc6481a5b987ea804deec78abdbf39579 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 6 Oct 2007 21:18:58 +0800
+Subject: [PATCH] [VAR] Remove setvarsafe
+
+The only user of setvarsafe is getopts.  However, we can achieve the same
+result by pre-setting the value of shellparam.optind.
+---
+ ChangeLog     |    1 +
+ src/options.c |   48 +++++++++++++++++++++++-------------------------
+ src/var.c     |   25 -------------------------
+ src/var.h     |    1 -
+ 4 files changed, 24 insertions(+), 51 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 11cdb67..ea54d84 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -2,6 +2,7 @@
+ 
+ 	* Add pushstackmark.
+ 	* Treat OPTIND=0 in the same way as OPTIND=1.
++	* Remove setvarsafe.
+ 
+ 2007-10-05  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/options.c b/src/options.c
+index 045345a..568148a 100644
+--- a/src/options.c
++++ b/src/options.c
+@@ -109,7 +109,7 @@ char optlist[NOPTS];
+ STATIC void options(int);
+ STATIC void minus_o(char *, int);
+ STATIC void setoption(int, int);
+-STATIC int getopts(char *, char *, char **, int *, int *); 
++STATIC int getopts(char *, char *, char **);
+ 
+ 
+ /*
+@@ -397,39 +397,40 @@ getoptscmd(int argc, char **argv)
+ 		sh_error("Usage: getopts optstring var [arg]");
+ 	else if (argc == 3) {
+ 		optbase = shellparam.p;
+-		if (shellparam.optind > shellparam.nparam + 1) {
++		if ((unsigned)shellparam.optind > shellparam.nparam + 1) {
+ 			shellparam.optind = 1;
+ 			shellparam.optoff = -1;
+ 		}
+ 	}
+ 	else {
+ 		optbase = &argv[3];
+-		if (shellparam.optind > argc - 2) {
++		if ((unsigned)shellparam.optind > argc - 2) {
+ 			shellparam.optind = 1;
+ 			shellparam.optoff = -1;
+ 		}
+ 	}
+ 
+-	return getopts(argv[1], argv[2], optbase, &shellparam.optind,
+-		       &shellparam.optoff);
++	return getopts(argv[1], argv[2], optbase);
+ }
+ 
+ STATIC int
+-getopts(char *optstr, char *optvar, char **optfirst, int *optind, int *optoff)
++getopts(char *optstr, char *optvar, char **optfirst)
+ {
+ 	char *p, *q;
+ 	char c = '?';
+ 	int done = 0;
+-	int err = 0;
+ 	char s[12];
+ 	char **optnext;
++	int ind = shellparam.optind;
++	int off = shellparam.optoff;
+ 
+-	optnext = optfirst + *optind - 1;
++	shellparam.optind = -1;
++	optnext = optfirst + ind - 1;
+ 
+-	if (*optind <= 1 || *optoff < 0 || strlen(optnext[-1]) < *optoff)
++	if (ind <= 1 || off < 0 || strlen(optnext[-1]) < off)
+ 		p = NULL;
+ 	else
+-		p = optnext[-1] + *optoff;
++		p = optnext[-1] + off;
+ 	if (p == NULL || *p == '\0') {
+ 		/* Current word is done, advance */
+ 		p = *optnext;
+@@ -450,7 +451,7 @@ atend:
+ 			if (optstr[0] == ':') {
+ 				s[0] = c;
+ 				s[1] = '\0';
+-				err |= setvarsafe("OPTARG", s, 0);
++				setvar("OPTARG", s, 0);
+ 			} else {
+ 				outfmt(&errout, "Illegal option -%c\n", c);
+ 				(void) unsetvar("OPTARG");
+@@ -467,7 +468,7 @@ atend:
+ 			if (optstr[0] == ':') {
+ 				s[0] = c;
+ 				s[1] = '\0';
+-				err |= setvarsafe("OPTARG", s, 0);
++				setvar("OPTARG", s, 0);
+ 				c = ':';
+ 			} else {
+ 				outfmt(&errout, "No arg for -%c option\n", c);
+@@ -479,25 +480,22 @@ atend:
+ 
+ 		if (p == *optnext)
+ 			optnext++;
+-		err |= setvarsafe("OPTARG", p, 0);
++		setvar("OPTARG", p, 0);
+ 		p = NULL;
+ 	} else
+-		err |= setvarsafe("OPTARG", nullstr, 0);
++		setvar("OPTARG", nullstr, 0);
+ 
+ out:
+-	*optoff = p ? p - *(optnext - 1) : -1;
+-	*optind = optnext - optfirst + 1;
+-	fmtstr(s, sizeof(s), "%d", *optind);
+-	err |= setvarsafe("OPTIND", s, VNOFUNC);
++	ind = optnext - optfirst + 1;
++	fmtstr(s, sizeof(s), "%d", ind);
++	setvar("OPTIND", s, VNOFUNC);
+ 	s[0] = c;
+ 	s[1] = '\0';
+-	err |= setvarsafe(optvar, s, 0);
+-	if (err) {
+-		*optind = 1;
+-		*optoff = -1;
+-		flushall();
+-		exraise(EXERROR);
+-	}
++	setvar(optvar, s, 0);
++
++	shellparam.optoff = p ? p - *(optnext - 1) : -1;
++	shellparam.optind = ind;
++
+ 	return done;
+ }
+ 
+diff --git a/src/var.c b/src/var.c
+index 3263dc5..501a279 100644
+--- a/src/var.c
++++ b/src/var.c
+@@ -168,31 +168,6 @@ initvar(void)
+ }
+ 
+ /*
+- * Safe version of setvar, returns 1 on success 0 on failure.
+- */
+-
+-int
+-setvarsafe(const char *name, const char *val, int flags)
+-{
+-	int err;
+-	volatile int saveint;
+-	struct jmploc *volatile savehandler = handler;
+-	struct jmploc jmploc;
+-
+-	SAVEINT(saveint);
+-	if (setjmp(jmploc.loc))
+-		err = 1;
+-	else {
+-		handler = &jmploc;
+-		setvar(name, val, flags);
+-		err = 0;
+-	}
+-	handler = savehandler;
+-	RESTOREINT(saveint);
+-	return err;
+-}
+-
+-/*
+  * Set the value of a variable.  The flags argument is ored with the
+  * flags of the variable.  If val is NULL, the variable is unset.
+  */
+diff --git a/src/var.h b/src/var.h
+index c3c2ca7..ae58c6c 100644
+--- a/src/var.h
++++ b/src/var.h
+@@ -138,7 +138,6 @@ int localcmd(int, char **);
+ void poplocalvars(void);
+ int unsetcmd(int, char **);
+ int unsetvar(const char *);
+-int setvarsafe(const char *, const char *, int);
+ int varcmp(const char *, const char *);
+ 
+ static inline int varequal(const char *a, const char *b) {
+-- 
+1.5.3.4
+
