@@ -1,15 +1,15 @@
-From ff6372d73ab74382fa20278f2766d283153bc075 Mon Sep 17 00:00:00 2001
-From: Gerrit Pape <pape@innominate.com>
-Date: Mon, 10 Dec 2007 12:26:58 +0000
+From 73615a4ecfc9bae8130c39ae05216d0feebd0172 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Fri, 21 Dec 2007 08:54:36 +0000
 Subject: [PATCH] run aclocal && autoconf && autoheader && automake
 
 ---
  Makefile.in     |  133 +-
  aclocal.m4      |  174 ++-
- config.h.in     |    6 +
- configure       | 4903 +++++++++++++++++++++++++++++++------------------------
+ config.h.in     |    9 +
+ configure       | 4909 +++++++++++++++++++++++++++++++------------------------
  src/Makefile.in |  175 +--
- 5 files changed, 3067 insertions(+), 2324 deletions(-)
+ 5 files changed, 3074 insertions(+), 2326 deletions(-)
 
 diff --git a/Makefile.in b/Makefile.in
 index 943db1b..b646890 100644
@@ -662,10 +662,10 @@ index 965df90..ce67b57 100644
  
  # Copyright (C) 2004, 2005  Free Software Foundation, Inc.
 diff --git a/config.h.in b/config.h.in
-index 02523bc..a43d402 100644
+index 02523bc..3d94d1d 100644
 --- a/config.h.in
 +++ b/config.h.in
-@@ -3,12 +3,18 @@
+@@ -3,12 +3,21 @@
  /* Define to 1 if you have the `bsearch' function. */
  #undef HAVE_BSEARCH
  
@@ -681,11 +681,14 @@ index 02523bc..a43d402 100644
 +/* Define to 1 if you have the `glob' function. */
 +#undef HAVE_GLOB
 +
++/* Define to 1 if you have the `imaxdiv' function. */
++#undef HAVE_IMAXDIV
++
  /* Define to 1 if you have the <inttypes.h> header file. */
  #undef HAVE_INTTYPES_H
  
 diff --git a/configure b/configure
-index 8290284..9c06455 100755
+index 8290284..7380665 100755
 --- a/configure
 +++ b/configure
 @@ -1,25 +1,54 @@
@@ -1833,13 +1836,13 @@ index 8290284..9c06455 100755
 -if test ! -r $srcdir/$ac_unique_file; then
 -  if test "$ac_srcdir_defaulted" = yes; then
 -    { echo "$as_me: error: cannot find sources ($ac_unique_file) in $ac_confdir or .." >&2
+-   { (exit 1); exit 1; }; }
+-  else
+-    { echo "$as_me: error: cannot find sources ($ac_unique_file) in $srcdir" >&2
 +if test ! -r "$srcdir/$ac_unique_file"; then
 +  test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
 +  { echo "$as_me: error: cannot find sources ($ac_unique_file) in $srcdir" >&2
     { (exit 1); exit 1; }; }
--  else
--    { echo "$as_me: error: cannot find sources ($ac_unique_file) in $srcdir" >&2
--   { (exit 1); exit 1; }; }
 -  fi
  fi
 -(cd $srcdir && test -r ./$ac_unique_file) 2>/dev/null ||
@@ -2030,13 +2033,7 @@ index 8290284..9c06455 100755
 -  [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dir";;
 -  *) ac_abs_builddir=`pwd`/"$ac_dir";;
 -  esac;;
-+    ac_top_srcdir=$srcdir
-+    ac_abs_top_srcdir=$srcdir ;;
-+  *) # Relative name.
-+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
-+    ac_top_srcdir=$ac_top_build_prefix$srcdir
-+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
- esac
+-esac
 -case $ac_abs_builddir in
 -.) ac_abs_top_builddir=${ac_top_builddir}.;;
 -*)
@@ -2054,7 +2051,13 @@ index 8290284..9c06455 100755
 -  [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
 -  *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
 -  esac;;
--esac
++    ac_top_srcdir=$srcdir
++    ac_abs_top_srcdir=$srcdir ;;
++  *) # Relative name.
++    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
++    ac_top_srcdir=$ac_top_build_prefix$srcdir
++    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+ esac
 -case $ac_abs_builddir in
 -.) ac_abs_top_srcdir=$ac_top_srcdir;;
 -*)
@@ -3656,12 +3659,12 @@ index 8290284..9c06455 100755
 -rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 +
 +rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+fi
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
  fi
 -echo "$as_me:$LINENO: result: $ac_cv_prog_cc_g" >&5
 -echo "${ECHO_T}$ac_cv_prog_cc_g" >&6
++
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++fi
 +
 +rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 +   ac_c_werror_flag=$ac_save_c_werror_flag
@@ -4039,7 +4042,7 @@ index 8290284..9c06455 100755
  if test "${ac_cv_prog_YACC+set}" = set; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
-@@ -2876,39 +3340,61 @@ do
+@@ -2876,40 +3340,61 @@ do
    IFS=$as_save_IFS
    test -z "$as_dir" && as_dir=.
    for ac_exec_ext in '' $ac_executable_extensions; do
@@ -4093,7 +4096,7 @@ index 8290284..9c06455 100755
 +if test "${enable_static+set}" = set; then
 +  enableval=$enable_static;
 +fi
-+
+ 
 +if test "$enable_static" = "yes"; then
 +	export LDFLAGS="-static -Wl,--fatal-warnings"
 +fi
@@ -4110,8 +4113,17 @@ index 8290284..9c06455 100755
  
  
  
-@@ -2932,9 +3418,9 @@ for ac_func in bsearch getpwnam getrlimit isalpha killpg mempcpy sigsetmask \
- 	       stpcpy strchrnul strsignal strtod strtoimax strtoumax sysconf
+@@ -2928,13 +3413,16 @@ echo "${ECHO_T}${CC_FOR_BUILD}" >&6
+ 
+ 
+ 
+-for ac_func in bsearch getpwnam getrlimit isalpha killpg mempcpy sigsetmask \
+-	       stpcpy strchrnul strsignal strtod strtoimax strtoumax sysconf
++
++
++for ac_func in bsearch getpwnam getrlimit imaxdiv isalpha killpg mempcpy \
++	       sigsetmask stpcpy strchrnul strsignal strtod strtoimax \
++	       strtoumax sysconf
  do
  as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
 -echo "$as_me:$LINENO: checking for $ac_func" >&5
@@ -4123,7 +4135,7 @@ index 8290284..9c06455 100755
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
    cat >conftest.$ac_ext <<_ACEOF
-@@ -2960,67 +3446,254 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -2960,67 +3448,254 @@ cat >>conftest.$ac_ext <<_ACEOF
  
  #undef $ac_func
  
@@ -4403,7 +4415,7 @@ index 8290284..9c06455 100755
  if test `eval echo '${'$as_ac_var'}'` = yes; then
    cat >>confdefs.h <<_ACEOF
  #define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-@@ -3029,9 +3702,10 @@ _ACEOF
+@@ -3029,9 +3704,10 @@ _ACEOF
  fi
  done
  
@@ -4416,7 +4428,7 @@ index 8290284..9c06455 100755
  if test "${ac_cv_func_signal+set}" = set; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
-@@ -3058,71 +3732,63 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3058,71 +3734,63 @@ cat >>conftest.$ac_ext <<_ACEOF
  
  #undef signal
  
@@ -4512,7 +4524,7 @@ index 8290284..9c06455 100755
  if test "${ac_cv_func_bsd_signal+set}" = set; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
-@@ -3149,67 +3815,59 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3149,67 +3817,59 @@ cat >>conftest.$ac_ext <<_ACEOF
  
  #undef bsd_signal
  
@@ -4602,7 +4614,7 @@ index 8290284..9c06455 100755
  if test $ac_cv_func_bsd_signal = yes; then
  
  cat >>confdefs.h <<\_ACEOF
-@@ -3220,8 +3878,8 @@ fi
+@@ -3220,8 +3880,8 @@ fi
  
  fi
  
@@ -4613,7 +4625,7 @@ index 8290284..9c06455 100755
  if test "${ac_cv_func_stat64+set}" = set; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
-@@ -3248,67 +3906,59 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3248,67 +3908,59 @@ cat >>conftest.$ac_ext <<_ACEOF
  
  #undef stat64
  
@@ -4703,7 +4715,7 @@ index 8290284..9c06455 100755
  if test $ac_cv_func_stat64 = yes; then
    :
  else
-@@ -3338,11 +3988,11 @@ fi
+@@ -3338,11 +3990,11 @@ fi
  
  
  
@@ -4718,7 +4730,7 @@ index 8290284..9c06455 100755
  use_libedit=
  if test "$with_libedit" = "yes"; then
  	ac_ext=c
-@@ -3350,8 +4000,8 @@ ac_cpp='$CPP $CPPFLAGS'
+@@ -3350,8 +4002,8 @@ ac_cpp='$CPP $CPPFLAGS'
  ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
  ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
  ac_compiler_gnu=$ac_cv_c_compiler_gnu
@@ -4729,7 +4741,7 @@ index 8290284..9c06455 100755
  # On Suns, sometimes $CPP names a directory.
  if test -n "$CPP" && test -d "$CPP"; then
    CPP=
-@@ -3385,24 +4035,22 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3385,24 +4037,22 @@ cat >>conftest.$ac_ext <<_ACEOF
  #endif
  		     Syntax error
  _ACEOF
@@ -4765,7 +4777,7 @@ index 8290284..9c06455 100755
    :
  else
    echo "$as_me: failed program was:" >&5
-@@ -3411,9 +4059,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
+@@ -3411,9 +4061,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
    # Broken: fails on valid input.
  continue
  fi
@@ -4777,7 +4789,7 @@ index 8290284..9c06455 100755
    # can be detected and how.
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-@@ -3423,24 +4072,22 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3423,24 +4074,22 @@ cat >>conftest.$ac_ext <<_ACEOF
  /* end confdefs.h.  */
  #include <ac_nonexistent.h>
  _ACEOF
@@ -4813,7 +4825,7 @@ index 8290284..9c06455 100755
    # Broken: success on invalid input.
  continue
  else
-@@ -3451,6 +4098,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
+@@ -3451,6 +4100,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
  ac_preproc_ok=:
  break
  fi
@@ -4821,7 +4833,7 @@ index 8290284..9c06455 100755
  rm -f conftest.err conftest.$ac_ext
  
  done
-@@ -3468,8 +4116,8 @@ fi
+@@ -3468,8 +4118,8 @@ fi
  else
    ac_cv_prog_CPP=$CPP
  fi
@@ -4832,7 +4844,7 @@ index 8290284..9c06455 100755
  ac_preproc_ok=false
  for ac_c_preproc_warn_flag in '' yes
  do
-@@ -3492,24 +4140,22 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3492,24 +4142,22 @@ cat >>conftest.$ac_ext <<_ACEOF
  #endif
  		     Syntax error
  _ACEOF
@@ -4868,7 +4880,7 @@ index 8290284..9c06455 100755
    :
  else
    echo "$as_me: failed program was:" >&5
-@@ -3518,9 +4164,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
+@@ -3518,9 +4166,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
    # Broken: fails on valid input.
  continue
  fi
@@ -4880,7 +4892,7 @@ index 8290284..9c06455 100755
    # can be detected and how.
    cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
-@@ -3530,24 +4177,22 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3530,24 +4179,22 @@ cat >>conftest.$ac_ext <<_ACEOF
  /* end confdefs.h.  */
  #include <ac_nonexistent.h>
  _ACEOF
@@ -4916,7 +4928,7 @@ index 8290284..9c06455 100755
    # Broken: success on invalid input.
  continue
  else
-@@ -3558,6 +4203,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
+@@ -3558,6 +4205,7 @@ sed 's/^/| /' conftest.$ac_ext >&5
  ac_preproc_ok=:
  break
  fi
@@ -4924,7 +4936,7 @@ index 8290284..9c06455 100755
  rm -f conftest.err conftest.$ac_ext
  
  done
-@@ -3580,23 +4226,170 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
+@@ -3580,23 +4228,170 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
  ac_compiler_gnu=$ac_cv_c_compiler_gnu
  
  
@@ -5106,7 +5118,7 @@ index 8290284..9c06455 100755
  if test "${ac_cv_header_stdc+set}" = set; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
-@@ -3620,34 +4413,31 @@ main ()
+@@ -3620,34 +4415,31 @@ main ()
  }
  _ACEOF
  rm -f conftest.$ac_objext
@@ -5155,7 +5167,7 @@ index 8290284..9c06455 100755
  
  if test $ac_cv_header_stdc = yes; then
    # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
-@@ -3703,6 +4493,7 @@ cat confdefs.h >>conftest.$ac_ext
+@@ -3703,6 +4495,7 @@ cat confdefs.h >>conftest.$ac_ext
  cat >>conftest.$ac_ext <<_ACEOF
  /* end confdefs.h.  */
  #include <ctype.h>
@@ -5163,7 +5175,7 @@ index 8290284..9c06455 100755
  #if ((' ' & 0x0FF) == 0x020)
  # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
  # define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
-@@ -3722,18 +4513,27 @@ main ()
+@@ -3722,18 +4515,27 @@ main ()
    for (i = 0; i < 256; i++)
      if (XOR (islower (i), ISLOWER (i))
  	|| toupper (i) != TOUPPER (i))
@@ -5197,7 +5209,7 @@ index 8290284..9c06455 100755
    ac_status=$?
    echo "$as_me:$LINENO: \$? = $ac_status" >&5
    (exit $ac_status); }; }; then
-@@ -3746,12 +4546,14 @@ sed 's/^/| /' conftest.$ac_ext >&5
+@@ -3746,12 +4548,14 @@ sed 's/^/| /' conftest.$ac_ext >&5
  ( exit $ac_status )
  ac_cv_header_stdc=no
  fi
@@ -5215,7 +5227,7 @@ index 8290284..9c06455 100755
  if test $ac_cv_header_stdc = yes; then
  
  cat >>confdefs.h <<\_ACEOF
-@@ -3774,9 +4576,9 @@ for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
+@@ -3774,9 +4578,9 @@ for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
  		  inttypes.h stdint.h unistd.h
  do
  as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -5228,7 +5240,7 @@ index 8290284..9c06455 100755
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
    cat >conftest.$ac_ext <<_ACEOF
-@@ -3790,37 +4592,35 @@ $ac_includes_default
+@@ -3790,37 +4594,35 @@ $ac_includes_default
  #include <$ac_header>
  _ACEOF
  rm -f conftest.$ac_objext
@@ -5283,7 +5295,7 @@ index 8290284..9c06455 100755
  if test `eval echo '${'$as_ac_Header'}'` = yes; then
    cat >>confdefs.h <<_ACEOF
  #define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
-@@ -3831,8 +4631,8 @@ fi
+@@ -3831,8 +4633,8 @@ fi
  done
  
  
@@ -5294,7 +5306,7 @@ index 8290284..9c06455 100755
  if test "${ac_cv_lib_edit_history_init+set}" = set; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
-@@ -3845,69 +4645,67 @@ cat confdefs.h >>conftest.$ac_ext
+@@ -3845,69 +4647,67 @@ cat confdefs.h >>conftest.$ac_ext
  cat >>conftest.$ac_ext <<_ACEOF
  /* end confdefs.h.  */
  
@@ -5391,7 +5403,7 @@ index 8290284..9c06455 100755
  cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
  _ACEOF
-@@ -3918,40 +4716,37 @@ $ac_includes_default
+@@ -3918,40 +4718,37 @@ $ac_includes_default
  #include <histedit.h>
  _ACEOF
  rm -f conftest.$ac_objext
@@ -5450,7 +5462,7 @@ index 8290284..9c06455 100755
  cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
  _ACEOF
-@@ -3960,24 +4755,22 @@ cat >>conftest.$ac_ext <<_ACEOF
+@@ -3960,24 +4757,22 @@ cat >>conftest.$ac_ext <<_ACEOF
  /* end confdefs.h.  */
  #include <histedit.h>
  _ACEOF
@@ -5486,7 +5498,7 @@ index 8290284..9c06455 100755
    ac_header_preproc=yes
  else
    echo "$as_me: failed program was:" >&5
-@@ -3985,9 +4778,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
+@@ -3985,9 +4780,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
  
    ac_header_preproc=no
  fi
@@ -5499,7 +5511,7 @@ index 8290284..9c06455 100755
  
  # So?  What about this header?
  case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-@@ -4011,25 +4805,18 @@ echo "$as_me: WARNING: histedit.h:     section \"Present But Cannot Be Compiled\
+@@ -4011,25 +4807,18 @@ echo "$as_me: WARNING: histedit.h:     section \"Present But Cannot Be Compiled\
  echo "$as_me: WARNING: histedit.h: proceeding with the preprocessor's result" >&2;}
      { echo "$as_me:$LINENO: WARNING: histedit.h: in the future, the compiler will take precedence" >&5
  echo "$as_me: WARNING: histedit.h: in the future, the compiler will take precedence" >&2;}
@@ -5530,7 +5542,7 @@ index 8290284..9c06455 100755
  
  fi
  if test $ac_cv_header_histedit_h = yes; then
-@@ -4053,7 +4840,7 @@ _ACEOF
+@@ -4053,7 +4842,7 @@ _ACEOF
  else
  	export LIBS="$LIBS -ledit"
  fi
@@ -5539,7 +5551,7 @@ index 8290284..9c06455 100755
  
  cat >confcache <<\_ACEOF
  # This file is a shell script that caches the results of configure
-@@ -4073,39 +4860,58 @@ _ACEOF
+@@ -4073,39 +4862,58 @@ _ACEOF
  
  # The following way of writing the cache mishandles newlines in values,
  # but we know of no workaround that is simple, portable, and efficient.
@@ -5614,7 +5626,7 @@ index 8290284..9c06455 100755
    fi
  fi
  rm -f confcache
-@@ -4114,32 +4920,18 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
+@@ -4114,32 +4922,18 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
  # Let make expand exec_prefix.
  test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
  
@@ -5653,7 +5665,7 @@ index 8290284..9c06455 100755
  done
  LIBOBJS=$ac_libobjs
  
-@@ -4184,17 +4976,45 @@ cat >>$CONFIG_STATUS <<\_ACEOF
+@@ -4184,17 +4978,45 @@ cat >>$CONFIG_STATUS <<\_ACEOF
  ## M4sh Initialization.  ##
  ## --------------------- ##
  
@@ -5703,7 +5715,7 @@ index 8290284..9c06455 100755
  
  # Support unset when possible.
  if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
-@@ -4204,8 +5024,43 @@ else
+@@ -4204,8 +5026,43 @@ else
  fi
  
  
@@ -5748,7 +5760,7 @@ index 8290284..9c06455 100755
  PS1='$ '
  PS2='> '
  PS4='+ '
-@@ -4219,18 +5074,19 @@ do
+@@ -4219,18 +5076,19 @@ do
    if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
      eval $as_var=C; export $as_var
    else
@@ -5771,7 +5783,7 @@ index 8290284..9c06455 100755
    as_basename=basename
  else
    as_basename=false
-@@ -4238,159 +5094,120 @@ fi
+@@ -4238,159 +5096,120 @@ fi
  
  
  # Name of the executable.
@@ -6002,7 +6014,7 @@ index 8290284..9c06455 100755
  
  if mkdir -p . 2>/dev/null; then
    as_mkdir_p=:
-@@ -4399,7 +5216,28 @@ else
+@@ -4399,7 +5218,28 @@ else
    as_mkdir_p=false
  fi
  
@@ -6032,7 +6044,7 @@ index 8290284..9c06455 100755
  
  # Sed expression to map a string onto a valid CPP name.
  as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
-@@ -4408,31 +5246,14 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
+@@ -4408,31 +5248,14 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
  as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
  
  
@@ -6068,7 +6080,7 @@ index 8290284..9c06455 100755
  
    CONFIG_FILES    = $CONFIG_FILES
    CONFIG_HEADERS  = $CONFIG_HEADERS
-@@ -4440,30 +5261,20 @@ generated by GNU Autoconf 2.59.  Invocation command line was
+@@ -4440,30 +5263,20 @@ generated by GNU Autoconf 2.59.  Invocation command line was
    CONFIG_COMMANDS = $CONFIG_COMMANDS
    $ $0 $@
  
@@ -6107,7 +6119,7 @@ index 8290284..9c06455 100755
  ac_cs_usage="\
  \`$as_me' instantiates files from templates according to the
  current configuration.
-@@ -4471,7 +5282,7 @@ current configuration.
+@@ -4471,7 +5284,7 @@ current configuration.
  Usage: $0 [OPTIONS] [FILE]...
  
    -h, --help       print this help, then exit
@@ -6116,7 +6128,7 @@ index 8290284..9c06455 100755
    -q, --quiet      do not print progress messages
    -d, --debug      don't remove temporary files
        --recheck    update $as_me by reconfiguring in the same conditions
-@@ -4490,19 +5301,22 @@ Configuration commands:
+@@ -4490,19 +5303,22 @@ Configuration commands:
  $config_commands
  
  Report bugs to <bug-autoconf@gnu.org>."
@@ -6145,7 +6157,7 @@ index 8290284..9c06455 100755
  _ACEOF
  
  cat >>$CONFIG_STATUS <<\_ACEOF
-@@ -4513,39 +5327,24 @@ while test $# != 0
+@@ -4513,39 +5329,24 @@ while test $# != 0
  do
    case $1 in
    --*=*)
@@ -6191,7 +6203,7 @@ index 8290284..9c06455 100755
      debug=: ;;
    --file | --fil | --fi | --f )
      $ac_shift
-@@ -4555,18 +5354,24 @@ Try \`$0 --help' for more information." >&2;}
+@@ -4555,18 +5356,24 @@ Try \`$0 --help' for more information." >&2;}
      $ac_shift
      CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
      ac_need_defaults=false;;
@@ -6221,7 +6233,7 @@ index 8290284..9c06455 100755
  
    esac
    shift
-@@ -4582,38 +5387,50 @@ fi
+@@ -4582,38 +5389,50 @@ fi
  _ACEOF
  cat >>$CONFIG_STATUS <<_ACEOF
  if \$ac_cs_recheck; then
@@ -6284,7 +6296,7 @@ index 8290284..9c06455 100755
  # If the user did not use the arguments to specify the items to instantiate,
  # then the envvar interface is used.  Set only those that are not.
  # We use the long form for the default assignment because of an extremely
-@@ -4625,578 +5442,534 @@ if $ac_need_defaults; then
+@@ -4625,578 +5444,534 @@ if $ac_need_defaults; then
  fi
  
  # Have a temporary directory for convenience.  Make it in the build tree
@@ -7304,7 +7316,7 @@ index 8290284..9c06455 100755
  # Compute $ac_file's index in $config_headers.
  _am_stamp_count=1
  for _am_header in $config_headers :; do
-@@ -5207,135 +5980,39 @@ for _am_header in $config_headers :; do
+@@ -5207,135 +5982,39 @@ for _am_header in $config_headers :; do
        _am_stamp_count=`expr $_am_stamp_count + 1` ;;
    esac
  done
@@ -7466,7 +7478,7 @@ index 8290284..9c06455 100755
    # Strip MF so we end up with the name of the file.
    mf=`echo "$mf" | sed -e 's/:.*$//'`
    # Check whether this is an Automake generated Makefile or not.
-@@ -5343,20 +6020,32 @@ echo "$as_me: executing $ac_dest commands" >&6;}
+@@ -5343,20 +6022,32 @@ echo "$as_me: executing $ac_dest commands" >&6;}
    # some people rename them; so instead we look at the file content.
    # Grep'ing the first line is not enough: some people post-process
    # each Makefile.in and add a new line on top of each file to say so.
@@ -7509,7 +7521,7 @@ index 8290284..9c06455 100755
    else
      continue
    fi
-@@ -5378,53 +6067,79 @@ echo X"$mf" |
+@@ -5378,53 +6069,79 @@ echo X"$mf" |
         sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
      # Make sure the directory exists.
      test -f "$dirpart/$file" && continue
@@ -8057,5 +8069,5 @@ index d5fb876..2b2ba34 100644
  
  token.h: mktokens
 -- 
-1.5.3.4
+1.5.3.7
 

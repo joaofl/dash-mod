@@ -1049,5 +1049,5 @@ index ae58c6c..66443df 100644
  char **listvars(int, int, char ***);
  #define environment() listvars(VEXPORT, VUNSET, 0)
 -- 
-1.5.3.4
+1.5.3.7
 

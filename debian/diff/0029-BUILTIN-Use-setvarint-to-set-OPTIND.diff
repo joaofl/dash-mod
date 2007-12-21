@@ -95,5 +95,5 @@ index 66443df..e4e2cff 100644
  struct strlist;
  void listsetvar(struct strlist *, int);
 -- 
-1.5.3.4
+1.5.3.7
 

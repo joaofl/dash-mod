@@ -66,5 +66,5 @@ index 8a41e64..282dbb0 100644
  	if (p == sstrend)
  		p = growstackstr();
 -- 
-1.5.3.4
+1.5.3.7
 

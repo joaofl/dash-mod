@@ -48,5 +48,5 @@ index 85f1406..045345a 100644
  
  	if (*optind <= 1 || *optoff < 0 || strlen(optnext[-1]) < *optoff)
 -- 
-1.5.3.4
+1.5.3.7
 

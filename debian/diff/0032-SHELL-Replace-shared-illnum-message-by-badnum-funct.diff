@@ -100,5 +100,5 @@ index 477cd16..2e0540a 100644
  intmax_t atomax10(const char *);
  int number(const char *);
 -- 
-1.5.3.4
+1.5.3.7
 
