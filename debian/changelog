@@ -8,8 +8,10 @@ dash (0.5.4-4) unstable; urgency=low
     as debian/diff/0040-*.
   * debian/po/vi.po: [INTL:vi] Vietnamese debconf templates translation
     update (thx Clytie Siddall, closes: #453625).
+  * debian/diff/ja.po: new; [INTL:ja] Japanese debconf translation (thx
+    Kenshi Muto, closes: #446573).
 
- -- Gerrit Pape <pape@smarden.org>  Fri, 21 Dec 2007 09:15:50 +0000
+ -- Gerrit Pape <pape@smarden.org>  Fri, 21 Dec 2007 09:21:34 +0000
 
 dash (0.5.4-3) unstable; urgency=low
 
