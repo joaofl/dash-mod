@@ -1,6 +1,6 @@
-From 385aca22753fbead576c4eb5fbbecf3852af3793 Mon Sep 17 00:00:00 2001
+From db29f202f4b228496f175eb1468a49ea7f8bdfb4 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
-Date: Thu, 20 Dec 2007 12:43:14 +0000
+Date: Sun, 23 Dec 2007 21:24:37 +0800
 Subject: [PATCH] [ARITH] If imaxdiv() isn't available, use / and % operators
 
 Although in posix, imaxdiv() isn't implemented on Debian/alpha, causing
@@ -10,11 +10,25 @@ available.
  http://bugs.debian.org/456398
 
 Signed-off-by: Gerrit Pape <pape@smarden.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 ---
+ ChangeLog        |    4 ++++
  configure.ac     |    5 +++--
  src/arith_yacc.c |    6 ++++++
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ 3 files changed, 13 insertions(+), 2 deletions(-)
 
+diff --git a/ChangeLog b/ChangeLog
+index 10ec45c..56acd66 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-12-23  Gerrit Pape <pape@smarden.org>
++
++	* If imaxdiv() isn't available, use / and % operators.
++
+ 2007-12-23  Richard M Kreuter <kreuter@progn.net>
+ 
+ 	* Add set +o support.
 diff --git a/configure.ac b/configure.ac
 index ccc4ac1..4d739c2 100644
 --- a/configure.ac

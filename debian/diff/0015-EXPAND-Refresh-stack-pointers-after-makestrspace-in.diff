@@ -1,4 +1,4 @@
-From 8afef9c5925d5d01857dff410e9d785661256bc0 Mon Sep 17 00:00:00 2001
+From a157c37d302aa2ba32503d2adc1264a43fbb0542 Mon Sep 17 00:00:00 2001
 From: Roy Marples <uberlord@gentoo.org>
 Date: Wed, 26 Sep 2007 13:59:56 +0800
 Subject: [PATCH] [EXPAND] Refresh stack pointers after makestrspace in _rmescapes

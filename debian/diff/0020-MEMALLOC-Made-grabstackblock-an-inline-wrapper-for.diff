@@ -1,4 +1,4 @@
-From e5ed9d07d7a412b92b01d27b1b3c721f815eaa62 Mon Sep 17 00:00:00 2001
+From 5b4c0869166220d27fc665f44d3d186c71445c58 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Fri, 5 Oct 2007 23:26:45 +0800
 Subject: [PATCH] [MEMALLOC] Made grabstackblock an inline wrapper for stalloc

@@ -1,4 +1,4 @@
-From a0761ea2120270c0c431f1b55aeecd4c3c714ee9 Mon Sep 17 00:00:00 2001
+From 5ad12f1a178523f2382f1edaed640ea2aed3fbb9 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Tue, 25 Sep 2007 10:54:13 +0800
 Subject: [PATCH] [EXPAND] Do not expand tilde in parameter expansion within quotes

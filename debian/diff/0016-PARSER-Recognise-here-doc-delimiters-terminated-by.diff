@@ -1,4 +1,4 @@
-From b51b439f12f370ee0ea728d5073ef886c488b4a2 Mon Sep 17 00:00:00 2001
+From 958bfe6c497042f8f927ef211b8929bf5e2dc551 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Wed, 26 Sep 2007 17:14:16 +0800
 Subject: [PATCH] [PARSER] Recognise here-doc delimiters terminated by EOF

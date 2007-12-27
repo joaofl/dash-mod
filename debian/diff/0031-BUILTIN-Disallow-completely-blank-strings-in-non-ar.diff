@@ -1,4 +1,4 @@
-From de30b28182cbdcdfdb3f80cb98e1a2a79e43c7aa Mon Sep 17 00:00:00 2001
+From b40aa93111e89ed92bbc0d899493ff3429355393 Mon Sep 17 00:00:00 2001
 From: Oleg Verych <olecom@flower.upol.cz>
 Date: Wed, 17 Oct 2007 12:34:03 +0800
 Subject: [PATCH] [BUILTIN] Disallow completely blank strings in non-arithmetic context.

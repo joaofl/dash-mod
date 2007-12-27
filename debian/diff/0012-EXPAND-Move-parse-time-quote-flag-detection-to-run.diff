@@ -1,6 +1,6 @@
-From 93b2c68e9ae7126f7f0f622d90ac9e862979ef13 Mon Sep 17 00:00:00 2001
-From: Gerrit Pape <pape@innominate.com>
-Date: Mon, 10 Dec 2007 12:33:40 +0000
+From 2e27f7201bb2d3966e6b15bca1e1c6cb87f6fa3b Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Tue, 25 Sep 2007 22:29:00 +0800
 Subject: [PATCH] [EXPAND] Move parse-time quote flag detection to run-time
 
 Because the parser does not recursively parse parameter expansion with respect
@@ -20,10 +20,6 @@ Old result:
 New result:
 
 	<>
-
-Conflicts:
-
-	src/TOUR
 ---
  ChangeLog      |    1 +
  src/eval.c     |    2 +-

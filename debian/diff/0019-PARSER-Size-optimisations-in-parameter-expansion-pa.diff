@@ -1,4 +1,4 @@
-From a52774a777752217668d968517f6d973173ff2ee Mon Sep 17 00:00:00 2001
+From bd32836c851d262db52b4e4f183441c049eebee4 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 4 Oct 2007 22:20:38 +0800
 Subject: [PATCH] [PARSER] Size optimisations in parameter expansion parser

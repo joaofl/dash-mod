@@ -1,4 +1,4 @@
-From 22157b7bc6481a5b987ea804deec78abdbf39579 Mon Sep 17 00:00:00 2001
+From 020a275c976f444aade5b09e6298717c50838f22 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 6 Oct 2007 21:18:58 +0800
 Subject: [PATCH] [VAR] Remove setvarsafe

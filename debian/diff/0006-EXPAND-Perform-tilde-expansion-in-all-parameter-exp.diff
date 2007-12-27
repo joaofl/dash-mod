@@ -1,4 +1,4 @@
-From bc7319c4bd3ab36f87a9b17771b59b655cab80fb Mon Sep 17 00:00:00 2001
+From 5b06be6d4dd2274044f75babc3fbca1efb4fb07a Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 16:22:25 +0800
 Subject: [PATCH] [EXPAND] Perform tilde expansion in all parameter expansion words

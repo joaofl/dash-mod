@@ -1,4 +1,4 @@
-From 868123a953e4e02c3fe8431ad73e60304bfc490a Mon Sep 17 00:00:00 2001
+From 17a177af823eb2828dd980aabf0f51edf981fd22 Mon Sep 17 00:00:00 2001
 From: Oleg Verych <olecom@flower.upol.cz>
 Date: Sat, 22 Sep 2007 21:19:37 +0800
 Subject: [PATCH] [BUILTIN] test: little size and speed optimizations

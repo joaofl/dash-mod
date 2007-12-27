@@ -1,3 +1,18 @@
+dash (0.5.4-5) unstable; urgency=low
+
+  * debian/diff/0038-EVAL-Fix-unaligned-trap-on-sparc.diff: applied
+    upstream, rename to
+    0038-EVAL-Fix-bad-pointer-arithmetic-in-evalcommand.diff.
+  * debian/diff/0039-ARITH-If-imaxdiv-isn-t-available-use-and-ope.diff:
+    applied upstream, rename to
+    0040-ARITH-If-imaxdiv-isn-t-available-use-and-ope.diff.
+  * debian/diff/0040-run-aclocal-autoconf-autoheader-automake.diff: redo
+    as debian/diff/0041-run-aclocal-autoconf-autoheader-automake.diff.
+  * debian/diff/0039-BUILTIN-Add-set-o-support.diff: new; from upstream
+    git: Add set +o support (closes: #456990).
+
+ -- Gerrit Pape <pape@smarden.org>  Thu, 27 Dec 2007 12:15:52 +0000
+
 dash (0.5.4-4) unstable; urgency=low
 
   * debian/diff/0038-EVAL-Fix-unaligned-trap-on-sparc.diff: new; fix

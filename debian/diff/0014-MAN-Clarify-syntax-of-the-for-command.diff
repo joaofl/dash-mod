@@ -1,4 +1,4 @@
-From 20bb6dab1855d93a2028ae16e72f5c52ca040cbb Mon Sep 17 00:00:00 2001
+From 534ce7ac15165f6e0953da99ac2c049ed22314f2 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Tue, 25 Sep 2007 22:47:25 +0800
 Subject: [PATCH] [MAN] Clarify syntax of the for command

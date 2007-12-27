@@ -1,4 +1,4 @@
-From fe1ed01705dc948d7232aa5f26ad1c179727009c Mon Sep 17 00:00:00 2001
+From a1eb6796ab0000c9b4acfa9dd2b529a2f1b415eb Mon Sep 17 00:00:00 2001
 From: Alexey Gladkov <legion@altlinux.org>
 Date: Thu, 4 Oct 2007 14:21:44 +0800
 Subject: [PATCH] [BUILD] Add --enable-static option to configure.

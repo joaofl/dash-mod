@@ -1,4 +1,4 @@
-From 712003d55de7efaf80651dd8e442ea7cc398703b Mon Sep 17 00:00:00 2001
+From d6ce4f9a86ff68b52358fcd3ab2818040dcab596 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 21:53:49 +0800
 Subject: [PATCH] [PARSER] Remove superfluous arinest test in CENDQUOTE
