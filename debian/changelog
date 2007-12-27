@@ -10,8 +10,9 @@ dash (0.5.4-5) unstable; urgency=low
     as debian/diff/0041-run-aclocal-autoconf-autoheader-automake.diff.
   * debian/diff/0039-BUILTIN-Add-set-o-support.diff: new; from upstream
     git: Add set +o support (closes: #456990).
+  * debian/diff/ja.po: remove again, doh.
 
- -- Gerrit Pape <pape@smarden.org>  Thu, 27 Dec 2007 12:15:52 +0000
+ -- Gerrit Pape <pape@smarden.org>  Thu, 27 Dec 2007 12:23:12 +0000
 
 dash (0.5.4-4) unstable; urgency=low
 
