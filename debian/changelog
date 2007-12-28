@@ -1,3 +1,9 @@
+dash (0.5.4-5.1) unstable; urgency=low
+
+  * debian/control: add Vcs-Git: http://smarden.org/git/dash.git/.
+
+ -- Gerrit Pape <pape@smarden.org>  Fri, 28 Dec 2007 12:30:53 +0000
+
 dash (0.5.4-5) unstable; urgency=low
 
   * debian/diff/0038-EVAL-Fix-unaligned-trap-on-sparc.diff: applied
