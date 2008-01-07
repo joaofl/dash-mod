@@ -1,4 +1,4 @@
-From 00ca7aa46be213fcdefd28b60dda5f8362cec29a Mon Sep 17 00:00:00 2001
+From e3806e06bd39fb62033646b812937a1712fd78ed Mon Sep 17 00:00:00 2001
 From: Richard M Kreuter <kreuter@progn.net>
 Date: Sun, 23 Dec 2007 11:24:48 +0800
 Subject: [PATCH] [BUILTIN] Add set +o support

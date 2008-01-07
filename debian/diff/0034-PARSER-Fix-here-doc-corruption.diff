@@ -1,4 +1,4 @@
-From 8a160a1bfc89330cd5c004ea4dccb25a5b9ae7a2 Mon Sep 17 00:00:00 2001
+From f22cfbd19cbadbc9b01733cdd20ed2336b7fcb25 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 20 Oct 2007 18:49:31 +0800
 Subject: [PATCH] [PARSER] Fix here-doc corruption

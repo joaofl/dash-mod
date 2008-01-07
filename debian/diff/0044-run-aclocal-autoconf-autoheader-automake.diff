@@ -1,6 +1,6 @@
-From 72bce403b4df2e37c005fa3a3988536ea22c18e0 Mon Sep 17 00:00:00 2001
+From c696bc5f353a57ec0f12b3e8fcecc0a2004126ec Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
-Date: Thu, 27 Dec 2007 12:15:00 +0000
+Date: Mon, 7 Jan 2008 09:26:06 +0000
 Subject: [PATCH] run aclocal && autoconf && autoheader && automake
 
 ---

@@ -1,4 +1,4 @@
-From f4e6003cd5a64afeaa6e622d33b70f3d6b09c628 Mon Sep 17 00:00:00 2001
+From 0db88ff47ad488680bce86defd7254f4f682e850 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 20 Oct 2007 18:26:23 +0800
 Subject: [PATCH] [EXPAND] Added configure --enable-glob and --enable-fnmatch options

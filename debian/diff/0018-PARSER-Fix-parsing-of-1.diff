@@ -1,4 +1,4 @@
-From 4d91c2b3076500ab3fd0388e8f9cf56bf5f11fd1 Mon Sep 17 00:00:00 2001
+From d4f9f079e000e1fb04ab58cac1c3aeabc190a344 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 4 Oct 2007 22:15:10 +0800
 Subject: [PATCH] [PARSER] Fix parsing of ${##1}

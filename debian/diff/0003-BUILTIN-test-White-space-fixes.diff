@@ -1,4 +1,4 @@
-From 6896f6f5ba6b1c637947bb1a7c9c3b3384879202 Mon Sep 17 00:00:00 2001
+From cd8b7aebb095f82a574b2863bd82f3333d215042 Mon Sep 17 00:00:00 2001
 From: Oleg Verych <olecom@flower.upol.cz>
 Date: Sat, 22 Sep 2007 21:08:32 +0800
 Subject: [PATCH] [BUILTIN] test: White space fixes

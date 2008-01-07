@@ -1,4 +1,4 @@
-From 1ee424aabeef91b3a563ad7fd69aced0f206841f Mon Sep 17 00:00:00 2001
+From ede60fbf86edd87449585781df10e091ec420a1f Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 21:59:39 +0800
 Subject: [PATCH] [PARSER] Remove superfluous arinest test for dqvarnest

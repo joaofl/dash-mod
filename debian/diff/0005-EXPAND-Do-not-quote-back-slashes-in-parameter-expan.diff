@@ -1,4 +1,4 @@
-From 43785d5b96587bde690684fbb5967bbd42e8d8e9 Mon Sep 17 00:00:00 2001
+From 9b568fedfdc4ec56e52ded4c3a1a135d24c8d75b Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 16:17:20 +0800
 Subject: [PATCH] [EXPAND] Do not quote back slashes in parameter expansions outside quotes

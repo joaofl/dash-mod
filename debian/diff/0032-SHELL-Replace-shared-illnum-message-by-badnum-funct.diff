@@ -1,4 +1,4 @@
-From 74e9af12ddf00a85ca31b2bba1344e663667f4f1 Mon Sep 17 00:00:00 2001
+From 044393f703ffb1b87b207ad66869d3ebb9e09eaa Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Wed, 17 Oct 2007 12:51:08 +0800
 Subject: [PATCH] [SHELL] Replace shared illnum message by badnum function.

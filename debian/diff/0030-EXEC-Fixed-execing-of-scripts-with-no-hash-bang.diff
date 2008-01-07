@@ -1,4 +1,4 @@
-From 0e9acbbbb51abb57ff040be22197b7741eefd338 Mon Sep 17 00:00:00 2001
+From cbf7553964832984f17c0c16ff071970e19a45c2 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 15 Oct 2007 20:24:28 +0800
 Subject: [PATCH] [EXEC] Fixed execing of scripts with no hash-bang

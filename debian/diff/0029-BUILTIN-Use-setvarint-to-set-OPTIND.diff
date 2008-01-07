@@ -1,4 +1,4 @@
-From baea47cdba2a550ba6a6a2f1d47abe6d8d102642 Mon Sep 17 00:00:00 2001
+From 894c375d54ef5c0d90523d9aa06ec183e5894122 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 11 Oct 2007 22:44:40 +0800
 Subject: [PATCH] [BUILTIN] Use setvarint to set OPTIND

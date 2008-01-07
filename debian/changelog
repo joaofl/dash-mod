@@ -1,8 +1,16 @@
-dash (0.5.4-5.1) unstable; urgency=low
+dash (0.5.4-6) unstable; urgency=low
 
   * debian/control: add Vcs-Git: http://smarden.org/git/dash.git/.
+  * debian/diff/0041-PARSER-Add-FAKEEOFMARK-for-expandstr.diff,
+    debian/diff/0042-PARSER-Do-not-show-prompts-in-expandstr.diff: new
+    from upstream git.
+  * debian/diff/0043-EXPAND-Fix-slash-treatment-in-expmeta.diff: new
+    from upstream git: [EXPAND] Fix slash treatment in expmeta (closes:
+    #458687, #458690, #459049).
+  * debian/diff/0041-run-aclocal-autoconf-autoheader-automake.diff: redo
+    as debian/diff/0044-run-aclocal-autoconf-autoheader-automake.diff.
 
- -- Gerrit Pape <pape@smarden.org>  Fri, 28 Dec 2007 12:30:53 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 07 Jan 2008 09:28:25 +0000
 
 dash (0.5.4-5) unstable; urgency=low
 

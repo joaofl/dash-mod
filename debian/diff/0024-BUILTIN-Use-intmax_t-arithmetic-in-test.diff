@@ -1,4 +1,4 @@
-From 800796969d9409ec5d5080304fa4dfd3118172f1 Mon Sep 17 00:00:00 2001
+From 8e92ae4cb4ab07ebf88c99c9dcd6219e7ea3297f Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 6 Oct 2007 22:42:14 +0800
 Subject: [PATCH] [BUILTIN] Use intmax_t arithmetic in test

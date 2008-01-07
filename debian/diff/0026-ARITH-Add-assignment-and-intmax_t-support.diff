@@ -1,4 +1,4 @@
-From 033ef3bce7a8959b79afe3b59a0dbc4b7961e547 Mon Sep 17 00:00:00 2001
+From 1e0d45a1c6d749533b090a2d7068b9c36a1473fe Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 11 Oct 2007 22:36:28 +0800
 Subject: [PATCH] [ARITH] Add assignment and intmax_t support

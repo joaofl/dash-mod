@@ -1,4 +1,4 @@
-From db29f202f4b228496f175eb1468a49ea7f8bdfb4 Mon Sep 17 00:00:00 2001
+From 509ca4a5a2699af4bce734dfb9efa10e2b5f631d Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Sun, 23 Dec 2007 21:24:37 +0800
 Subject: [PATCH] [ARITH] If imaxdiv() isn't available, use / and % operators

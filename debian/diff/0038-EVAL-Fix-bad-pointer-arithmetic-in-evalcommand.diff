@@ -1,4 +1,4 @@
-From 7b31d8a48e61c006ed02943712e9c16913685484 Mon Sep 17 00:00:00 2001
+From 1db0b82e3cafe809be176016b1e83a05119eac08 Mon Sep 17 00:00:00 2001
 From: Steve Langasek <steve.langasek@canonical.com>
 Date: Sun, 23 Dec 2007 11:02:26 +0800
 Subject: [PATCH] [EVAL] Fix bad pointer arithmetic in evalcommand

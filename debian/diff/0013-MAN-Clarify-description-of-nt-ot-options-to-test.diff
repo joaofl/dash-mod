@@ -1,4 +1,4 @@
-From 66687f2785687b46dd05bcfaf31d1e6081cc77a2 Mon Sep 17 00:00:00 2001
+From 68cbcb7160c5b02c2184e850ff3d5c52864ba024 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Tue, 25 Sep 2007 22:46:55 +0800
 Subject: [PATCH] [MAN] Clarify description of -nt, -ot options to test builtin

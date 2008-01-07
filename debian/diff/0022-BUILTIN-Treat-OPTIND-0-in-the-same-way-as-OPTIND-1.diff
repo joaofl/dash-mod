@@ -1,4 +1,4 @@
-From ff7359e6c8fff6b3e38cb6fced6e9366bcb082c0 Mon Sep 17 00:00:00 2001
+From ee88381ece2dad9524f924b08e40045034eda0f5 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 6 Oct 2007 18:59:31 +0800
 Subject: [PATCH] [BUILTIN] Treat OPTIND=0 in the same way as OPTIND=1
