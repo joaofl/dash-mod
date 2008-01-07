@@ -6,7 +6,6 @@
 #
 # Even minor modifications require translation updates and such
 # changes should be coordinated with translators and reviewers.
-
 Template: dash/sh
 Type: boolean
 Default: false

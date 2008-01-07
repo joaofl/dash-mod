@@ -9,8 +9,9 @@ dash (0.5.4-6) unstable; urgency=low
     #458687, #458690, #459049).
   * debian/diff/0041-run-aclocal-autoconf-autoheader-automake.diff: redo
     as debian/diff/0044-run-aclocal-autoconf-autoheader-automake.diff.
+  * debian/dash.templates.in: remove empty line after comments, hmm.
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 07 Jan 2008 09:28:25 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 07 Jan 2008 10:37:47 +0000
 
 dash (0.5.4-5) unstable; urgency=low
 
