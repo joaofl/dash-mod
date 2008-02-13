@@ -1,3 +1,10 @@
+dash (0.5.4-7) unstable; urgency=low
+
+  * debian/po/nl.po: [INTL:nl] New po-debconf translation in Dutch for dash
+    (thx Tim Dijkstra, closes: #458425).
+
+ -- Gerrit Pape <pape@smarden.org>  Wed, 13 Feb 2008 19:09:45 +0000
+
 dash (0.5.4-6) unstable; urgency=low
 
   * debian/control: add Vcs-Git: http://smarden.org/git/dash.git/.
