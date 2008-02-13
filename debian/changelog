@@ -2,8 +2,10 @@ dash (0.5.4-7) unstable; urgency=low
 
   * debian/po/nl.po: [INTL:nl] New po-debconf translation in Dutch for dash
     (thx Tim Dijkstra, closes: #458425).
+  * debian/rules: apply patch for cross building support, slightly modified
+    (thx Neil Williams, closes: #450512).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 13 Feb 2008 19:09:45 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 13 Feb 2008 19:19:53 +0000
 
 dash (0.5.4-6) unstable; urgency=low
 

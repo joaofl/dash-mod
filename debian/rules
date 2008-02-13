@@ -1,8 +1,14 @@
 #!/usr/bin/make -f
 
-CC =cc
+CC =gcc
 CFLAGS =-g -O2 -Wall
 STRIP =strip
+
+DEB_HOST_GNU_TYPE =$(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE =$(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+ifneq ($(DEB_HOST_GNU_TYPE),$(DEB_BUILD_GNU_TYPE))
+  CC =$(DEB_HOST_GNU_TYPE)-gcc
+endif
 
 ifneq (,$(findstring diet,$(DEB_BUILD_OPTIONS)))
   CC =diet -v -Os gcc
@@ -32,7 +38,7 @@ configure-stamp: patch-stamp
 
 build: deb-checkdir build-stamp
 build-stamp: configure-stamp
-	-gcc -v
+	-$(CC) -v
 	(cd build-tmp && exec $(MAKE) CFLAGS='$(CFLAGS)') || \
 	  (cat build-tmp/config.log; exit 1) || exit 1
 	touch build-stamp
@@ -80,7 +86,7 @@ binary-indep: install-indep ash.deb
 binary-arch: install-arch po-templates dash.deb
 	# dash
 	rm -f debian/substvars
-	test '$(CC)' != 'cc' || dpkg-shlibdeps '$(DIR)'/bin/dash
+	test '$(CC)' != 'gcc' || dpkg-shlibdeps '$(DIR)'/bin/dash
 	dpkg-gencontrol -isp -pdash -P'$(DIR)'
 	dpkg -b '$(DIR)' ..
 
