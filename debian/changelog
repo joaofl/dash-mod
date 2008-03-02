@@ -4,8 +4,11 @@ dash (0.5.4-8) unstable; urgency=low
     Doolittle, blessed by upstream: Fix null pointer dereference (thx!,
     closes: #467065; most probably closes: #462414, #462977, #463649,
     #467358, #468376, #468449, #468837, #469102).
+  * debian/dash.templates.in: don't mention 'distribution policy' or
+    'Debian policy' at all, but talk only about POSIX-compliance; run
+    debconf-updatepo (closes: #455550).
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 02 Mar 2008 21:15:55 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun, 02 Mar 2008 21:24:19 +0000
 
 dash (0.5.4-7) unstable; urgency=low
 

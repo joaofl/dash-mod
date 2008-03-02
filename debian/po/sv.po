@@ -8,13 +8,13 @@
 # or http://www.debian.org/intl/l10n/po-debconf/README-trans
 # Developers do not need to manually edit POT or PO files.
 # , fuzzy
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: dash 0.5.2-7\n"
-"Report-Msgid-Bugs-To: Source: dash@packages.debian.org\n"
-"POT-Creation-Date: 2007-11-11 19:37+0000\n"
+"Report-Msgid-Bugs-To: dash@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-02 21:54+0000\n"
 "PO-Revision-Date: 2005-09-27 15:43-0700\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -24,25 +24,24 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:2001
+#: ../dash.templates.in:1001
 msgid "Install dash as /bin/sh?"
 msgstr "Installera dash som /bin/sh?"
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:2001
+#: ../dash.templates.in:1001
 msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
 msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:2001
+#: ../dash.templates.in:1001
 #, fuzzy
 msgid ""
-"However, since the distribution policy requires all shell scripts using /bin/"
-"sh to be POSIX compliant, any shell that conforms to POSIX, such as dash, "
-"can serve as /bin/sh. You may wish to do this because dash is faster and "
-"smaller than bash."
+"However, since the default shell is required to be POSIX-compliant, any "
+"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+"wish to do this because dash is faster and smaller than bash."
 msgstr ""
 "Bash är standard för /bin/sh på ett Debian-system.  Eftersom vår policy "
 "kräver att alla script som använder /bin/sh måste vara POSIX-kompatibla, kan "

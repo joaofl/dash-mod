@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: dash 0.4.17\n"
-"Report-Msgid-Bugs-To: Source: dash@packages.debian.org\n"
-"POT-Creation-Date: 2007-11-11 19:37+0000\n"
+"Report-Msgid-Bugs-To: dash@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-02 21:54+0000\n"
 "PO-Revision-Date: 2007-11-11 21:15+0100\n"
 "Last-Translator: Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -26,24 +26,29 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:2001
+#: ../dash.templates.in:1001
 msgid "Install dash as /bin/sh?"
 msgstr "Faut-il mettre en place un lien de /bin/sh vers dash ?"
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:2001
+#: ../dash.templates.in:1001
 msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
 msgstr "Par défaut, sur un système Debian, /bin/sh est un lien vers bash."
 
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:2001
+#: ../dash.templates.in:1001
+#, fuzzy
+#| msgid ""
+#| "However, since the distribution policy requires all shell scripts using /"
+#| "bin/sh to be POSIX compliant, any shell that conforms to POSIX, such as "
+#| "dash, can serve as /bin/sh. You may wish to do this because dash is "
+#| "faster and smaller than bash."
 msgid ""
-"However, since the distribution policy requires all shell scripts using /bin/"
-"sh to be POSIX compliant, any shell that conforms to POSIX, such as dash, "
-"can serve as /bin/sh. You may wish to do this because dash is faster and "
-"smaller than bash."
+"However, since the default shell is required to be POSIX-compliant, any "
+"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+"wish to do this because dash is faster and smaller than bash."
 msgstr ""
 "Cependant, comme la charte Debian impose que tous les scripts utilisant /bin/"
 "sh soient conformes à la norme POSIX, /bin/sh peut être n'importe quel "
