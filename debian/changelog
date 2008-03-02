@@ -1,3 +1,12 @@
+dash (0.5.4-8) unstable; urgency=low
+
+  * debian/diff/0045-Fix-null-pointer-dereference.diff: new from Larry
+    Doolittle, blessed by upstream: Fix null pointer dereference (thx!,
+    closes: #467065; most probably closes: #462414, #462977, #463649,
+    #467358, #468376, #468449, #468837, #469102).
+
+ -- Gerrit Pape <pape@smarden.org>  Sun, 02 Mar 2008 21:15:55 +0000
+
 dash (0.5.4-7) unstable; urgency=low
 
   * debian/po/nl.po: [INTL:nl] New po-debconf translation in Dutch for dash
