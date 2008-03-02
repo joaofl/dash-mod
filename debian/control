@@ -3,7 +3,7 @@ Section: shells
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
 Build-Depends: po-debconf
-Standards-Version: 3.7.2.2
+Standards-Version: 3.7.3.0
 Vcs-Git: http://smarden.org/git/dash.git/
 
 Package: dash
