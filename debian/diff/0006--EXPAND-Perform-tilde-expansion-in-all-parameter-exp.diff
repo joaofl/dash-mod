@@ -1,0 +1,54 @@
+From 82c20d9ca645ea33cbc500ad3da3b1c8d430322d Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Mon, 24 Sep 2007 16:22:25 +0800
+Subject: [PATCH] [EXPAND] Perform tilde expansion in all parameter expansion words
+
+Previously tilde expansion was not carried out for =?#% expansion words.
+This is contrary to the POSIX specification.
+
+Test case:
+
+	a=~root:~root
+	echo ${a#~root}
+
+Old result:
+
+	/root:/root
+
+New result:
+
+	:/root
+---
+ ChangeLog    |    1 +
+ src/expand.c |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index dca08d5..816f56d 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,7 @@
+ 2007-09-24  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Do not quote back slashes in parameter expansions outside quotes.
++	* Perform tilde expansion in all parameter expansion words.
+ 
+ 2007-09-22  Oleg Verych <olecom@flower.upol.cz>
+ 
+diff --git a/src/expand.c b/src/expand.c
+index 3956112..1443c14 100644
+--- a/src/expand.c
++++ b/src/expand.c
+@@ -683,7 +683,8 @@ subevalvar(char *p, char *str, int strloc, int subtype, int startloc, int varfla
+ 	char *(*scan)(char *, char *, char *, char *, int , int);
+ 
+ 	herefd = -1;
+-	argstr(p, subtype != VSASSIGN && subtype != VSQUESTION ? EXP_CASE : 0);
++	argstr(p, EXP_TILDE | (subtype != VSASSIGN && subtype != VSQUESTION ?
++			       EXP_CASE : 0));
+ 	STPUTC('\0', expdest);
+ 	herefd = saveherefd;
+ 	argbackq = saveargbackq;
+-- 
+1.5.5
+

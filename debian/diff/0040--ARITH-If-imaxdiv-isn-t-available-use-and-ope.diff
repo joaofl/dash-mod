@@ -1,0 +1,77 @@
+From 509ca4a5a2699af4bce734dfb9efa10e2b5f631d Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Sun, 23 Dec 2007 21:24:37 +0800
+Subject: [PATCH] [ARITH] If imaxdiv() isn't available, use / and % operators
+
+Although in posix, imaxdiv() isn't implemented on Debian/alpha, causing
+dash to fail to build.  So use / and % operators if imaxdiv() isn't
+available.
+
+ http://bugs.debian.org/456398
+
+Signed-off-by: Gerrit Pape <pape@smarden.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog        |    4 ++++
+ configure.ac     |    5 +++--
+ src/arith_yacc.c |    6 ++++++
+ 3 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 10ec45c..56acd66 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-12-23  Gerrit Pape <pape@smarden.org>
++
++	* If imaxdiv() isn't available, use / and % operators.
++
+ 2007-12-23  Richard M Kreuter <kreuter@progn.net>
+ 
+ 	* Add set +o support.
+diff --git a/configure.ac b/configure.ac
+index ccc4ac1..4d739c2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -33,8 +33,9 @@ dnl Checks for libraries.
+ dnl Checks for header files.
+ 
+ dnl Checks for library functions.
+-AC_CHECK_FUNCS(bsearch getpwnam getrlimit isalpha killpg mempcpy sigsetmask \
+-	       stpcpy strchrnul strsignal strtod strtoimax strtoumax sysconf)
++AC_CHECK_FUNCS(bsearch getpwnam getrlimit imaxdiv isalpha killpg mempcpy \
++	       sigsetmask stpcpy strchrnul strsignal strtod strtoimax \
++	       strtoumax sysconf)
+ 
+ if test "$enable_fnmatch" = yes; then
+ 	use_fnmatch=
+diff --git a/src/arith_yacc.c b/src/arith_yacc.c
+index e473594..f4857fe 100644
+--- a/src/arith_yacc.c
++++ b/src/arith_yacc.c
+@@ -88,7 +88,9 @@ static inline int higher_prec(int op1, int op2)
+ 
+ static intmax_t do_binop(int op, intmax_t a, intmax_t b)
+ {
++#ifdef HAVE_IMAXDIV
+ 	imaxdiv_t div;
++#endif
+ 
+ 	switch (op) {
+ 	default:
+@@ -96,8 +98,12 @@ static intmax_t do_binop(int op, intmax_t a, intmax_t b)
+ 	case ARITH_DIV:
+ 		if (!b)
+ 			yyerror("division by zero");
++#ifdef HAVE_IMAXDIV
+ 		div = imaxdiv(a, b);
+ 		return op == ARITH_REM ? div.rem : div.quot;
++#else
++		return op == ARITH_REM ? a % b : a / b;
++#endif
+ 	case ARITH_MUL:
+ 		return a * b;
+ 	case ARITH_ADD:
+-- 
+1.5.5
+

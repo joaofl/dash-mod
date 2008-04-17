@@ -1,0 +1,44 @@
+From 08ee0731cd65a502f34718c2ac11c266daeb4c5b Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Mon, 24 Sep 2007 21:53:49 +0800
+Subject: [PATCH] [PARSER] Remove superfluous arinest test in CENDQUOTE
+
+If arinest is set then the syntax must be ARISYNTAX.  As such CENDQUOTE can
+never occur while arinest is set so we don't need to test for it.
+---
+ ChangeLog    |    1 +
+ src/parser.c |    5 ++---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 816f56d..0a35741 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -2,6 +2,7 @@
+ 
+ 	* Do not quote back slashes in parameter expansions outside quotes.
+ 	* Perform tilde expansion in all parameter expansion words.
++	* Remove superfluous arinest test in CENDQUOTE.
+ 
+ 2007-09-22  Oleg Verych <olecom@flower.upol.cz>
+ 
+diff --git a/src/parser.c b/src/parser.c
+index 279d49e..26c9046 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -932,10 +932,9 @@ quotemark:
+ 				dblquote = 1;
+ 				goto quotemark;
+ 			case CENDQUOTE:
+-				if (eofmark != NULL && arinest == 0 &&
+-				    varnest == 0) {
++				if (eofmark && !varnest)
+ 					USTPUTC(c, out);
+-				} else {
++				else {
+ 					if (dqvarnest == 0) {
+ 						syntax = BASESYNTAX;
+ 						dblquote = 0;
+-- 
+1.5.5
+

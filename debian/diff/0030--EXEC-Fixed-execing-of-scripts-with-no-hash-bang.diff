@@ -1,0 +1,102 @@
+From cbf7553964832984f17c0c16ff071970e19a45c2 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Mon, 15 Oct 2007 20:24:28 +0800
+Subject: [PATCH] [EXEC] Fixed execing of scripts with no hash-bang
+
+The function tryexec used the original name instead of the path found through
+PATH search.  This patch fixes that.
+
+Test case:
+
+	trap 'rm -f $TMP' EXIT
+	TMP=$(tempfile -s nosuchthing)
+
+	cat <<- EOF > $TMP
+		echo OK
+	EOF
+	chmod u+x $TMP
+
+	cd /
+	PATH=${TMP%/*} ${TMP##*/}
+
+Old result:
+
+	/bin/sh: Can't open filelgY4Fanosuchthing
+
+New result:
+
+	OK
+---
+ ChangeLog  |    4 ++++
+ src/eval.c |    3 ++-
+ src/exec.c |   21 +++------------------
+ 3 files changed, 9 insertions(+), 19 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 00c09c3..60bdfb5 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-10-15  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fixed execing of scripts with no hash-bang.
++
+ 2007-10-11  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Add assignment support in arithmetic expansions.
+diff --git a/src/eval.c b/src/eval.c
+index 2aa8317..1e0edd9 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -727,7 +727,8 @@ evalcommand(union node *cmd, int flags)
+ 			argc++;
+ 	}
+ 
+-	argv = nargv = stalloc(sizeof (char *) * (argc + 1));
++	/* Reserve one extra spot at the front for shellexec. */
++	argv = nargv = stalloc(sizeof (char *) * (argc + 2)) + 1;
+ 	for (sp = arglist.list ; sp ; sp = sp->next) {
+ 		TRACE(("evalcommand arg: %s\n", sp->text));
+ 		*nargv++ = sp->text;
+diff --git a/src/exec.c b/src/exec.c
+index 8a1f722..bbb70e8 100644
+--- a/src/exec.c
++++ b/src/exec.c
+@@ -149,11 +149,6 @@ shellexec(char **argv, const char *path, int idx)
+ STATIC void
+ tryexec(char *cmd, char **argv, char **envp)
+ {
+-	int repeated = 0;
+-#if !defined(BSD) && !defined(linux)
+-	char *p;
+-#endif
+-
+ repeat:
+ #ifdef SYSV
+ 	do {
+@@ -162,19 +157,9 @@ repeat:
+ #else
+ 	execve(cmd, argv, envp);
+ #endif
+-	if (repeated++) {
+-		ckfree(argv);
+-	} else if (errno == ENOEXEC) {
+-		char **ap;
+-		char **new;
+-
+-		for (ap = argv; *ap; ap++)
+-			;
+-		ap = new = ckmalloc((ap - argv + 2) * sizeof(char *));
+-		*ap++ = cmd = _PATH_BSHELL;
+-		while ((*ap++ = *argv++))
+-			;
+-		argv = new;
++	if (cmd != _PATH_BSHELL && errno == ENOEXEC) {
++		*argv-- = cmd;
++		*argv = cmd = _PATH_BSHELL;
+ 		goto repeat;
+ 	}
+ }
+-- 
+1.5.5
+

@@ -1,0 +1,172 @@
+From 8e92ae4cb4ab07ebf88c99c9dcd6219e7ea3297f Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 6 Oct 2007 22:42:14 +0800
+Subject: [PATCH] [BUILTIN] Use intmax_t arithmetic in test
+
+This patch adds the function atomax10 and uses it in test(1) so that we
+support intmax_t comparisons.
+---
+ ChangeLog        |    1 +
+ src/bltin/test.c |   31 ++++++-------------------------
+ src/mystring.c   |   34 ++++++++++++++++++++++++++++++++--
+ src/mystring.h   |    2 ++
+ 4 files changed, 41 insertions(+), 27 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index ea54d84..1db14ac 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -3,6 +3,7 @@
+ 	* Add pushstackmark.
+ 	* Treat OPTIND=0 in the same way as OPTIND=1.
+ 	* Remove setvarsafe.
++	* Use intmax_t arithmetic in test.
+ 
+ 2007-10-05  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/bltin/test.c b/src/bltin/test.c
+index 7d49569..bc8b175 100644
+--- a/src/bltin/test.c
++++ b/src/bltin/test.c
+@@ -11,8 +11,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ 
+-#include <ctype.h>
+-#include <errno.h>
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
+@@ -145,13 +144,17 @@ static int binop(void);
+ static int filstat(char *, enum token);
+ static enum token t_lex(char *);
+ static int isoperand(void);
+-static int getn(const char *);
+ static int newerf(const char *, const char *);
+ static int olderf(const char *, const char *);
+ static int equalf(const char *, const char *);
+ static int test_st_mode(const struct stat64 *, int);
+ static int bash_group_member(gid_t);
+ 
++static inline intmax_t getn(const char *s)
++{
++	return atomax10(s);
++}
++
+ int
+ testcmd(int argc, char **argv)
+ {
+@@ -396,28 +399,6 @@ isoperand(void)
+ 	return 0;
+ }
+ 
+-/* atoi with error detection */
+-static int
+-getn(const char *s)
+-{
+-	char *p;
+-	long r;
+-
+-	errno = 0;
+-	r = strtol(s, &p, 10);
+-
+-	if (errno != 0)
+-		error("%s: out of range", s);
+-
+-	while (isspace((unsigned char)*p))
+-	      p++;
+-
+-	if (*p)
+-		error("%s: bad number", s);
+-
+-	return (int) r;
+-}
+-
+ static int
+ newerf (const char *f1, const char *f2)
+ {
+diff --git a/src/mystring.c b/src/mystring.c
+index 7d937a8..df1691b 100644
+--- a/src/mystring.c
++++ b/src/mystring.c
+@@ -42,6 +42,11 @@
+  *	is_number(s)		Return true if s is a string of digits.
+  */
+ 
++#include <ctype.h>
++#include <errno.h>
++#include <inttypes.h>
++#include <limits.h>
++#include <stdint.h>
+ #include <stdlib.h>
+ #include "shell.h"
+ #include "syntax.h"
+@@ -105,6 +110,29 @@ prefix(const char *string, const char *pfx)
+ 
+ 
+ /*
++ * Convert a string into an integer of type intmax_t.  Alow trailing spaces.
++ */
++intmax_t atomax10(const char *s)
++{
++	char *p;
++	intmax_t r;
++
++	errno = 0;
++	r = strtoimax(s, &p, 10);
++
++	if (errno != 0)
++		sh_error(illnum, s);
++
++	while (isspace((unsigned char)*p))
++	      p++;
++
++	if (*p)
++		sh_error(illnum, s);
++
++	return r;
++}
++
++/*
+  * Convert a string of digits to an integer, printing an error message on
+  * failure.
+  */
+@@ -112,10 +140,12 @@ prefix(const char *string, const char *pfx)
+ int
+ number(const char *s)
+ {
++	intmax_t n = atomax10(s);
+ 
+-	if (! is_number(s))
++	if (n < 0 || n > INT_MAX)
+ 		sh_error(illnum, s);
+-	return atoi(s);
++
++	return n;
+ }
+ 
+ 
+diff --git a/src/mystring.h b/src/mystring.h
+index f451cc2..c9cade6 100644
+--- a/src/mystring.h
++++ b/src/mystring.h
+@@ -34,6 +34,7 @@
+  *	@(#)mystring.h	8.2 (Berkeley) 5/4/95
+  */
+ 
++#include <stdint.h>
+ #include <string.h>
+ 
+ extern const char snlfmt[];
+@@ -47,6 +48,7 @@ extern const char homestr[];
+ void scopyn(const char *, char *, int);
+ #endif
+ char *prefix(const char *, const char *);
++intmax_t atomax10(const char *);
+ int number(const char *);
+ int is_number(const char *);
+ char *single_quote(const char *);
+-- 
+1.5.5
+

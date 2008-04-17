@@ -1,0 +1,43 @@
+From b428e83766c7b9d0cb887f0dd582272c5e85a536 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Mon, 24 Sep 2007 22:11:59 +0800
+Subject: [PATCH] [PARSER] Remove superfluous dblquote settings when ending arith
+
+When an arithmetic expansion terminates and we restore the syntax to the
+previous one, we don't need to set dblquote because we never changed upon
+entering the arithmetic expansion.
+---
+ ChangeLog    |    1 +
+ src/parser.c |    4 ----
+ 2 files changed, 1 insertions(+), 4 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index b311ad4..e5987f9 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -4,6 +4,7 @@
+ 	* Perform tilde expansion in all parameter expansion words.
+ 	* Remove superfluous arinest test in CENDQUOTE.
+ 	* Remove superfluous arinest test for dqvarnest.
++	* Remove superfluous dblquote settings when ending arith.
+ 
+ 2007-09-22  Oleg Verych <olecom@flower.upol.cz>
+ 
+diff --git a/src/parser.c b/src/parser.c
+index 8fac57a..791251d 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -970,10 +970,6 @@ quotemark:
+ 						if (--arinest == 0) {
+ 							USTPUTC(CTLENDARI, out);
+ 							syntax = prevsyntax;
+-							if (syntax == DQSYNTAX)
+-								dblquote = 1;
+-							else
+-								dblquote = 0;
+ 						} else
+ 							USTPUTC(')', out);
+ 					} else {
+-- 
+1.5.5
+

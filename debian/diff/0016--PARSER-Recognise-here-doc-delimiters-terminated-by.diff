@@ -1,0 +1,67 @@
+From ea180ade7ece7780de8b90b80950fef75a00654d Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Wed, 26 Sep 2007 17:14:16 +0800
+Subject: [PATCH] [PARSER] Recognise here-doc delimiters terminated by EOF
+
+Previously dash required a <newline> character to be present in order for
+a here-document delimiter to be detected.  Allowing EOF in the absence of
+a <newline> to play the same purpose allows some intuitive scripts to
+succeed.  POSIX seems to be silence on this so this should be OK.
+
+Test case:
+
+	eval 'cat <<- NOT
+		test
+	NOT'
+	echo OK
+
+Old result:
+
+	test
+	NOTOK
+
+New result:
+
+	test
+	OK
+---
+ ChangeLog    |    4 ++++
+ src/parser.c |   10 ++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 670682b..cf56c9a 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2007-09-26  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Recognise here-doc delimiters terminated by EOF.
++
+ 2007-09-26  Roy Marples <uberlord@gentoo.org>
+ 
+ 	* Refresh stack pointers after makestrspace in _rmescapes.
+diff --git a/src/parser.c b/src/parser.c
+index 1a483d4..cac0aa5 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -1049,8 +1049,14 @@ checkend: {
+ 				char *p, *q;
+ 
+ 				p = line;
+-				for (q = eofmark + 1 ; *q && *p == *q ; p++, q++);
+-				if (*p == '\n' && *q == '\0') {
++				for (q = eofmark + 1;; p++, q++) {
++					c = *p;
++					if (c == '\n')
++						c = 0;
++					if (!*q || c != *q)
++						break;
++				}
++				if (c == *q) {
+ 					c = PEOF;
+ 					plinno++;
+ 					needprompt = doprompt;
+-- 
+1.5.5
+

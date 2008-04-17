@@ -1,3 +1,10 @@
+dash (0.5.4-9) unstable; urgency=low
+
+  * debian/diff/0046-Fix-bitwise-AND-and-OR-operator-parsing.diff: new:
+    Fix bitwise AND and OR operator parsing (closes: #470914).
+
+ -- Gerrit Pape <pape@smarden.org>  Thu, 17 Apr 2008 20:20:21 +0000
+
 dash (0.5.4-8) unstable; urgency=low
 
   * debian/diff/0045-Fix-null-pointer-dereference.diff: new from Larry

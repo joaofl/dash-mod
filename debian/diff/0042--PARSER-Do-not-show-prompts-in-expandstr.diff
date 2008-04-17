@@ -1,0 +1,55 @@
+From 8cbde910100fa6b708c3eeb35cfd366726034967 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Thu, 27 Dec 2007 13:57:07 +1100
+Subject: [PATCH] [PARSER] Do not show prompts in expandstr
+
+Once I fixed the previous problem it became apparent that we never dealt
+with prompts with new-lines in them correctly.  The problem is that we
+showed a secondary prompt for each of them.
+
+This patch disables prompt generation in expandstr.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog    |    1 +
+ src/parser.c |    8 ++++++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 8b392f4..0030738 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,7 @@
+ 2007-12-27  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Add FAKEEOFMARK for expandstr.
++	* Do not show prompts in expandstr.
+ 
+ 2007-12-23  Gerrit Pape <pape@smarden.org>
+ 
+diff --git a/src/parser.c b/src/parser.c
+index 3206328..9dd6185 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -1499,10 +1499,18 @@ const char *
+ expandstr(const char *ps)
+ {
+ 	union node n;
++	int saveprompt;
+ 
+ 	/* XXX Fix (char *) cast. */
+ 	setinputstring((char *)ps);
++
++	saveprompt = doprompt;
++	doprompt = 0;
++
+ 	readtoken1(pgetc(), DQSYNTAX, FAKEEOFMARK, 0);
++
++	doprompt = saveprompt;
++
+ 	popfile();
+ 
+ 	n.narg.type = NARG;
+-- 
+1.5.5
+

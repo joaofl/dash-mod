@@ -1,0 +1,52 @@
+From ee88381ece2dad9524f924b08e40045034eda0f5 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 6 Oct 2007 18:59:31 +0800
+Subject: [PATCH] [BUILTIN] Treat OPTIND=0 in the same way as OPTIND=1
+
+Previously setting OPTIND to 0 would cause subsequent getopts calls to fail.
+This patch makes dash reset the getopts parameters the same way as OPTIND=1.
+
+Both behaviours are allowed by POSIX but other common shells do tolerate this
+case.
+---
+ ChangeLog     |    1 +
+ src/options.c |    4 +---
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index d3c7320..11cdb67 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,7 @@
+ 2007-10-06  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Add pushstackmark.
++	* Treat OPTIND=0 in the same way as OPTIND=1.
+ 
+ 2007-10-05  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/options.c b/src/options.c
+index 85f1406..045345a 100644
+--- a/src/options.c
++++ b/src/options.c
+@@ -377,7 +377,7 @@ void
+ getoptsreset(value)
+ 	const char *value;
+ {
+-	shellparam.optind = number(value);
++	shellparam.optind = number(value) ?: 1;
+ 	shellparam.optoff = -1;
+ }
+ 
+@@ -424,8 +424,6 @@ getopts(char *optstr, char *optvar, char **optfirst, int *optind, int *optoff)
+ 	char s[12];
+ 	char **optnext;
+ 
+-	if (*optind < 1)
+-		return 1;
+ 	optnext = optfirst + *optind - 1;
+ 
+ 	if (*optind <= 1 || *optoff < 0 || strlen(optnext[-1]) < *optoff)
+-- 
+1.5.5
+

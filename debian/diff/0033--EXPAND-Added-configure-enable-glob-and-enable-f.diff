@@ -1,0 +1,166 @@
+From 0db88ff47ad488680bce86defd7254f4f682e850 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 20 Oct 2007 18:26:23 +0800
+Subject: [PATCH] [EXPAND] Added configure --enable-glob and --enable-fnmatch options
+
+Debian's libc6 as of 2.6.1-6 has working glob(3)/fnmatch(3) support.
+This patch adds the options --enable-glob and --enable-fnmatch to
+the configure script.  By default glob(3) and fnmatch(3) are still
+unused.  However, on distros where the glibc is known to work you
+may enable these options.
+---
+ ChangeLog       |    6 +++++-
+ configure.ac    |   13 +++++++++++++
+ src/Makefile.am |    2 +-
+ src/expand.c    |   25 ++++++++-----------------
+ 4 files changed, 27 insertions(+), 19 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index ba9d5d5..a821c32 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,4 +1,8 @@
+-2007-10-15  Herbert Xu <herbert@gondor.apana.org.au>
++2007-10-20  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Added configure --enable-glob and --enable-fnmatch options.
++
++2007-10-17  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Replace shared illnum message by badnum function.
+ 
+diff --git a/configure.ac b/configure.ac
+index 5e8f17d..ccc4ac1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -24,6 +24,10 @@ if test "$enable_static" = "yes"; then
+ 	export LDFLAGS="-static -Wl,--fatal-warnings"
+ fi
+ 
++AC_ARG_ENABLE(fnmatch, AS_HELP_STRING(--enable-fnmatch, \
++				      [Use fnmatch(3) from libc]))
++AC_ARG_ENABLE(glob, AS_HELP_STRING(--enable-glob, [Use glob(3) from libc]))
++
+ dnl Checks for libraries.
+ 
+ dnl Checks for header files.
+@@ -32,6 +36,15 @@ dnl Checks for library functions.
+ AC_CHECK_FUNCS(bsearch getpwnam getrlimit isalpha killpg mempcpy sigsetmask \
+ 	       stpcpy strchrnul strsignal strtod strtoimax strtoumax sysconf)
+ 
++if test "$enable_fnmatch" = yes; then
++	use_fnmatch=
++	AC_CHECK_FUNCS(fnmatch, use_fnmatch=yes)
++fi
++
++if test "$use_fnmatch" = yes && test "$enable_glob" = yes; then
++	AC_CHECK_FUNCS(glob)
++fi
++
+ dnl Check for klibc signal.
+ AC_CHECK_FUNC(signal)
+ if test "$ac_cv_func_signal" != yes; then
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 49026a3..e9130eb 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -4,7 +4,7 @@ COMMON_CFLAGS = -Wall
+ COMMON_CPPFLAGS = \
+ 	-include $(top_builddir)/config.h \
+ 	-DBSD=1 -DSHELL \
+-	-DGLOB_BROKEN -DFNMATCH_BROKEN -DIFS_BROKEN
++	-DIFS_BROKEN
+ 
+ AM_CFLAGS = $(COMMON_CFLAGS)
+ AM_CPPFLAGS = $(COMMON_CPPFLAGS)
+diff --git a/src/expand.c b/src/expand.c
+index 5c31400..c489446 100644
+--- a/src/expand.c
++++ b/src/expand.c
+@@ -45,16 +45,9 @@
+ #include <stdint.h>
+ #include <limits.h>
+ #include <string.h>
+-#if defined(__GLIBC__)
+-#if !defined(FNMATCH_BROKEN)
+ #include <fnmatch.h>
+-#if !defined(GLOB_BROKEN)
+ #include <glob.h>
+-#endif
+-#else
+ #include <ctype.h>
+-#endif
+-#endif
+ 
+ /*
+  * Routines to expand arguments to commands.  We have to deal with
+@@ -127,18 +120,16 @@ STATIC void removerecordregions(int);
+ STATIC void ifsbreakup(char *, struct arglist *);
+ STATIC void ifsfree(void);
+ STATIC void expandmeta(struct strlist *, int);
+-#if defined(__GLIBC__) && !defined(FNMATCH_BROKEN) && !defined(GLOB_BROKEN)
++#ifdef HAVE_GLOB
+ STATIC void addglob(const glob_t *);
+ #else
+ STATIC void expmeta(char *, char *);
+-#endif
+-STATIC void addfname(char *);
+-#if !(defined(__GLIBC__) && !defined(FNMATCH_BROKEN) && !defined(GLOB_BROKEN))
+ STATIC struct strlist *expsort(struct strlist *);
+ STATIC struct strlist *msort(struct strlist *, int);
+ #endif
++STATIC void addfname(char *);
+ STATIC int patmatch(char *, const char *);
+-#if !defined(__GLIBC__) || defined(FNMATCH_BROKEN)
++#ifndef HAVE_FNMATCH
+ STATIC int pmatch(const char *, const char *);
+ #else
+ #define pmatch(a, b) !fnmatch((a), (b), 0)
+@@ -1159,7 +1150,7 @@ ifsfree(void)
+  * should be escapes.  The results are stored in the list exparg.
+  */
+ 
+-#if defined(__GLIBC__) && !defined(FNMATCH_BROKEN) && !defined(GLOB_BROKEN)
++#ifdef HAVE_GLOB
+ STATIC void
+ expandmeta(str, flag)
+ 	struct strlist *str;
+@@ -1220,7 +1211,7 @@ addglob(pglob)
+ }
+ 
+ 
+-#else	/* defined(__GLIBC__) && !defined(FNMATCH_BROKEN) && !defined(GLOB_BROKEN) */
++#else	/* HAVE_GLOB */
+ STATIC char *expdir;
+ 
+ 
+@@ -1387,7 +1378,7 @@ out:
+ 	if (! atend)
+ 		endname[-1] = '/';
+ }
+-#endif	/* defined(__GLIBC__) && !defined(FNMATCH_BROKEN) && !defined(GLOB_BROKEN) */
++#endif	/* HAVE_GLOB */
+ 
+ 
+ /*
+@@ -1406,7 +1397,7 @@ addfname(char *name)
+ }
+ 
+ 
+-#if !(defined(__GLIBC__) && !defined(FNMATCH_BROKEN) && !defined(GLOB_BROKEN))
++#ifndef HAVE_GLOB
+ /*
+  * Sort the results of file name expansion.  It calculates the number of
+  * strings to sort and then calls msort (short for merge sort) to do the
+@@ -1479,7 +1470,7 @@ patmatch(char *pattern, const char *string)
+ }
+ 
+ 
+-#if !defined(__GLIBC__) || defined(FNMATCH_BROKEN)
++#ifndef HAVE_FNMATCH
+ STATIC int ccmatch(const char *p, int chr, const char **r)
+ {
+ 	static const struct class {
+-- 
+1.5.5
+
