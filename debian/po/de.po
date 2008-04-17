@@ -1,13 +1,13 @@
 # Translation of dash debconf templates to German
-# Copyright (C) Helge Kreutzmann <debian@helgefjell.de>, 2006, 2007.
+# Copyright (C) Helge Kreutzmann <debian@helgefjell.de>, 2006-2008.
 # This file is distributed under the same license as the dash package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dash 0.5.4-3\n"
+"Project-Id-Version: dash 0.5.4-8\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-02 21:54+0000\n"
-"PO-Revision-Date: 2007-11-20 20:44+0100\n"
+"PO-Revision-Date: 2008-03-06 22:52+0100\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -31,18 +31,11 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-#, fuzzy
-#| msgid ""
-#| "However, since the distribution policy requires all shell scripts using /"
-#| "bin/sh to be POSIX compliant, any shell that conforms to POSIX, such as "
-#| "dash, can serve as /bin/sh. You may wish to do this because dash is "
-#| "faster and smaller than bash."
 msgid ""
 "However, since the default shell is required to be POSIX-compliant, any "
 "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
 "wish to do this because dash is faster and smaller than bash."
 msgstr ""
-"Da die Richtlinien der Distribution allerdings von allen Shellskripten, die /"
-"bin/sh benutzen, POSIX-Kompatibilität verlangt, kann für /bin/sh jede POSIX-"
-"kompatible Shell (wie Dash) benutzt werden. Eventuell wollen Sie Dash "
-"verwenden, da Dash schneller und kleiner als Bash ist."
+"Da die Standardshell allerdings POSIX-konform sein muss, kann jede Shell, "
+"die (wie Dash) POSIX-konform ist als /bin/sh dienen. Eventuell wollen Sie "
+"Dash verwenden, da Dash schneller und kleiner als Bash ist."
