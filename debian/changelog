@@ -4,8 +4,10 @@ dash (0.5.4-9) unstable; urgency=low
     Fix bitwise AND and OR operator parsing (closes: #470914).
   * debian/dash.menu: change menu section from Apps/Shells to
     Applications/Shells (thx Christian Perrier).
+  * debian/po/fr.po: [INTL:fr] French debconf templates translation update
+    (thx Christian Perrier, closes: #469253).
 
- -- Gerrit Pape <pape@smarden.org>  Thu, 17 Apr 2008 20:26:59 +0000
+ -- Gerrit Pape <pape@smarden.org>  Thu, 17 Apr 2008 20:32:51 +0000
 
 dash (0.5.4-8) unstable; urgency=low
 
