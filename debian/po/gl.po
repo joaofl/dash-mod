@@ -1,13 +1,13 @@
 # Galician translation of dash's debconf templates
 # This file is distributed under the same license as the dash package.
-# Jacobo Tarrio <jtarrio@debian.org>, 2007.
+# Jacobo Tarrio <jtarrio@debian.org>, 2007, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: dash\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-02 21:54+0000\n"
-"PO-Revision-Date: 2007-11-11 19:43+0000\n"
+"PO-Revision-Date: 2008-05-13 00:31+0100\n"
 "Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -31,18 +31,12 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-#, fuzzy
-#| msgid ""
-#| "However, since the distribution policy requires all shell scripts using /"
-#| "bin/sh to be POSIX compliant, any shell that conforms to POSIX, such as "
-#| "dash, can serve as /bin/sh. You may wish to do this because dash is "
-#| "faster and smaller than bash."
 msgid ""
 "However, since the default shell is required to be POSIX-compliant, any "
 "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
 "wish to do this because dash is faster and smaller than bash."
 msgstr ""
-"Nembargantes, como a política da distribución require que tódolos scripts "
-"que empreguen /bin/sh sexan compatibles con POSIX, calquera shell que siga "
-"POSIX, coma dash, pode servir coma /bin/sh. Pode ser unha boa idea facelo, "
-"xa que dash é máis rápido e máis pequeno que bash."
+"Nembargantes, como o intérprete de ordes por defecto ten que ser compatible "
+"con POSIX, calquera shell que siga POSIX, coma dash, pode servir coma /bin/"
+"sh. Pode ser unha boa idea facelo, xa que dash é máis rápido e máis pequeno "
+"que bash."
