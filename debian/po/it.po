@@ -1,14 +1,14 @@
 # dash -- Italian debconf messages
 # This file is distributed under the same license as the dash package.
 # Andrea Bolognani <eof@kiyuko.org>, 2006.
-# Luca Monducci <luca.mo@tiscali.it>, 2007.
+# Luca Monducci <luca.mo@tiscali.it>, 2007 - 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: dash 0.5.4 italian debconf templates\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-02 21:54+0000\n"
-"PO-Revision-Date: 2007-11-17 13:33+0100\n"
+"PO-Revision-Date: 2008-05-03 13:33+0200\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,17 +32,11 @@ msgstr ""
 #. Description
 #: ../dash.templates.in:1001
 #, fuzzy
-#| msgid ""
-#| "However, since the distribution policy requires all shell scripts using /"
-#| "bin/sh to be POSIX compliant, any shell that conforms to POSIX, such as "
-#| "dash, can serve as /bin/sh. You may wish to do this because dash is "
-#| "faster and smaller than bash."
 msgid ""
 "However, since the default shell is required to be POSIX-compliant, any "
 "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
 "wish to do this because dash is faster and smaller than bash."
 msgstr ""
-"Tuttavia, poiché la politica della distribuzione richiede che tutti gli "
-"script che usano /bin/sh siano conformi a POSIX, qualunque shell conforme "
-"con POSIX, come dash, può essere usata come /bin/sh. Si può preferire dash "
-"perché è più piccola e veloce di bash."
+"Tuttavia, poiché è richiesto che la shell predefinita sia conforme con "
+"POSIX, qualunque shell conforme a POSIX, come dash, può essere usata come /"
+"bin/sh. Si può preferire dash perché è più piccola e veloce di bash."
