@@ -8,8 +8,10 @@ dash (0.5.4-10) unstable; urgency=low
     for dash (thx Jacobo Tarrio, closes: #480978).
   * debian/po/ja.po: [INTL:ja] updated Japanese debconf translation
     (thx Kenshi Muto, closes: #483509).
+  * debian/control: Homepage: http://gondor.apana.org.au/~herbert/dash/
+    (closes: #484665).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 11 Jun 2008 21:34:23 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 11 Jun 2008 21:40:28 +0000
 
 dash (0.5.4-9) unstable; urgency=low
 
