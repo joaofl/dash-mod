@@ -2,8 +2,10 @@ dash (0.5.4-10) unstable; urgency=low
 
   * debian/po/it.po: [INTL:it] Italian debconf templates translation
     (thx Luca Monducci, closes: #479361).
+  * debian/po/ru.po: [INTL:ru] Russian debconf templates translation
+    update (thx Yuri Kozlov, closes: #479592).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 11 Jun 2008 21:28:47 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 11 Jun 2008 21:30:28 +0000
 
 dash (0.5.4-9) unstable; urgency=low
 
