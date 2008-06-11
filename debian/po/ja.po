@@ -16,36 +16,30 @@ msgstr ""
 "Project-Id-Version: dash\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-02 21:54+0000\n"
-"PO-Revision-Date: 2004-04-30 21:51+1000\n"
+"PO-Revision-Date: 2008-05-29 14:18+0900\n"
 "Last-Translator: Kenshi Muto <kmuto@deian.org>\n"
 "Language-Team: Japanese <debian-l10n-japanese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "Install dash as /bin/sh?"
-msgstr "dash ¤ò /bin/sh ¤È¤·¤Æ¥¤¥ó¥¹¥È¡¼¥ë¤·¤Ş¤¹¤«?"
+msgstr "dash ã‚’ /bin/sh ã¨ã—ã¦ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã‹?"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
-msgstr ""
+msgstr "Debian ãŠã‚ˆã³ Debian ãƒ™ãƒ¼ã‚¹ã®ã‚·ã‚¹ãƒ†ãƒ ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã® /bin/sh ã‚·ã‚§ãƒ«ã¯ bash ã§ã™ã€‚"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-#, fuzzy
 msgid ""
 "However, since the default shell is required to be POSIX-compliant, any "
 "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
 "wish to do this because dash is faster and smaller than bash."
-msgstr ""
-"Debian ¥·¥¹¥Æ¥à¤Ç¤Ï bash ¤¬¥Ç¥Õ¥©¥ë¥È¤Î /bin/sh ¤Ç¤¹¡£¤·¤«¤·¡¢Debian ¤Î¥İ¥ê"
-"¥·¡¼¤Ë¤è¤Ã¤Æ¡¢/bin/sh ¤òÍÑ¤¤¤ëÁ´¤Æ¤Î¥·¥§¥ë¥¹¥¯¥ê¥×¥È¤Ï POSIX ½àµò¤Ç¤Ê¤±¤ì¤Ğ¤Ê"
-"¤é¤Ê¤¤¤¿¤á¡¢POSIX ¤òËş¤¿¤¹¥·¥§¥ë¤Ï¤É¤ì¤Ç¤â /bin/sh ¤È¤Ê¤ë¤³¤È¤¬¤Ç¤­¤Ş¤¹¡£"
-"dash ¤Ï POSIX ½àµò¤Ç¤¹¤Î¤Ç¡¢/bin/sh ¤È¤·¤Æ»È¤¦ ¤³¤È¤¬¤Ç¤­¤Ş¤¹¡£dash ¤Ï bash "
-"¤è¤êÂ®¤¯¤Æ¾®¤µ¤¤¤Î¤Ç¡¢¤½¤¦¤·¤¿¤¤¤È»×¤¦ ¤«¤â¤·¤ì¤Ş¤»¤ó¡£"
+msgstr "Debian ã‚·ã‚¹ãƒ†ãƒ ã§ã¯ bash ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã® /bin/sh ã§ã™ã€‚ã—ã‹ã—ã€Debian ã®ãƒãƒªã‚·ãƒ¼ã«ã‚ˆã£ã¦ã€/bin/sh ã‚’ç”¨ã„ã‚‹å…¨ã¦ã®ã‚·ã‚§ãƒ«ã‚¹ã‚¯ãƒªãƒ—ãƒˆã¯ POSIX æº–æ‹ ã§ãªã‘ã‚Œã°ãªã‚‰ãªã„ãŸã‚ã€POSIX ã‚’æº€ãŸã™ã‚·ã‚§ãƒ«ã¯ã©ã‚Œã§ã‚‚ /bin/sh ã¨ãªã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚dash ã¯ POSIX æº–æ‹ ã§ã™ã®ã§ã€/bin/sh ã¨ã—ã¦ä½¿ã†ã“ã¨ãŒã§ãã¾ã™ã€‚dash ã¯ bash ã‚ˆã‚Šé€Ÿãã¦å°ã•ã„ã®ã§ã€ãã†ã—ãŸã„ã¨æ€ã†ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“ã€‚"
