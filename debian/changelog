@@ -23,8 +23,10 @@ dash (0.5.4-10) unstable; urgency=low
     update (thx Clytie Siddall, closes: #486801).
   * debian/po/cs.po: [l10n] Updated Czech translation of dash debconf
     messages (thx Miroslav Kure, closes: #487266).
+  * debian/po/pt.po: [INTL:pt] Updated Portuguese translation for
+    debconf messages (thx Ricardo Silva, closes: #487290).
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 06 Jul 2008 11:23:29 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun, 06 Jul 2008 11:25:07 +0000
 
 dash (0.5.4-9) unstable; urgency=low
 
