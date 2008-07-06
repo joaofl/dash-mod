@@ -13,8 +13,10 @@ dash (0.5.4-10) unstable; urgency=low
   * debian/diff/0047--MAN-add-missing-right-parenthesis...diff: new;
     [MAN] add missing right parenthesis in section Redirection (closes:
     #481365).
+  * debian/diff/0048--SHELL-add-l-option-to-force-login...diff: new;
+    [SHELL] add -l option to force login shell (closes: #483287).
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 06 Jul 2008 10:51:27 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun, 06 Jul 2008 10:54:08 +0000
 
 dash (0.5.4-9) unstable; urgency=low
 
