@@ -1,0 +1,46 @@
+# translation of dash debconf template to Basque
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Xabier Bilbao <xabidu@gmail.com>, 2008.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: dash-eu\n"
+"Report-Msgid-Bugs-To: dash@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-02 21:54+0000\n"
+"PO-Revision-Date: 2008-06-24 16:57+0200\n"
+"Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
+"Language-Team: Basque <itzulpena@euskalgnu.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid "Install dash as /bin/sh?"
+msgstr "Dash instalatu /bin/sh gisa?"
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
+msgstr ""
+"Debian banaketan, eta Debian-en oinarriturikoetan, bash da lehenetsitako "
+"/bin/sh shell-a."
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
+msgid ""
+"However, since the default shell is required to be POSIX-compliant, any "
+"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+"wish to do this because dash is faster and smaller than bash."
+msgstr ""
+"Alabaina, lehenetsitako shell-ak POSIX-ekin bateragarria izan behar duenez, "
+"POSIX-ekin bat datorren edozein shell, hala nola dash, /bin/sh gisa ezar "
+"daiteke. Aldaketa hau egitea nahi izan dezakezu, dash bizkorragoa eta "
+"txikiagoa baita bash baino."
