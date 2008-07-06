@@ -15,8 +15,10 @@ dash (0.5.4-10) unstable; urgency=low
     #481365).
   * debian/diff/0048--SHELL-add-l-option-to-force-login...diff: new;
     [SHELL] add -l option to force login shell (closes: #483287).
+  * debian/po/tr.po: new; [INTL:tr] Turkish debconf template translation
+    for dash (thx Mert Dirik, closes: #486571).
 
- -- Gerrit Pape <pape@smarden.org>  Sun, 06 Jul 2008 10:54:08 +0000
+ -- Gerrit Pape <pape@smarden.org>  Sun, 06 Jul 2008 11:16:31 +0000
 
 dash (0.5.4-9) unstable; urgency=low
 
