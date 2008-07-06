@@ -1,10 +1,10 @@
 # Vietnamese translation for dash.
-# Copyright © 2007 Free Software Foundation, Inc.
-# Clytie Siddall <clytie@riverland.net.au>, 2005-2007.
+# Copyright © 2008 Free Software Foundation, Inc.
+# Clytie Siddall <clytie@riverland.net.au>, 2005-2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dash 0.5.2-5\n"
+"Project-Id-Version: dash 0.5.4-9.1\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-02 21:54+0000\n"
 "PO-Revision-Date: 2007-11-30 19:19+1030\n"
@@ -16,30 +16,28 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.7b1\n"
 
+#: ../dash.templates.in:1001
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
 msgid "Install dash as /bin/sh?"
-msgstr "Cài đặt dash chạy « /bin/sh » không?"
+msgstr "Cài đặt dash làm « /bin/sh » không?"
 
+#: ../dash.templates.in:1001
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
 msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
 msgstr ""
 "Trên hệ thống Debian và dựa trên Debian, trình bao « /bin/sh » mặc định là "
 "bash."
 
-# msgid ""
-# Bash is the default /bin/sh on a Debian system.  However, since the 
-# Debian policy requires all shell scripts using /bin/sh to be POSIX 
-# compliant, any shell that conforms to POSIX can serve as /bin/sh.  Since 
-# dash is POSIX compliant, it can be used as /bin/sh.  You may wish to do 
+# Bash is the default /bin/sh on a Debian system.  However, since the
+# Debian policy requires all shell scripts using /bin/sh to be POSIX
+# compliant, any shell that conforms to POSIX can serve as /bin/sh.  Since
+# dash is POSIX compliant, it can be used as /bin/sh.  You may wish to do
 # this because dash is faster and smaller than bash.
+#: ../dash.templates.in:1001
 #. Type: boolean
 #. Description
-#: ../dash.templates.in:1001
-#, fuzzy
 #| msgid ""
 #| "However, since the distribution policy requires all shell scripts using /"
 #| "bin/sh to be POSIX compliant, any shell that conforms to POSIX, such as "
@@ -50,6 +48,4 @@ msgid ""
 "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
 "wish to do this because dash is faster and smaller than bash."
 msgstr ""
-"Tuy nhiên, vì chính sách phân phối cần thiết mọi văn lệnh trình bao đều dùng "
-"« /bin/sh » thì tùy theo POSIX, bất cứ trình bao nào tùy theo POSIX, v.d. "
-"dash, có thể chạy như « /bin/sh »."
+"Tuy nhiên, vì trình bao mặc định phải tuân theo POSIX, bất cứ trình bào nào làm cho phù hợp với POSIX, v.d. dash, có khả năng làm « /bin/sh ». Có ích vì dash nhỏ hơn và chạy nhanh hơn bash."
