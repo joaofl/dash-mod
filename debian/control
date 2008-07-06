@@ -3,7 +3,7 @@ Section: shells
 Priority: optional
 Maintainer: Gerrit Pape <pape@smarden.org>
 Build-Depends: po-debconf
-Standards-Version: 3.7.3.0
+Standards-Version: 3.8.0.1
 Homepage: http://gondor.apana.org.au/~herbert/dash/
 Vcs-Git: http://smarden.org/git/dash.git/
 
