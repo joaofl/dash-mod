@@ -1,0 +1,38 @@
+From fe7a0a32d8835831d1eff5c7ef305a7ea51544b4 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Fri, 16 May 2008 00:35:51 +0000
+Subject: [PATCH] [MAN] add missing right parenthesis in section Redirection
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+in section Redirection the following text misses a left brace:
+
+ where redir-op is one of the redirection operators mentioned previously.
+ Following is a list of the possible redirections.  The [n] is an optional
+ number, as in ‘3’ (not ‘[3]’, that refers to a file descriptor.
+
+Reported by Jörg Sommer through
+ http://bugs.debian.org/481365
+
+Signed-off-by: Gerrit Pape <pape@smarden.org>
+---
+ src/dash.1 |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/dash.1 b/src/dash.1
+index b4140eb..df7c749 100644
+--- a/src/dash.1
++++ b/src/dash.1
+@@ -389,7 +389,7 @@ The
+ is an optional number, as in
+ .Sq 3
+ (not
+-.Sq Bq 3 ,
++.Sq Bq 3 ) ,
+ that refers to a file descriptor.
+ .Bl -tag -width aaabsfiles -offset indent
+ .It [n] Ns \*[Gt] file
+-- 
+1.5.6
+
