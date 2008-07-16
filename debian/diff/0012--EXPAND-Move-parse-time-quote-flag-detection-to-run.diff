@@ -1,4 +1,4 @@
-From 9ba0b212900e642649b4ad354a00de763bf8303f Mon Sep 17 00:00:00 2001
+From 6d1b5d568b9bfd276d5bbd4d1a961475fdfac38d Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Tue, 25 Sep 2007 22:29:00 +0800
 Subject: [PATCH] [EXPAND] Move parse-time quote flag detection to run-time
@@ -568,5 +568,5 @@ index 1b58de1..14dbef3 100644
  			putc(c, tracefile);
  			break;
 -- 
-1.5.5
+1.5.6.3
 

@@ -1,4 +1,4 @@
-From f6ff75befa660341c839e1fa8c1a33eb61afc4c8 Mon Sep 17 00:00:00 2001
+From 628b3c7edebdd6e1d66a7670bc642574ce09d1a4 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Tue, 25 Sep 2007 22:47:25 +0800
 Subject: [PATCH] [MAN] Clarify syntax of the for command
@@ -53,5 +53,5 @@ index 3aefe21..9b8ab0e 100644
  The syntax of the break and continue command is
  .Bd -literal -offset indent
 -- 
-1.5.5
+1.5.6.3
 

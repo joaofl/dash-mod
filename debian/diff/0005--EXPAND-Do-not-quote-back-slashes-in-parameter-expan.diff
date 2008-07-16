@@ -1,4 +1,4 @@
-From 9b568fedfdc4ec56e52ded4c3a1a135d24c8d75b Mon Sep 17 00:00:00 2001
+From 0e49b542077342c7576c1a1d87f4a504349a648e Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 16:17:20 +0800
 Subject: [PATCH] [EXPAND] Do not quote back slashes in parameter expansions outside quotes
@@ -105,5 +105,5 @@ index 6faff17..279d49e 100644
  				if (c == PEOF) {
  					USTPUTC(CTLESC, out);
 -- 
-1.5.5
+1.5.6.3
 

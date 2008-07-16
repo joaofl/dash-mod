@@ -1,4 +1,4 @@
-From 2f0c9d44f44945e49b9e079944dcf01f3477c8dc Mon Sep 17 00:00:00 2001
+From f8013c456e399928b0d4de8d5d8c874b348e4231 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sun, 11 Nov 2007 15:27:00 +0800
 Subject: [PATCH] [EXPAND] Expand here-documents in the current shell environment
@@ -129,5 +129,5 @@ index 33dbc88..ce34db0 100644
  	}
  out:
 -- 
-1.5.5
+1.5.6.3
 

@@ -1,4 +1,4 @@
-From 6b46a86991dff7af70dfd249c27767be9b7d4c97 Mon Sep 17 00:00:00 2001
+From 0b5648e3e626ee6f0b516a3d81aa82720937f34c Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 27 Dec 2007 13:54:16 +1100
 Subject: [PATCH] [PARSER] Add FAKEEOFMARK for expandstr
@@ -80,5 +80,5 @@ index 2d20b00..3206328 100644
  
  	n.narg.type = NARG;
 -- 
-1.5.5
+1.5.6.3
 

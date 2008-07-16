@@ -1,4 +1,4 @@
-From cb854af0a92e82e4640df0a8152280b9c9628da8 Mon Sep 17 00:00:00 2001
+From 5b5ddaafa8fcb5ba615ec2262cf6890ccaaf9abc Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 11 Oct 2007 22:42:04 +0800
 Subject: [PATCH] [EXPAND] Add likely flags in expari
@@ -44,5 +44,5 @@ index 9cb8eab..5c31400 100644
  }
  
 -- 
-1.5.5
+1.5.6.3
 

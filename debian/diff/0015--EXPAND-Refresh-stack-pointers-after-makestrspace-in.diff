@@ -1,4 +1,4 @@
-From 2a419c48841ba0ed9fe95b1f95308ed6e174ac4b Mon Sep 17 00:00:00 2001
+From d8ac156a41a341897b2737be98684fca07673490 Mon Sep 17 00:00:00 2001
 From: Roy Marples <uberlord@gentoo.org>
 Date: Wed, 26 Sep 2007 13:59:56 +0800
 Subject: [PATCH] [EXPAND] Refresh stack pointers after makestrspace in _rmescapes
@@ -61,5 +61,5 @@ index 8c6c7f9..98ad718 100644
  			r = ckmalloc(fulllen);
  		} else {
 -- 
-1.5.5
+1.5.6.3
 

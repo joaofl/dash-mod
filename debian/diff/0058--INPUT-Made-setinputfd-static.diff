@@ -1,0 +1,62 @@
+From 6ac68daaa717646e8f5615594299771a1ca9bead Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 13 Jul 2008 21:40:51 +0800
+Subject: [PATCH] [INPUT] Made setinputfd static
+
+This function is no longer used anywhere else.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog   |    1 +
+ src/input.c |    3 ++-
+ src/input.h |    1 -
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 5565e06..53d5b7c 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -3,6 +3,7 @@
+ 	* Fixed 3,4-argument cases for test per POSIX.
+ 	* Made aexpr/oexpr non-recursive.
+ 	* Made t_lex reentrant.
++	* Made setinputfd static.
+ 
+ 2008-05-19  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/input.c b/src/input.c
+index bc84e57..27c4fd1 100644
+--- a/src/input.c
++++ b/src/input.c
+@@ -107,6 +107,7 @@ EditLine *el;			/* cookie for editline package */
+ 
+ STATIC void pushfile(void);
+ static int preadfd(void);
++static void setinputfd(int fd, int push);
+ 
+ #ifdef mkinit
+ INCLUDE <stdio.h>
+@@ -422,7 +423,7 @@ out:
+  * interrupts off.
+  */
+ 
+-void
++static void
+ setinputfd(int fd, int push)
+ {
+ 	if (push) {
+diff --git a/src/input.h b/src/input.h
+index 1d6f528..50a7797 100644
+--- a/src/input.h
++++ b/src/input.h
+@@ -57,7 +57,6 @@ void pungetc(void);
+ void pushstring(char *, void *);
+ void popstring(void);
+ int setinputfile(const char *, int);
+-void setinputfd(int, int);
+ void setinputstring(char *);
+ void popfile(void);
+ void popallfiles(void);
+-- 
+1.5.6.3
+

@@ -1,4 +1,4 @@
-From ee88381ece2dad9524f924b08e40045034eda0f5 Mon Sep 17 00:00:00 2001
+From 26876e11f862333596a3e1771b03ef2a3ea83523 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 6 Oct 2007 18:59:31 +0800
 Subject: [PATCH] [BUILTIN] Treat OPTIND=0 in the same way as OPTIND=1
@@ -48,5 +48,5 @@ index 85f1406..045345a 100644
  
  	if (*optind <= 1 || *optoff < 0 || strlen(optnext[-1]) < *optoff)
 -- 
-1.5.5
+1.5.6.3
 

@@ -1,4 +1,4 @@
-From 4c0f98546aa3f6e74a2062ed4a3dd9589f012269 Mon Sep 17 00:00:00 2001
+From 9ca9a7fec1a221dc666a21aae358bac753cad2c4 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 6 Oct 2007 00:45:52 +0800
 Subject: [PATCH] [MEMALLOC] Add pushstackmark
@@ -149,5 +149,5 @@ index f49ee7d..d0e0553 100644
  		popstackmark(&smark);
  	}
 -- 
-1.5.5
+1.5.6.3
 

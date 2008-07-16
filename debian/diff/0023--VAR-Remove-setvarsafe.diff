@@ -1,4 +1,4 @@
-From c699fa24176e084ea93c9dd7058511d97d218e20 Mon Sep 17 00:00:00 2001
+From 8386655170128eee31f9a4234bdb1676cd99102d Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 6 Oct 2007 21:18:58 +0800
 Subject: [PATCH] [VAR] Remove setvarsafe
@@ -190,5 +190,5 @@ index c3c2ca7..ae58c6c 100644
  
  static inline int varequal(const char *a, const char *b) {
 -- 
-1.5.5
+1.5.6.3
 

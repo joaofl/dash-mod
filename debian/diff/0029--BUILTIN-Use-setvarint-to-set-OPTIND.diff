@@ -1,4 +1,4 @@
-From 894c375d54ef5c0d90523d9aa06ec183e5894122 Mon Sep 17 00:00:00 2001
+From 992add9857d3498e128f31c23a26f5504684e621 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 11 Oct 2007 22:44:40 +0800
 Subject: [PATCH] [BUILTIN] Use setvarint to set OPTIND
@@ -95,5 +95,5 @@ index 66443df..e4e2cff 100644
  struct strlist;
  void listsetvar(struct strlist *, int);
 -- 
-1.5.5
+1.5.6.3
 

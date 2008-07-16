@@ -1,4 +1,4 @@
-From ea180ade7ece7780de8b90b80950fef75a00654d Mon Sep 17 00:00:00 2001
+From e4c4c05ad35975d7c8f96ee4f8b2fb5a51147aae Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Wed, 26 Sep 2007 17:14:16 +0800
 Subject: [PATCH] [PARSER] Recognise here-doc delimiters terminated by EOF
@@ -63,5 +63,5 @@ index 1a483d4..cac0aa5 100644
  					plinno++;
  					needprompt = doprompt;
 -- 
-1.5.5
+1.5.6.3
 

@@ -1,4 +1,4 @@
-From 4cfa59c5a310b4f3ed44867dba7e7afd63ada506 Mon Sep 17 00:00:00 2001
+From 049b09d6ab8515d3f5edbec93b927fda26c922c2 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 8 Oct 2007 21:32:25 +0800
 Subject: [PATCH] [PARSER] Report substition errors at expansion time
@@ -175,5 +175,5 @@ index d0e0553..4b8a5fe 100644
  	goto parsesub_return;
  }
 -- 
-1.5.5
+1.5.6.3
 

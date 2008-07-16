@@ -1,0 +1,77 @@
+From 77092009dabb07fa0622d856ae9cfbfc65bee850 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 13 Jul 2008 20:05:56 +0800
+Subject: [PATCH] [BUILTIN] Made aexpr/oexpr non-recursive
+
+Making these functions non-recursive is straightforward since they
+carry no state.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog        |    1 +
+ src/bltin/test.c |   31 +++++++++++++++++++------------
+ 2 files changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index b2f7333..ef45102 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,7 @@
+ 2008-06-13  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Fixed 3,4-argument cases for test per POSIX.
++	* Made aexpr/oexpr non-recursive.
+ 
+ 2008-05-19  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/bltin/test.c b/src/bltin/test.c
+index 89d8d86..32a12fe 100644
+--- a/src/bltin/test.c
++++ b/src/bltin/test.c
+@@ -232,24 +232,31 @@ syntax(const char *op, const char *msg)
+ static int
+ oexpr(enum token n)
+ {
+-	int res;
+-
+-	res = aexpr(n);
+-	if (t_lex(*++t_wp) == BOR)
+-		return oexpr(t_lex(*++t_wp)) || res;
+-	t_wp--;
++	int res = 0;
++
++	for (;;) {
++		res |= aexpr(n);
++		n = t_lex(t_wp[1]);
++		if (n != BOR)
++			break;
++		n = t_lex(*(t_wp += 2));
++	}
+ 	return res;
+ }
+ 
+ static int
+ aexpr(enum token n)
+ {
+-	int res;
+-
+-	res = nexpr(n);
+-	if (t_lex(*++t_wp) == BAND)
+-		return aexpr(t_lex(*++t_wp)) && res;
+-	t_wp--;
++	int res = 1;
++
++	for (;;) {
++		if (!nexpr(n))
++			res = 0;
++		n = t_lex(t_wp[1]);
++		if (n != BAND)
++			break;
++		n = t_lex(*(t_wp += 2));
++	}
+ 	return res;
+ }
+ 
+-- 
+1.5.6.3
+

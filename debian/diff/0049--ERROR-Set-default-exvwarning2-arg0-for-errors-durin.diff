@@ -1,0 +1,43 @@
+From eac68bc870c0d9ada72adda08faeed5161ebd9d5 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 3 May 2008 14:41:48 +0800
+Subject: [PATCH] [ERROR] Set default exvwarning2 arg0 for errors during early initialisation
+
+As it stands if we get an error before procargs gets called by main()
+we'll try to print out a null pointer.  This patch avoids this by
+printing out "sh" instead.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog   |    1 +
+ src/error.c |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 2c04c19..773b36e 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -3,6 +3,7 @@
+ 	* Fixed _PATH_BSHELL warning.
+ 	* Test __GLIBC__ instead of _GNU_SOURCE.
+ 	* Restored warning when getcwd fails.
++	* Set default exvwarning2 arg0 for errors during early initialisation.
+ 
+ 2008-05-02  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/error.c b/src/error.c
+index 338243d..7f165c1 100644
+--- a/src/error.c
++++ b/src/error.c
+@@ -122,7 +122,7 @@ exvwarning2(const char *msg, va_list ap)
+ 	const char *fmt;
+ 
+ 	errs = out2;
+-	name = arg0;
++	name = arg0 ?: "sh";
+ 	fmt = "%s: ";
+ 	if (commandname) {
+ 		name = commandname;
+-- 
+1.5.6.3
+

@@ -1,4 +1,4 @@
-From 553f85288bb1cdacfa482f351af26cc924ccb386 Mon Sep 17 00:00:00 2001
+From 3a85fe7b393a4beb8f4294daf7d0176c6f426a28 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 22 Sep 2007 20:50:21 +0800
 Subject: [PATCH] [SHELL] Move flushall to the point just before _exit
@@ -44,5 +44,5 @@ index c386db7..58cd0cc 100644
  	/* NOTREACHED */
  }
 -- 
-1.5.5
+1.5.6.3
 

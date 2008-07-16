@@ -1,4 +1,4 @@
-From d4f9f079e000e1fb04ab58cac1c3aeabc190a344 Mon Sep 17 00:00:00 2001
+From ab72e0678b0febde521c9b828af6b227b4cca3a8 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 4 Oct 2007 22:15:10 +0800
 Subject: [PATCH] [PARSER] Fix parsing of ${##1}
@@ -86,5 +86,5 @@ index cac0aa5..9edb824 100644
  		else
  badsub:			synerror("Bad substitution");
 -- 
-1.5.5
+1.5.6.3
 

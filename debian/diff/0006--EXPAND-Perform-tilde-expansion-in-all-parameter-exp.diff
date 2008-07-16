@@ -1,4 +1,4 @@
-From 82c20d9ca645ea33cbc500ad3da3b1c8d430322d Mon Sep 17 00:00:00 2001
+From 764cd0ba8701a4f557bab0a96dbb3a5cf1308a90 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 16:22:25 +0800
 Subject: [PATCH] [EXPAND] Perform tilde expansion in all parameter expansion words
@@ -50,5 +50,5 @@ index 3956112..1443c14 100644
  	herefd = saveherefd;
  	argbackq = saveargbackq;
 -- 
-1.5.5
+1.5.6.3
 

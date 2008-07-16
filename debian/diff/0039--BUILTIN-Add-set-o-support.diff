@@ -1,4 +1,4 @@
-From e3806e06bd39fb62033646b812937a1712fd78ed Mon Sep 17 00:00:00 2001
+From 8b0cb6ab29cd7bb714dfd63b2eed79ee6002ce3e Mon Sep 17 00:00:00 2001
 From: Richard M Kreuter <kreuter@progn.net>
 Date: Sun, 23 Dec 2007 11:24:48 +0800
 Subject: [PATCH] [BUILTIN] Add set +o support
@@ -101,5 +101,5 @@ index f669117..48c9671 100644
  		for (i = 0; i < NOPTS; i++)
  			if (equal(name, optnames[i])) {
 -- 
-1.5.5
+1.5.6.3
 

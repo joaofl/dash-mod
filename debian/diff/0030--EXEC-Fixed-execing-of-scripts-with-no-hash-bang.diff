@@ -1,4 +1,4 @@
-From cbf7553964832984f17c0c16ff071970e19a45c2 Mon Sep 17 00:00:00 2001
+From eb40fd0bec3ffc8a5baa8be6ae3b71d6da38e681 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 15 Oct 2007 20:24:28 +0800
 Subject: [PATCH] [EXEC] Fixed execing of scripts with no hash-bang
@@ -98,5 +98,5 @@ index 8a1f722..bbb70e8 100644
  	}
  }
 -- 
-1.5.5
+1.5.6.3
 

@@ -1,4 +1,4 @@
-From ade5f31819251f8fbe9f98f4d3d7f2d9ec0d56d5 Mon Sep 17 00:00:00 2001
+From b2ce42cabeefe63177c8b461258ad480ea1c7894 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Fri, 5 Oct 2007 23:26:45 +0800
 Subject: [PATCH] [MEMALLOC] Made grabstackblock an inline wrapper for stalloc
@@ -66,5 +66,5 @@ index 8a41e64..282dbb0 100644
  	if (p == sstrend)
  		p = growstackstr();
 -- 
-1.5.5
+1.5.6.3
 

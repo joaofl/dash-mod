@@ -1,0 +1,68 @@
+From f82702beb8f367952bc73bb6a970a473102c4f59 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 3 May 2008 15:02:01 +0800
+Subject: [PATCH] [SHELL] Use uninitialized_var to silence bogus warnings
+
+gcc generates bogus warnings about uninitialised variables in parser.c.
+This patch borrows the uninitialized_var macro from Linux to silence
+them.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog    |    1 +
+ src/parser.c |    5 +++--
+ src/system.h |    6 ++++++
+ 3 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index d52c521..7fba27f 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -8,6 +8,7 @@
+ 	* Test __GLIBC__ instead of _GNU_SOURCE.
+ 	* Restored warning when getcwd fails.
+ 	* Set default exvwarning2 arg0 for errors during early initialisation.
++	* Use uninitialized_var to silence bogus warnings.
+ 
+ 2008-05-02  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/parser.c b/src/parser.c
+index 32ed044..e891d31 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -851,7 +851,8 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
+ 	int parenlevel;	/* levels of parens in arithmetic */
+ 	int dqvarnest;	/* levels of variables expansion within double quotes */
+ 	int oldstyle;
+-	char const *prevsyntax;	/* syntax before arithmetic */
++	/* syntax before arithmetic */
++	char const *uninitialized_var(prevsyntax);
+ 
+ 	startlinno = plinno;
+ 	dblquote = 0;
+@@ -1285,7 +1286,7 @@ parsebackq: {
+ 	union node *n;
+ 	char *str;
+ 	size_t savelen;
+-	int saveprompt;
++	int uninitialized_var(saveprompt);
+ 
+ 	str = NULL;
+ 	savelen = out - (char *)stackblock();
+diff --git a/src/system.h b/src/system.h
+index b8853e6..17a9533 100644
+--- a/src/system.h
++++ b/src/system.h
+@@ -97,3 +97,9 @@ static inline int killpg(pid_t pid, int signal)
+ #define _SC_CLK_TCK 2
+ long sysconf(int) __attribute__((__noreturn__));
+ #endif
++
++/*
++ * A trick to suppress uninitialized variable warning without generating any
++ * code
++ */
++#define uninitialized_var(x) x = x
+-- 
+1.5.6.3
+

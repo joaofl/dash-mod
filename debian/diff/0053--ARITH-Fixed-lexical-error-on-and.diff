@@ -1,0 +1,65 @@
+From a62633d37c483de0f511e999ae6cf585adf41390 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 7 May 2008 11:15:52 +0800
+Subject: [PATCH] [ARITH] Fixed lexical error on & and |
+
+The parser used to skip a byte when parsing the & and | operators, testcase:
+
+ $ dash -c 'echo $((7&1))'
+ $ dash -c 'echo $((7& 1))'
+ $ dash -c 'echo $((7&11))'
+
+Signed-off-by: Gerrit Pape <pape@smarden.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog         |    4 ++++
+ src/arith_yylex.c |    8 +++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index c277720..2f65e03 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2008-05-07  Gerrit Pape <pape@smarden.org>
++
++	* Fixed lexical error in arithmetic expansion of & and |.
++
+ 2008-05-03  Dan McGee <dpmcgee@gmail.com>
+ 
+ 	* Fixed klibc/klcc build problems.
+diff --git a/src/arith_yylex.c b/src/arith_yylex.c
+index c4458a4..ec5b5b2 100644
+--- a/src/arith_yylex.c
++++ b/src/arith_yylex.c
+@@ -141,7 +141,9 @@ yylex()
+ 		case '=':
+ 			value += ARITH_ASS - '=';
+ checkeq:
+-			if (*++buf != '=')
++			buf++;
++checkeqcur:
++			if (*buf != '=')
+ 				goto out;
+ 			value += 11;
+ 			break;
+@@ -174,14 +176,14 @@ checkeq:
+ 		case '|':
+ 			if (*++buf != '|') {
+ 				value += ARITH_BOR - '|';
+-				goto checkeq;
++				goto checkeqcur;
+ 			}
+ 			value += ARITH_OR - '|';
+ 			break;
+ 		case '&':
+ 			if (*++buf != '&') {
+ 				value += ARITH_BAND - '&';
+-				goto checkeq;
++				goto checkeqcur;
+ 			}
+ 			value += ARITH_AND - '&';
+ 			break;
+-- 
+1.5.6.3
+

@@ -1,4 +1,4 @@
-From 7501b55f699ab71fc6cd2667716e70eebaa2868a Mon Sep 17 00:00:00 2001
+From bf358f676e1214ab926d17406a01cd0ca6aca9a8 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 11 Oct 2007 22:38:46 +0800
 Subject: [PATCH] [ARITH] Size optimisations in arithmetic lexer
@@ -154,5 +154,5 @@ index 0f46990..2c15657 100644
  		}
  		break;
 -- 
-1.5.5
+1.5.6.3
 

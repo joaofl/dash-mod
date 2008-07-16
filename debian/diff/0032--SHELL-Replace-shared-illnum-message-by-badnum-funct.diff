@@ -1,4 +1,4 @@
-From 044393f703ffb1b87b207ad66869d3ebb9e09eaa Mon Sep 17 00:00:00 2001
+From 1a940dadf0981b797c21d83fea26ef0fa7a54e0e Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Wed, 17 Oct 2007 12:51:08 +0800
 Subject: [PATCH] [SHELL] Replace shared illnum message by badnum function.
@@ -100,5 +100,5 @@ index 477cd16..2e0540a 100644
  intmax_t atomax10(const char *);
  int number(const char *);
 -- 
-1.5.5
+1.5.6.3
 

@@ -1,4 +1,4 @@
-From 903e743d0593b31c430a4182fabba1f4ed9dac4a Mon Sep 17 00:00:00 2001
+From bc46e866d18baf90de0ebf128a8f7ba964c2b138 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 4 Oct 2007 22:20:38 +0800
 Subject: [PATCH] [PARSER] Size optimisations in parameter expansion parser
@@ -90,5 +90,5 @@ index 9edb824..f49ee7d 100644
  			varnest++;
  			if (dblquote)
 -- 
-1.5.5
+1.5.6.3
 

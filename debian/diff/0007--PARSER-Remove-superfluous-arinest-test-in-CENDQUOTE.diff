@@ -1,4 +1,4 @@
-From 08ee0731cd65a502f34718c2ac11c266daeb4c5b Mon Sep 17 00:00:00 2001
+From 15ae663711888b7d710950224e0b5e6ae1967bf0 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 21:53:49 +0800
 Subject: [PATCH] [PARSER] Remove superfluous arinest test in CENDQUOTE
@@ -40,5 +40,5 @@ index 279d49e..26c9046 100644
  						syntax = BASESYNTAX;
  						dblquote = 0;
 -- 
-1.5.5
+1.5.6.3
 

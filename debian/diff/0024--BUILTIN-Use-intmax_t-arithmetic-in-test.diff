@@ -1,4 +1,4 @@
-From 8e92ae4cb4ab07ebf88c99c9dcd6219e7ea3297f Mon Sep 17 00:00:00 2001
+From 45c1f40e0235e06d5e6552ce5ab228644d5f36dc Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 6 Oct 2007 22:42:14 +0800
 Subject: [PATCH] [BUILTIN] Use intmax_t arithmetic in test
@@ -168,5 +168,5 @@ index f451cc2..c9cade6 100644
  int is_number(const char *);
  char *single_quote(const char *);
 -- 
-1.5.5
+1.5.6.3
 

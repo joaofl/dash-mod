@@ -1,4 +1,4 @@
-From 0150a7be130d6c54e286ca9fe5d72ba80f84ccf9 Mon Sep 17 00:00:00 2001
+From e8edb8f8a4098977944050ce322c76dcc4557b80 Mon Sep 17 00:00:00 2001
 From: Alexey Gladkov <legion@altlinux.org>
 Date: Thu, 4 Oct 2007 14:21:44 +0800
 Subject: [PATCH] [BUILD] Add --enable-static option to configure.
@@ -39,5 +39,5 @@ index e0a94a8..5e8f17d 100644
  
  dnl Checks for header files.
 -- 
-1.5.5
+1.5.6.3
 

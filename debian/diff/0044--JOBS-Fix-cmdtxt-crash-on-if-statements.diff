@@ -1,0 +1,57 @@
+From 1ace536aa75eec20105a05d73bd2576ae783de6e Mon Sep 17 00:00:00 2001
+From: Larry Doolittle <ldoolitt@recycle.lbl.gov>
+Date: Fri, 7 Mar 2008 20:22:17 +0800
+Subject: [PATCH] [JOBS] Fix cmdtxt crash on if statements
+
+(Herbert: for context, see
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=467065 )
+
+This is a real bug in upstream dash, which has existed since at
+least dash-0.5.1 (July 2004).  It is a latent bug in cmdtxt()
+(which I think applies only to pipes) as it handles "if" commands.
+The attached patch fixes it for me.
+
+It's possible this patch will fix one or more of #462414,
+#462977, and #463649.  I'll send messages there to see if
+the submitters can test.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog  |    4 ++++
+ src/jobs.c |    5 +++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 4bc9181..f5e0dbc 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2008-03-07  Larry Doolittle <ldoolitt@recycle.lbl.gov>
++
++	* Fix cmdtxt crash on if statements.
++
+ 2008-01-01  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Fix slash treatment in expmeta.
+diff --git a/src/jobs.c b/src/jobs.c
+index 529d615..40dc8f6 100644
+--- a/src/jobs.c
++++ b/src/jobs.c
+@@ -1235,11 +1235,12 @@ donode:
+ 		cmdputs("if ");
+ 		cmdtxt(n->nif.test);
+ 		cmdputs("; then ");
+-		n = n->nif.ifpart;
+ 		if (n->nif.elsepart) {
+-			cmdtxt(n);
++			cmdtxt(n->nif.ifpart);
+ 			cmdputs("; else ");
+ 			n = n->nif.elsepart;
++		} else {
++			n = n->nif.ifpart;
+ 		}
+ 		p = "; fi";
+ 		goto dotail;
+-- 
+1.5.6.3
+

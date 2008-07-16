@@ -1,0 +1,49 @@
+From fb6842ef95b720d42c8ab828c7a299ea8406e7f8 Mon Sep 17 00:00:00 2001
+From: Dan McGee <dpmcgee@gmail.com>
+Date: Sat, 3 May 2008 15:08:22 +0800
+Subject: [PATCH] [SHELL] Added gitignore
+
+This gitignore covers most of the generated files in the src/ directory.
+
+Signed-off-by: Dan McGee <dpmcgee@gmail.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog      |    1 +
+ src/.gitignore |   13 +++++++++++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
+ create mode 100644 src/.gitignore
+
+diff --git a/ChangeLog b/ChangeLog
+index 7fba27f..c277720 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,7 @@
+ 2008-05-03  Dan McGee <dpmcgee@gmail.com>
+ 
+ 	* Fixed klibc/klcc build problems.
++	* Added gitignore.
+ 
+ 2008-05-03  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/.gitignore b/src/.gitignore
+new file mode 100644
+index 0000000..644eccb
+--- /dev/null
++++ b/src/.gitignore
+@@ -0,0 +1,13 @@
++*.o
++builtins.[ch]
++builtins.def
++dash
++init.c
++mkinit
++mknodes
++mksignames
++mksyntax
++nodes.[ch]
++signames.c
++syntax.[ch]
++token.h
+-- 
+1.5.6.3
+

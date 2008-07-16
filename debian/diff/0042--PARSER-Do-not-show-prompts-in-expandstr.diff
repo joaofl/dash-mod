@@ -1,4 +1,4 @@
-From 8cbde910100fa6b708c3eeb35cfd366726034967 Mon Sep 17 00:00:00 2001
+From 21caed6e95dd6ae8c5c8fe65ff613e6aebb1575f Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Thu, 27 Dec 2007 13:57:07 +1100
 Subject: [PATCH] [PARSER] Do not show prompts in expandstr
@@ -51,5 +51,5 @@ index 3206328..9dd6185 100644
  
  	n.narg.type = NARG;
 -- 
-1.5.5
+1.5.6.3
 

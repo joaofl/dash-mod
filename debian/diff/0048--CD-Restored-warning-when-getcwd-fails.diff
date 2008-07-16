@@ -1,0 +1,62 @@
+From b1b709c76ee8667a2bf3e4a143df90f82e19c0f2 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sat, 3 May 2008 14:36:08 +0800
+Subject: [PATCH] [CD] Restored warning when getcwd fails
+
+Somewhere along the lines the warning when getcwd fails went missing.
+This patch restores it.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog |    1 +
+ src/cd.c  |   12 ++++++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 94b37c4..2c04c19 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -2,6 +2,7 @@
+ 
+ 	* Fixed _PATH_BSHELL warning.
+ 	* Test __GLIBC__ instead of _GNU_SOURCE.
++	* Restored warning when getcwd fails.
+ 
+ 2008-05-02  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/cd.c b/src/cd.c
+index 73ccde0..624801d 100644
+--- a/src/cd.c
++++ b/src/cd.c
+@@ -52,6 +52,7 @@
+ #include "error.h"
+ #include "exec.h"
+ #include "redir.h"
++#include "main.h"
+ #include "mystring.h"
+ #include "show.h"
+ #include "cd.h"
+@@ -251,11 +252,18 @@ getpwd()
+ {
+ #ifdef __GLIBC__
+ 	char *dir = getcwd(0, 0);
+-	return dir ? dir : nullstr;
++
++	if (dir)
++		return dir;
+ #else
+ 	char buf[PATH_MAX];
+-	return getcwd(buf, sizeof(buf)) ? savestr(buf) : nullstr;
++
++	if (getcwd(buf, sizeof(buf))
++		return savestr(buf);
+ #endif
++
++	sh_warnx("getcwd() failed: %s", strerror(errno));
++	return nullstr;
+ }
+ 
+ int
+-- 
+1.5.6.3
+

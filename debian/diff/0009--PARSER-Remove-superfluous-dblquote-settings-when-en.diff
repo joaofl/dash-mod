@@ -1,4 +1,4 @@
-From b428e83766c7b9d0cb887f0dd582272c5e85a536 Mon Sep 17 00:00:00 2001
+From 44ea8759219dfa4c55056932367a3f13001f8731 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Mon, 24 Sep 2007 22:11:59 +0800
 Subject: [PATCH] [PARSER] Remove superfluous dblquote settings when ending arith
@@ -39,5 +39,5 @@ index 8fac57a..791251d 100644
  							USTPUTC(')', out);
  					} else {
 -- 
-1.5.5
+1.5.6.3
 

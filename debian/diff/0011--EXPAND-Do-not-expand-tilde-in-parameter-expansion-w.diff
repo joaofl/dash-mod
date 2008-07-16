@@ -1,4 +1,4 @@
-From 7e9ee068665eda9591126d3015badf92d7d593f7 Mon Sep 17 00:00:00 2001
+From a39e7997d2f7f71a32bc05df29c0b73c34add3f0 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Tue, 25 Sep 2007 10:54:13 +0800
 Subject: [PATCH] [EXPAND] Do not expand tilde in parameter expansion within quotes
@@ -90,5 +90,5 @@ index 6b7d607..be7ec6f 100644
  
  union node;
 -- 
-1.5.5
+1.5.6.3
 

@@ -1,4 +1,4 @@
-From 8eacbcc79c48f2656127f488ef3172d69e092343 Mon Sep 17 00:00:00 2001
+From 971c93b89a26ca0bd3e3f24e5586c3d6ef9f39cd Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Tue, 1 Jan 2008 13:46:01 +1100
 Subject: [PATCH] [EXPAND] Fix slash treatment in expmeta
@@ -36,11 +36,11 @@ Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
  2 files changed, 12 insertions(+), 7 deletions(-)
 
 diff --git a/ChangeLog b/ChangeLog
-index 0030738..4ed9125 100644
+index 0030738..4bc9181 100644
 --- a/ChangeLog
 +++ b/ChangeLog
 @@ -1,3 +1,7 @@
-+2008-01-01 Herbert Xu <herbert@gondor.apana.org.au>
++2008-01-01  Herbert Xu <herbert@gondor.apana.org.au>
 +
 +	* Fix slash treatment in expmeta.
 +
@@ -76,5 +76,5 @@ index f3d63c4..5986236 100644
  		if (enddir != expdir)
  			metaflag++;
 -- 
-1.5.5
+1.5.6.3
 

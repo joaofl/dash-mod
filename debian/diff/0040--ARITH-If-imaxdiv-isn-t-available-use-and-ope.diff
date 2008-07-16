@@ -1,4 +1,4 @@
-From 509ca4a5a2699af4bce734dfb9efa10e2b5f631d Mon Sep 17 00:00:00 2001
+From b21a62f3a6321a35a63fdc2dfceaafc55b326d47 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Sun, 23 Dec 2007 21:24:37 +0800
 Subject: [PATCH] [ARITH] If imaxdiv() isn't available, use / and % operators
@@ -73,5 +73,5 @@ index e473594..f4857fe 100644
  		return a * b;
  	case ARITH_ADD:
 -- 
-1.5.5
+1.5.6.3
 

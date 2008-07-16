@@ -1,4 +1,4 @@
-From 0db88ff47ad488680bce86defd7254f4f682e850 Mon Sep 17 00:00:00 2001
+From b000ad6bc7fae900468cec13e83e7d125527fc52 Mon Sep 17 00:00:00 2001
 From: Herbert Xu <herbert@gondor.apana.org.au>
 Date: Sat, 20 Oct 2007 18:26:23 +0800
 Subject: [PATCH] [EXPAND] Added configure --enable-glob and --enable-fnmatch options
@@ -162,5 +162,5 @@ index 5c31400..c489446 100644
  {
  	static const struct class {
 -- 
-1.5.5
+1.5.6.3
 

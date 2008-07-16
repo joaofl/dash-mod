@@ -1,0 +1,57 @@
+From 5a1b6b570ede39ddc80b837cda6e0622920a4660 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 13 Jul 2008 21:51:52 +0800
+Subject: [PATCH] [SHELL] Expand ENV before using it
+
+Per POSIX ENV needs to undergo parameter expansion.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog  |    1 +
+ src/main.c |    4 +++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 53d5b7c..58bed78 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -4,6 +4,7 @@
+ 	* Made aexpr/oexpr non-recursive.
+ 	* Made t_lex reentrant.
+ 	* Made setinputfd static.
++	* Expand ENV before using it.
+ 
+ 2008-05-19  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/main.c b/src/main.c
+index b421e4f..cf34931 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -154,7 +154,7 @@ main(int argc, char **argv)
+ 		read_profile("/etc/profile");
+ state1:
+ 		state = 2;
+-		read_profile(".profile");
++		read_profile("$HOME/.profile");
+ 	}
+ state2:
+ 	state = 3;
+@@ -168,6 +168,7 @@ state2:
+ 			read_profile(shinit);
+ 		}
+ 	}
++	popstackmark(&smark);
+ state3:
+ 	state = 4;
+ 	if (minusc)
+@@ -259,6 +260,7 @@ read_profile(const char *name)
+ {
+ 	int skip;
+ 
++	name = expandstr(name);
+ 	if (setinputfile(name, INPUT_PUSH_FILE | INPUT_NOFILE_OK) < 0)
+ 		return;
+ 
+-- 
+1.5.6.3
+
