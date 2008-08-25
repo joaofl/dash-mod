@@ -1,3 +1,10 @@
+dash (0.5.4-12) unstable; urgency=low
+
+  * debian/po/nl.po: [INTL:nl] Updated debconf templates translation
+    for Dutch (thx Thijs Kinkhorst, closes: #492069).
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 25 Aug 2008 19:44:31 +0000
+
 dash (0.5.4-11) unstable; urgency=low
 
   * debian/diff/0045-Fix-null-pointer-dereference.diff,
