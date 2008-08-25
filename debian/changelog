@@ -5,8 +5,10 @@ dash (0.5.4-12) unstable; urgency=low
   * debian/po/pt.po: [INTL:pt] Updated Portuguese translation for
     debconf messages (thx Traduz - Portuguese Translation Team,
     closes: #489805).
+  * debian/po/sv.po: [INTL:sv] po-debconf file for dash (thx Martin
+    Ågren, closes: #491532).
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 25 Aug 2008 19:46:06 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 25 Aug 2008 19:47:04 +0000
 
 dash (0.5.4-11) unstable; urgency=low
 

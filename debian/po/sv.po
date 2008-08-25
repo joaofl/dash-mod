@@ -1,3 +1,4 @@
+# translation of dash_0.5.4-11_sv.po to Swedish
 # Translators, if you are not familiar with the PO format, gettext
 # documentation is worth reading, especially sections dedicated to
 # this format, e.g. by running:
@@ -7,20 +8,21 @@
 # /usr/share/doc/po-debconf/README-trans
 # or http://www.debian.org/intl/l10n/po-debconf/README-trans
 # Developers do not need to manually edit POT or PO files.
-# , fuzzy
 #
-#
+# Martin Ågren <martin.agren@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: dash 0.5.2-7\n"
+"Project-Id-Version: dash_0.5.4-11_sv\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-02 21:54+0000\n"
-"PO-Revision-Date: 2005-09-27 15:43-0700\n"
-"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
-"Language-Team: Swedish <sv@li.org>\n"
+"PO-Revision-Date: 2008-07-20 10:45+0200\n"
+"Last-Translator: Martin Ågren <martin.agren@gmail.com>\n"
+"Language-Team: Swedish <debian-l10n-swedish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #. Type: boolean
 #. Description
@@ -32,19 +34,17 @@ msgstr "Installera dash som /bin/sh?"
 #. Description
 #: ../dash.templates.in:1001
 msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
-msgstr ""
+msgstr "Standardvalet för skalet /bin/sh på Debian och Debianbaserade system är bash."
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-#, fuzzy
 msgid ""
 "However, since the default shell is required to be POSIX-compliant, any "
 "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
 "wish to do this because dash is faster and smaller than bash."
 msgstr ""
-"Bash är standard för /bin/sh på ett Debian-system.  Eftersom vår policy "
-"kräver att alla script som använder /bin/sh måste vara POSIX-kompatibla, kan "
-"vilket POSIX-kompatibelt skal som helst vara /bin/sh.  Då dash är POSIX-"
-"kompatibelt kan det användas som /bin/sh. Du kanske önskar detta eftersom "
-"dash är snabbare och mindre än bash."
+"Eftersom standardskalet måste vara POSIX-kompatibelt, kan dock "
+"vilket POSIX-kompatibelt skal som helst, såsom dash, tjänstgöra som /bin/sh. "
+"Du kanske önskar detta eftersom dash är snabbare och mindre än bash."
+
