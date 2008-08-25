@@ -2,8 +2,11 @@ dash (0.5.4-12) unstable; urgency=low
 
   * debian/po/nl.po: [INTL:nl] Updated debconf templates translation
     for Dutch (thx Thijs Kinkhorst, closes: #492069).
+  * debian/po/pt.po: [INTL:pt] Updated Portuguese translation for
+    debconf messages (thx Traduz - Portuguese Translation Team,
+    closes: #489805).
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 25 Aug 2008 19:44:31 +0000
+ -- Gerrit Pape <pape@smarden.org>  Mon, 25 Aug 2008 19:46:06 +0000
 
 dash (0.5.4-11) unstable; urgency=low
 
