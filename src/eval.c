@@ -326,7 +326,15 @@ exexit:
 #if !defined(__alpha__) || (defined(__GNUC__) && __GNUC__ >= 3)
 STATIC
 #endif
-void evaltreenr(union node *, int) __attribute__ ((alias("evaltree")));
+void evaltreenr(union node *n, int flags)
+#ifdef HAVE_ATTRIBUTE_ALIAS
+	__attribute__ ((alias("evaltree")));
+#else
+{
+	evaltree(n, flags);
+	abort();
+}
+#endif
 
 
 STATIC void
@@ -377,7 +385,7 @@ evalfor(union node *n, int flags)
 	setstackmark(&smark);
 	arglist.lastp = &arglist.list;
 	for (argp = n->nfor.args ; argp ; argp = argp->narg.next) {
-		expandarg(argp, &arglist, EXP_FULL | EXP_TILDE | EXP_RECORD);
+		expandarg(argp, &arglist, EXP_FULL | EXP_TILDE);
 		/* XXX */
 		if (evalskip)
 			goto out;
@@ -577,8 +585,6 @@ evalpipe(union node *n, int flags)
 void
 evalbackcmd(union node *n, struct backcmd *result)
 {
-	int saveherefd;
-
 	result->fd = -1;
 	result->buf = NULL;
 	result->nleft = 0;
@@ -586,9 +592,6 @@ evalbackcmd(union node *n, struct backcmd *result)
 	if (n == NULL) {
 		goto out;
 	}
-
-	saveherefd = herefd;
-	herefd = -1;
 
 #ifdef notyet
 	/*
@@ -636,7 +639,6 @@ evalbackcmd(union node *n, struct backcmd *result)
 		result->fd = pip[0];
 		result->jp = jp;
 	}
-	herefd = saveherefd;
 out:
 	TRACE(("evalbackcmd done: fd=%d buf=0x%x nleft=%d jp=0x%x\n",
 		result->fd, result->buf, result->nleft, result->jp));
@@ -727,7 +729,9 @@ evalcommand(union node *cmd, int flags)
 			argc++;
 	}
 
-	argv = nargv = stalloc(sizeof (char *) * (argc + 1));
+	/* Reserve one extra spot at the front for shellexec. */
+	nargv = stalloc(sizeof (char *) * (argc + 2));
+	argv = ++nargv;
 	for (sp = arglist.list ; sp ; sp = sp->next) {
 		TRACE(("evalcommand arg: %s\n", sp->text));
 		*nargv++ = sp->text;
@@ -1027,7 +1031,7 @@ breakcmd(int argc, char **argv)
 	int n = argc > 1 ? number(argv[1]) : 1;
 
 	if (n <= 0)
-		sh_error(illnum, argv[1]);
+		badnum(argv[1]);
 	if (n > loopnest)
 		n = loopnest;
 	if (n > 0) {

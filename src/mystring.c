@@ -42,6 +42,11 @@
  *	is_number(s)		Return true if s is a string of digits.
  */
 
+#include <ctype.h>
+#include <errno.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "shell.h"
 #include "syntax.h"
@@ -55,7 +60,8 @@
 char nullstr[1];		/* zero length string */
 const char spcstr[] = " ";
 const char snlfmt[] = "%s\n";
-const char dolatstr[] = { CTLVAR, VSNORMAL|VSQUOTE, '@', '=', '\0' };
+const char dolatstr[] = { CTLQUOTEMARK, CTLVAR, VSNORMAL, '@', '=',
+			  CTLQUOTEMARK, '\0' };
 const char illnum[] = "Illegal number: %s";
 const char homestr[] = "HOME";
 
@@ -102,6 +108,45 @@ prefix(const char *string, const char *pfx)
 	return (char *) string;
 }
 
+void badnum(const char *s)
+{
+	sh_error(illnum, s);
+}
+
+/*
+ * Convert a string into an integer of type intmax_t.  Alow trailing spaces.
+ */
+intmax_t atomax(const char *s, int base)
+{
+	char *p;
+	intmax_t r;
+
+	errno = 0;
+	r = strtoimax(s, &p, base);
+
+	if (errno != 0)
+		badnum(s);
+
+	/*
+	 * Disallow completely blank strings in non-arithmetic (base != 0)
+	 * contexts.
+	 */
+	if (p == s && base)
+		badnum(s);
+
+	while (isspace((unsigned char)*p))
+	      p++;
+
+	if (*p)
+		badnum(s);
+
+	return r;
+}
+
+intmax_t atomax10(const char *s)
+{
+	return atomax(s, 10);
+}
 
 /*
  * Convert a string of digits to an integer, printing an error message on
@@ -111,10 +156,12 @@ prefix(const char *string, const char *pfx)
 int
 number(const char *s)
 {
+	intmax_t n = atomax10(s);
 
-	if (! is_number(s))
-		sh_error(illnum, s);
-	return atoi(s);
+	if (n < 0 || n > INT_MAX)
+		badnum(s);
+
+	return n;
 }
 
 

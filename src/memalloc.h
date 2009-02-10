@@ -40,29 +40,32 @@ struct stackmark {
 	struct stack_block *stackp;
 	char *stacknxt;
 	size_t stacknleft;
-	struct stackmark *marknext;
 };
 
 
 extern char *stacknxt;
 extern size_t stacknleft;
 extern char *sstrend;
-extern int herefd;
 
 pointer ckmalloc(size_t);
 pointer ckrealloc(pointer, size_t);
 char *savestr(const char *);
 pointer stalloc(size_t);
 void stunalloc(pointer);
+void pushstackmark(struct stackmark *mark, size_t len);
 void setstackmark(struct stackmark *);
 void popstackmark(struct stackmark *);
 void growstackblock(void);
-void grabstackblock(size_t);
 void *growstackstr(void);
 char *makestrspace(size_t, char *);
 char *stnputs(const char *, size_t, char *);
 char *stputs(const char *, char *);
 
+
+static inline void grabstackblock(size_t len)
+{
+	stalloc(len);
+}
 
 static inline char *_STPUTC(int c, char *p) {
 	if (p == sstrend)

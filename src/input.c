@@ -107,6 +107,7 @@ EditLine *el;			/* cookie for editline package */
 
 STATIC void pushfile(void);
 static int preadfd(void);
+static void setinputfd(int fd, int push);
 
 #ifdef mkinit
 INCLUDE <stdio.h>
@@ -122,33 +123,6 @@ RESET {
 	popallfiles();
 }
 #endif
-
-
-/*
- * Read a line from the script.
- */
-
-char *
-pfgets(char *line, int len)
-{
-	char *p = line;
-	int nleft = len;
-	int c;
-
-	while (--nleft > 0) {
-		c = pgetc2();
-		if (c == PEOF) {
-			if (p == line)
-				return NULL;
-			break;
-		}
-		*p++ = c;
-		if (c == '\n')
-			break;
-	}
-	*p = '\0';
-	return line;
-}
 
 
 /*
@@ -449,7 +423,7 @@ out:
  * interrupts off.
  */
 
-void
+static void
 setinputfd(int fd, int push)
 {
 	if (push) {

@@ -106,31 +106,33 @@ const char optletters[NOPTS] = {
 char optlist[NOPTS];
 
 
-STATIC void options(int);
+static int options(int);
 STATIC void minus_o(char *, int);
 STATIC void setoption(int, int);
-STATIC int getopts(char *, char *, char **, int *, int *); 
+STATIC int getopts(char *, char *, char **);
 
 
 /*
  * Process the shell command line arguments.
  */
 
-void
+int
 procargs(int argc, char **argv)
 {
 	int i;
 	const char *xminusc;
 	char **xargv;
+	int login;
 
 	xargv = argv;
+	login = xargv[0] && xargv[0][0] == '-';
 	arg0 = xargv[0];
 	if (argc > 0)
 		xargv++;
 	for (i = 0; i < NOPTS; i++)
 		optlist[i] = 2;
 	argptr = xargv;
-	options(1);
+	login |= options(1);
 	xargv = argptr;
 	xminusc = minusc;
 	if (*xargv == NULL) {
@@ -169,6 +171,8 @@ setarg0:
 		xargv++;
 	}
 	optschanged();
+
+	return login;
 }
 
 
@@ -190,12 +194,13 @@ optschanged(void)
  * to the argument list; we advance it past the options.
  */
 
-STATIC void
+STATIC int
 options(int cmdline)
 {
 	char *p;
 	int val;
 	int c;
+	int login = 0;
 
 	if (cmdline)
 		minusc = NULL;
@@ -223,6 +228,8 @@ options(int cmdline)
 		while ((c = *p++) != '\0') {
 			if (c == 'c' && cmdline) {
 				minusc = p;	/* command is after shell args*/
+			} else if (c == 'l' && cmdline) {
+				login = 1;
 			} else if (c == 'o') {
 				minus_o(*argptr, val);
 				if (*argptr)
@@ -232,6 +239,8 @@ options(int cmdline)
 			}
 		}
 	}
+
+	return login;
 }
 
 STATIC void
@@ -240,10 +249,18 @@ minus_o(char *name, int val)
 	int i;
 
 	if (name == NULL) {
-		out1str("Current option settings\n");
-		for (i = 0; i < NOPTS; i++)
-			out1fmt("%-16s%s\n", optnames[i],
-				optlist[i] ? "on" : "off");
+		if (val) {
+			out1str("Current option settings\n");
+			for (i = 0; i < NOPTS; i++)
+				out1fmt("%-16s%s\n", optnames[i],
+					optlist[i] ? "on" : "off");
+		} else {
+			for (i = 0; i < NOPTS; i++)
+				out1fmt("set %s %s\n",
+					optlist[i] ? "-o" : "+o",
+					optnames[i]);
+
+		}
 	} else {
 		for (i = 0; i < NOPTS; i++)
 			if (equal(name, optnames[i])) {
@@ -377,7 +394,7 @@ void
 getoptsreset(value)
 	const char *value;
 {
-	shellparam.optind = number(value);
+	shellparam.optind = number(value) ?: 1;
 	shellparam.optoff = -1;
 }
 
@@ -397,41 +414,40 @@ getoptscmd(int argc, char **argv)
 		sh_error("Usage: getopts optstring var [arg]");
 	else if (argc == 3) {
 		optbase = shellparam.p;
-		if (shellparam.optind > shellparam.nparam + 1) {
+		if ((unsigned)shellparam.optind > shellparam.nparam + 1) {
 			shellparam.optind = 1;
 			shellparam.optoff = -1;
 		}
 	}
 	else {
 		optbase = &argv[3];
-		if (shellparam.optind > argc - 2) {
+		if ((unsigned)shellparam.optind > argc - 2) {
 			shellparam.optind = 1;
 			shellparam.optoff = -1;
 		}
 	}
 
-	return getopts(argv[1], argv[2], optbase, &shellparam.optind,
-		       &shellparam.optoff);
+	return getopts(argv[1], argv[2], optbase);
 }
 
 STATIC int
-getopts(char *optstr, char *optvar, char **optfirst, int *optind, int *optoff)
+getopts(char *optstr, char *optvar, char **optfirst)
 {
 	char *p, *q;
 	char c = '?';
 	int done = 0;
-	int err = 0;
-	char s[12];
+	char s[2];
 	char **optnext;
+	int ind = shellparam.optind;
+	int off = shellparam.optoff;
 
-	if (*optind < 1)
-		return 1;
-	optnext = optfirst + *optind - 1;
+	shellparam.optind = -1;
+	optnext = optfirst + ind - 1;
 
-	if (*optind <= 1 || *optoff < 0 || strlen(optnext[-1]) < *optoff)
+	if (ind <= 1 || off < 0 || strlen(optnext[-1]) < off)
 		p = NULL;
 	else
-		p = optnext[-1] + *optoff;
+		p = optnext[-1] + off;
 	if (p == NULL || *p == '\0') {
 		/* Current word is done, advance */
 		p = *optnext;
@@ -452,7 +468,7 @@ atend:
 			if (optstr[0] == ':') {
 				s[0] = c;
 				s[1] = '\0';
-				err |= setvarsafe("OPTARG", s, 0);
+				setvar("OPTARG", s, 0);
 			} else {
 				outfmt(&errout, "Illegal option -%c\n", c);
 				(void) unsetvar("OPTARG");
@@ -469,7 +485,7 @@ atend:
 			if (optstr[0] == ':') {
 				s[0] = c;
 				s[1] = '\0';
-				err |= setvarsafe("OPTARG", s, 0);
+				setvar("OPTARG", s, 0);
 				c = ':';
 			} else {
 				outfmt(&errout, "No arg for -%c option\n", c);
@@ -481,25 +497,21 @@ atend:
 
 		if (p == *optnext)
 			optnext++;
-		err |= setvarsafe("OPTARG", p, 0);
+		setvar("OPTARG", p, 0);
 		p = NULL;
 	} else
-		err |= setvarsafe("OPTARG", nullstr, 0);
+		setvar("OPTARG", nullstr, 0);
 
 out:
-	*optoff = p ? p - *(optnext - 1) : -1;
-	*optind = optnext - optfirst + 1;
-	fmtstr(s, sizeof(s), "%d", *optind);
-	err |= setvarsafe("OPTIND", s, VNOFUNC);
+	ind = optnext - optfirst + 1;
+	setvarint("OPTIND", ind, VNOFUNC);
 	s[0] = c;
 	s[1] = '\0';
-	err |= setvarsafe(optvar, s, 0);
-	if (err) {
-		*optind = 1;
-		*optoff = -1;
-		flushall();
-		exraise(EXERROR);
-	}
+	setvar(optvar, s, 0);
+
+	shellparam.optoff = p ? p - *(optnext - 1) : -1;
+	shellparam.optind = ind;
+
 	return done;
 }
 

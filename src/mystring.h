@@ -34,12 +34,13 @@
  *	@(#)mystring.h	8.2 (Berkeley) 5/4/95
  */
 
+#include <stdint.h>
 #include <string.h>
 
 extern const char snlfmt[];
 extern const char spcstr[];
 extern const char dolatstr[];
-#define DOLATSTRLEN 4
+#define DOLATSTRLEN 6
 extern const char illnum[];
 extern const char homestr[];
 
@@ -47,6 +48,9 @@ extern const char homestr[];
 void scopyn(const char *, char *, int);
 #endif
 char *prefix(const char *, const char *);
+void badnum(const char *s) __attribute__ ((noreturn));
+intmax_t atomax(const char *, int);
+intmax_t atomax10(const char *);
 int number(const char *);
 int is_number(const char *);
 char *single_quote(const char *);

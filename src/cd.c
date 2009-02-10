@@ -52,6 +52,7 @@
 #include "error.h"
 #include "exec.h"
 #include "redir.h"
+#include "main.h"
 #include "mystring.h"
 #include "show.h"
 #include "cd.h"
@@ -241,8 +242,6 @@ updatepwd(const char *dir)
 }
 
 
-#define MAXPWD 256
-
 /*
  * Find out what the current directory is. If we already know the current
  * directory, this routine returns immediately.
@@ -251,8 +250,20 @@ inline
 STATIC char *
 getpwd()
 {
+#ifdef __GLIBC__
 	char *dir = getcwd(0, 0);
-	return dir ? dir : nullstr;
+
+	if (dir)
+		return dir;
+#else
+	char buf[PATH_MAX];
+
+	if (getcwd(buf, sizeof(buf)))
+		return savestr(buf);
+#endif
+
+	sh_warnx("getcwd() failed: %s", strerror(errno));
+	return nullstr;
 }
 
 int

@@ -1,3 +1,185 @@
+2009-01-14  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Add arith_yacc.h to dash_SOURCES.
+	* Release 0.5.5.1.
+
+2009-01-13  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Release 0.5.5.
+
+2009-01-13  Mark Mentovai <mmentovai@gmail.com>
+
+	* Fixed build on OS X.
+
+2008-12-26  Aleksey Cheusov <vle@gmx.net>
+
+	* Fixed build on NetBSD.
+
+2008-10-17  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Removed obsolete for loop syntax in manual.
+
+2008-08-05  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed getcwd build error for the non-glibc case.
+
+2008-06-13  Gerrit Pape <pape@smarden.org>
+
+	* Added missing right parenthesis in manual page.
+
+2008-06-13  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed 3,4-argument cases for test per POSIX.
+	* Made aexpr/oexpr non-recursive.
+	* Made t_lex reentrant.
+	* Made setinputfd static.
+	* Expand ENV before using it.
+	* Added support for -l.
+
+2008-05-19  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed non-leading slash treatment in expmeta.
+
+2008-05-07  Gerrit Pape <pape@smarden.org>
+
+	* Fixed lexical error in arithmetic expansion of & and |.
+
+2008-05-03  Dan McGee <dpmcgee@gmail.com>
+
+	* Fixed klibc/klcc build problems.
+	* Added gitignore.
+
+2008-05-03  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed _PATH_BSHELL warning.
+	* Test __GLIBC__ instead of _GNU_SOURCE.
+	* Restored warning when getcwd fails.
+	* Set default exvwarning2 arg0 for errors during early initialisation.
+	* Use uninitialized_var to silence bogus warnings.
+
+2008-05-02  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Restored non-glibc getcwd support.
+
+2008-03-07  Larry Doolittle <ldoolitt@recycle.lbl.gov>
+
+	* Fix cmdtxt crash on if statements.
+
+2008-01-01  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix slash treatment in expmeta.
+
+2007-12-27  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Add FAKEEOFMARK for expandstr.
+	* Do not show prompts in expandstr.
+
+2007-12-23  Gerrit Pape <pape@smarden.org>
+
+	* If imaxdiv() isn't available, use / and % operators.
+
+2007-12-23  Richard M Kreuter <kreuter@progn.net>
+
+	* Add set +o support.
+
+2007-12-23  Steve Langasek <steve.langasek@canonical.com>
+
+	* Fixed bad pointer arithmetic in evalcommand.
+
+2007-11-11  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Removed noexpand/length check on eofmark.
+	* Removed herefd hack.
+	* Expand here-documents in the current shell environment.
+
+2007-10-20  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Added configure --enable-glob and --enable-fnmatch options.
+	* Fix here-doc corruption.
+
+2007-10-17  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Replace shared illnum message by badnum function.
+
+2007-10-17  Oleg Verych <olecom@flower.upol.cz>
+
+	* Disallow completely blank strings in non-arithmetic context.
+
+2007-10-15  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed execing of scripts with no hash-bang.
+
+2007-10-11  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Add assignment support in arithmetic expansions.
+	* Size optimisations in arithmetic lexer.
+	* Add likely flags in expari.
+	* Use setvarint to set OPTIND.
+
+2007-10-08  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Report substition errors at expansion time.
+
+2007-10-06  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Add pushstackmark.
+	* Treat OPTIND=0 in the same way as OPTIND=1.
+	* Remove setvarsafe.
+	* Use intmax_t arithmetic in test.
+
+2007-10-05  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Made grabstackblock an inline wrapper for stalloc.
+
+2007-10-04  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix parsing of ${##1}.
+	* Size optimisations in parameter expansion parser.
+
+2007-10-04  Alexey Gladkov <legion@altlinux.org>
+
+	* Add --enable-static option to configure.
+
+2007-09-26  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Recognise here-doc delimiters terminated by EOF.
+
+2007-09-26  Roy Marples <uberlord@gentoo.org>
+
+	* Refresh stack pointers after makestrspace in _rmescapes.
+
+2007-09-25  Gerrit Pape <pape@smarden.org>
+
+	* Clarify description of -nt, -ot options to test builtin.
+	* Clarify syntax of the for command.
+
+2007-09-25  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Do not expand tilde in parameter expansion within quotes.
+	* Move parse-time quote flag detection to run-time.
+
+2007-09-24  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Do not quote back slashes in parameter expansions outside quotes.
+	* Perform tilde expansion in all parameter expansion words.
+	* Remove superfluous arinest test in CENDQUOTE.
+	* Remove superfluous arinest test for dqvarnest.
+	* Remove superfluous dblquote settings when ending arith.
+	* Remove arithmetic expansion collapsing at parse time.
+
+2007-09-22  Oleg Verych <olecom@flower.upol.cz>
+
+	* White space fixes for test(1).
+	* Use direct comparison instead of strcmp in test(1).
+
+2007-09-22  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Move flushall to the point just before _exit.
+
+2007-09-21  Denis Vlasenko <vda.linux@googlemail.com>
+
+	* Restore foreground process group on exit.
+
 2007-07-12  Herbert Xu <herbert@gondor.apana.org.au>
 
 	* Release 0.5.4.

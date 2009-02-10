@@ -32,7 +32,10 @@
  * SUCH DAMAGE.
  */
 
+#if HAVE_ALLOCA_H
 #include <alloca.h>
+#endif
+
 #include <stdlib.h>
 
 #include "shell.h"
@@ -51,6 +54,7 @@
 #include "alias.h"
 #include "show.h"
 #include "builtins.h"
+#include "system.h"
 #ifndef SMALL
 #include "myhistedit.h"
 #endif
@@ -59,10 +63,13 @@
  * Shell command parser.
  */
 
-#define EOFMARKLEN 79
-
 /* values returned by readtoken */
 #include "token.h"
+
+
+
+/* Used by expandstr to get here-doc like behaviour. */
+#define FAKEEOFMARK (char *)1
 
 
 
@@ -101,7 +108,6 @@ STATIC int peektoken(void);
 STATIC int readtoken(void);
 STATIC int xxreadtoken(void);
 STATIC int readtoken1(int, char const *, char *, int);
-STATIC int noexpand(char *);
 STATIC void synexpect(int) __attribute__((__noreturn__));
 STATIC void synerror(const char *) __attribute__((__noreturn__));
 STATIC void setprompt(int);
@@ -114,6 +120,11 @@ isassignment(const char *p)
 	if (p == q)
 		return 0;
 	return *q == '=';
+}
+
+static inline int realeofmark(const char *eofmark)
+{
+	return eofmark && eofmark != FAKEEOFMARK;
 }
 
 
@@ -596,18 +607,17 @@ parsefname(void)
 {
 	union node *n = redirnode;
 
+	if (n->type == NHERE)
+		checkkwd = CHKEOFMARK;
 	if (readtoken() != TWORD)
 		synexpect(-1);
 	if (n->type == NHERE) {
 		struct heredoc *here = heredoc;
 		struct heredoc *p;
-		int i;
 
 		if (quoteflag == 0)
 			n->type = NXHERE;
 		TRACE(("Here document %d\n", n->type));
-		if (! noexpand(wordtext) || (i = strlen(wordtext)) == 0 || i > EOFMARKLEN)
-			synerror("Illegal eof marker for << redirection");
 		rmescapes(wordtext);
 		here->eofmark = wordtext;
 		here->next = NULL;
@@ -836,7 +846,6 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
 	int c = firstc;
 	char *out;
 	int len;
-	char line[EOFMARKLEN + 1];
 	struct nodelist *bqlist;
 	int quotef;
 	int dblquote;
@@ -845,7 +854,8 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
 	int parenlevel;	/* levels of parens in arithmetic */
 	int dqvarnest;	/* levels of variables expansion within double quotes */
 	int oldstyle;
-	char const *prevsyntax;	/* syntax before arithmetic */
+	/* syntax before arithmetic */
+	char const *uninitialized_var(prevsyntax);
 
 	startlinno = plinno;
 	dblquote = 0;
@@ -891,7 +901,9 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
 					USTPUTC(CTLESC, out);
 				USTPUTC(c, out);
 				break;
-			case CBACK:	/* backslash */
+			/* backslash */
+			case CBACK:
+			case CDBACK:
 				c = pgetc2();
 				if (c == PEOF) {
 					USTPUTC(CTLESC, out);
@@ -909,11 +921,9 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
 							eofmark != NULL
 						)
 					) {
-						USTPUTC(CTLESC, out);
 						USTPUTC('\\', out);
 					}
-					if (SQSYNTAX[c] == CCTL)
-						USTPUTC(CTLESC, out);
+					USTPUTC(CTLESC, out);
 					USTPUTC(c, out);
 					quotef++;
 				}
@@ -930,10 +940,9 @@ quotemark:
 				dblquote = 1;
 				goto quotemark;
 			case CENDQUOTE:
-				if (eofmark != NULL && arinest == 0 &&
-				    varnest == 0) {
+				if (eofmark && !varnest)
 					USTPUTC(c, out);
-				} else {
+				else {
 					if (dqvarnest == 0) {
 						syntax = BASESYNTAX;
 						dblquote = 0;
@@ -966,15 +975,9 @@ quotemark:
 					--parenlevel;
 				} else {
 					if (pgetc() == ')') {
-						if (--arinest == 0) {
-							USTPUTC(CTLENDARI, out);
+						USTPUTC(CTLENDARI, out);
+						if (!--arinest)
 							syntax = prevsyntax;
-							if (syntax == DQSYNTAX)
-								dblquote = 1;
-							else
-								dblquote = 0;
-						} else
-							USTPUTC(')', out);
 					} else {
 						/*
 						 * unbalanced parens
@@ -1042,7 +1045,10 @@ endword:
  */
 
 checkend: {
-	if (eofmark) {
+	if (realeofmark(eofmark)) {
+		int markloc;
+		char *p;
+
 		if (c == PEOA) {
 			c = pgetc2();
 		}
@@ -1051,21 +1057,42 @@ checkend: {
 				c = pgetc2();
 			}
 		}
-		if (c == *eofmark) {
-			if (pfgets(line, sizeof line) != NULL) {
-				char *p, *q;
 
-				p = line;
-				for (q = eofmark + 1 ; *q && *p == *q ; p++, q++);
-				if (*p == '\n' && *q == '\0') {
-					c = PEOF;
-					plinno++;
-					needprompt = doprompt;
-				} else {
-					pushstring(line, NULL);
+		markloc = out - (char *)stackblock();
+		for (p = eofmark; STPUTC(c, out), *p; p++) {
+			if (c != *p)
+				goto more_heredoc;
+
+			c = pgetc2();
+		}
+
+		if (c == '\n' || c == PEOF) {
+			c = PEOF;
+			plinno++;
+			needprompt = doprompt;
+		} else {
+			int len;
+
+more_heredoc:
+			p = (char *)stackblock() + markloc + 1;
+			len = out - p;
+
+			if (len) {
+				len -= c < 0;
+				c = p[-1];
+
+				if (len) {
+					char *str;
+
+					str = alloca(len + 1);
+					*(char *)mempcpy(str, p, len) = 0;
+
+					pushstring(str, NULL);
 				}
 			}
 		}
+
+		STADJUST((char *)stackblock() + markloc - out, out);
 	}
 	goto checkend_return;
 }
@@ -1143,12 +1170,12 @@ parseredir: {
 parsesub: {
 	int subtype;
 	int typeloc;
-	int flags;
 	char *p;
 	static const char types[] = "}-+?=";
 
 	c = pgetc();
 	if (
+		(checkkwd & CHKEOFMARK) ||
 		c <= PEOA  ||
 		(c != '(' && c != '{' && !is_name(c) && !is_special(c))
 	) {
@@ -1164,24 +1191,18 @@ parsesub: {
 	} else {
 		USTPUTC(CTLVAR, out);
 		typeloc = out - (char *)stackblock();
-		USTPUTC(VSNORMAL, out);
+		STADJUST(1, out);
 		subtype = VSNORMAL;
-		if (c == '{') {
+		if (likely(c == '{')) {
 			c = pgetc();
-			if (c == '#') {
-				if ((c = pgetc()) == '}')
-					c = '#';
-				else
-					subtype = VSLENGTH;
-			}
-			else
-				subtype = 0;
+			subtype = 0;
 		}
-		if (c > PEOA && is_name(c)) {
+varname:
+		if (is_name(c)) {
 			do {
 				STPUTC(c, out);
 				c = pgetc();
-			} while (c > PEOA && is_in_name(c));
+			} while (is_in_name(c));
 		} else if (is_digit(c)) {
 			do {
 				STPUTC(c, out);
@@ -1189,25 +1210,42 @@ parsesub: {
 			} while (is_digit(c));
 		}
 		else if (is_special(c)) {
-			USTPUTC(c, out);
+			int cc = c;
+
 			c = pgetc();
+
+			if (!subtype && cc == '#') {
+				subtype = VSLENGTH;
+
+				if (c == '_' || isalnum(c))
+					goto varname;
+
+				cc = c;
+				c = pgetc();
+				if (cc == '}' || c != '}') {
+					pungetc();
+					subtype = 0;
+					c = cc;
+					cc = '#';
+				}
+			}
+
+			USTPUTC(cc, out);
 		}
 		else
-badsub:			synerror("Bad substitution");
+			goto badsub;
 
-		STPUTC('=', out);
-		flags = 0;
 		if (subtype == 0) {
 			switch (c) {
 			case ':':
-				flags = VSNUL;
+				subtype = VSNUL;
 				c = pgetc();
 				/*FALLTHROUGH*/
 			default:
 				p = strchr(types, c);
 				if (p == NULL)
-					goto badsub;
-				subtype = p - types + VSNORMAL;
+					break;
+				subtype |= p - types + VSNORMAL;
 				break;
 			case '%':
 			case '#':
@@ -1224,17 +1262,16 @@ badsub:			synerror("Bad substitution");
 				}
 			}
 		} else {
+badsub:
 			pungetc();
 		}
-		if (dblquote || arinest)
-			flags |= VSQUOTE;
-		*((char *)stackblock() + typeloc) = subtype | flags;
+		*((char *)stackblock() + typeloc) = subtype;
 		if (subtype != VSNORMAL) {
 			varnest++;
-			if (dblquote || arinest) {
+			if (dblquote)
 				dqvarnest++;
-			}
 		}
+		STPUTC('=', out);
 	}
 	goto parsesub_return;
 }
@@ -1252,7 +1289,7 @@ parsebackq: {
 	union node *n;
 	char *str;
 	size_t savelen;
-	int saveprompt;
+	int uninitialized_var(saveprompt);
 
 	str = NULL;
 	savelen = out - (char *)stackblock();
@@ -1359,10 +1396,7 @@ done:
 		memcpy(out, str, savelen);
 		STADJUST(savelen, out);
 	}
-	if (arinest || dblquote)
-		USTPUTC(CTLBACKQ | CTLQUOTE, out);
-	else
-		USTPUTC(CTLBACKQ, out);
+	USTPUTC(CTLBACKQ, out);
 	if (oldstyle)
 		goto parsebackq_oldreturn;
 	else
@@ -1377,18 +1411,8 @@ parsearith: {
 	if (++arinest == 1) {
 		prevsyntax = syntax;
 		syntax = ARISYNTAX;
-		USTPUTC(CTLARI, out);
-		if (dblquote)
-			USTPUTC('"',out);
-		else
-			USTPUTC(' ',out);
-	} else {
-		/*
-		 * we collapse embedded arithmetic expansion to
-		 * parenthesis, which should be equivalent
-		 */
-		USTPUTC('(', out);
 	}
+	USTPUTC(CTLARI, out);
 	goto parsearith_return;
 }
 
@@ -1403,29 +1427,6 @@ RESET {
 	checkkwd = 0;
 }
 #endif
-
-/*
- * Returns true if the text contains nothing to expand (no dollar signs
- * or backquotes).
- */
-
-STATIC int
-noexpand(char *text)
-{
-	char *p;
-	signed char c;
-
-	p = text;
-	while ((c = *p++) != '\0') {
-		if (c == CTLQUOTEMARK)
-			continue;
-		if (c == CTLESC)
-			p++;
-		else if (BASESYNTAX[(int)c] == CCTL)
-			return 0;
-	}
-	return 1;
-}
 
 
 /*
@@ -1493,8 +1494,7 @@ setprompt(int which)
 	show = !el;
 #endif
 	if (show) {
-		setstackmark(&smark);
-		stalloc(stackblocksize());
+		pushstackmark(&smark, stackblocksize());
 		out2str(getprompt(NULL));
 		popstackmark(&smark);
 	}
@@ -1504,10 +1504,18 @@ const char *
 expandstr(const char *ps)
 {
 	union node n;
+	int saveprompt;
 
 	/* XXX Fix (char *) cast. */
 	setinputstring((char *)ps);
-	readtoken1(pgetc(), DQSYNTAX, nullstr, 0);
+
+	saveprompt = doprompt;
+	doprompt = 0;
+
+	readtoken1(pgetc(), DQSYNTAX, FAKEEOFMARK, 0);
+
+	doprompt = saveprompt;
+
 	popfile();
 
 	n.narg.type = NARG;
@@ -1515,7 +1523,7 @@ expandstr(const char *ps)
 	n.narg.text = wordtext;
 	n.narg.backquote = backquotelist;
 
-	expandarg(&n, NULL, 0);
+	expandarg(&n, NULL, EXP_QUOTED);
 	return stackblock();
 }
 

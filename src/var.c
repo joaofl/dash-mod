@@ -168,31 +168,6 @@ initvar(void)
 }
 
 /*
- * Safe version of setvar, returns 1 on success 0 on failure.
- */
-
-int
-setvarsafe(const char *name, const char *val, int flags)
-{
-	int err;
-	volatile int saveint;
-	struct jmploc *volatile savehandler = handler;
-	struct jmploc jmploc;
-
-	SAVEINT(saveint);
-	if (setjmp(jmploc.loc))
-		err = 1;
-	else {
-		handler = &jmploc;
-		setvar(name, val, flags);
-		err = 0;
-	}
-	handler = savehandler;
-	RESTOREINT(saveint);
-	return err;
-}
-
-/*
  * Set the value of a variable.  The flags argument is ored with the
  * flags of the variable.  If val is NULL, the variable is unset.
  */
@@ -225,6 +200,21 @@ setvar(const char *name, const char *val, int flags)
 	*p = '\0';
 	setvareq(nameeq, flags | VNOSAVE);
 	INTON;
+}
+
+/*
+ * Set the given integer as the value of a variable.  The flags argument is
+ * ored with the flags of the variable.
+ */
+
+intmax_t setvarint(const char *name, intmax_t val, int flags)
+{
+	int len = max_int_length(sizeof(val));
+	char buf[len];
+
+	fmtstr(buf, len, "%jd", val);
+	setvar(name, buf, flags);
+	return val;
 }
 
 
@@ -316,6 +306,11 @@ lookupvar(const char *name)
 		return strchrnul(v->text, '=') + 1;
 	}
 	return NULL;
+}
+
+intmax_t lookupvarint(const char *name)
+{
+	return atomax(lookupvar(name) ?: nullstr, 0);
 }
 
 

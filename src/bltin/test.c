@@ -11,8 +11,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <ctype.h>
-#include <errno.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -143,34 +142,80 @@ static int nexpr(enum token);
 static int primary(enum token);
 static int binop(void);
 static int filstat(char *, enum token);
-static enum token t_lex(char *);
-static int isoperand(void);
-static int getn(const char *);
+static enum token t_lex(char **);
+static int isoperand(char **);
 static int newerf(const char *, const char *);
 static int olderf(const char *, const char *);
 static int equalf(const char *, const char *);
 static int test_st_mode(const struct stat64 *, int);
 static int bash_group_member(gid_t);
 
+static inline intmax_t getn(const char *s)
+{
+	return atomax10(s);
+}
+
+static const struct t_op *getop(const char *s)
+{
+	const struct t_op *op;
+
+	for (op = ops; op->op_text; op++) {
+		if (strcmp(s, op->op_text) == 0)
+			return op;
+	}
+
+	return NULL;
+}
+
 int
 testcmd(int argc, char **argv)
 {
+	const struct t_op *op;
+	enum token n;
 	int res;
 
-	if (strcmp(argv[0], "[") == 0) {
-		if (strcmp(argv[--argc], "]"))
+	if (*argv[0] == '[') {
+		if (*argv[--argc] != ']')
 			error("missing ]");
 		argv[argc] = NULL;
 	}
 
-	if (argc < 2)
+	argv++;
+	argc--;
+
+	if (argc < 1)
 		return 1;
 
-	t_wp = &argv[1];
-	res = !oexpr(t_lex(*t_wp));
+	/*
+	 * POSIX prescriptions: he who wrote this deserves the Nobel
+	 * peace prize.
+	 */
+	switch (argc) {
+	case 3:
+		op = getop(argv[1]);
+		if (op && op->op_type == BINOP) {
+			n = OPERAND;
+			goto eval;
+		}
+		/* fall through */
 
-	if (*t_wp != NULL && *++t_wp != NULL)
-		syntax(*t_wp, "unexpected operator");
+	case 4:
+		if (!strcmp(argv[0], "(") && !strcmp(argv[argc - 1], ")")) {
+			argv[--argc] = NULL;
+			argv++;
+			argc--;
+		}
+	}
+
+	n = t_lex(argv);
+
+eval:
+	t_wp = argv;
+	res = !oexpr(n);
+	argv = t_wp;
+
+	if (argv[0] != NULL && argv[1] != NULL)
+		syntax(argv[0], "unexpected operator");
 
 	return res;
 }
@@ -187,24 +232,31 @@ syntax(const char *op, const char *msg)
 static int
 oexpr(enum token n)
 {
-	int res;
+	int res = 0;
 
-	res = aexpr(n);
-	if (t_lex(*++t_wp) == BOR)
-		return oexpr(t_lex(*++t_wp)) || res;
-	t_wp--;
+	for (;;) {
+		res |= aexpr(n);
+		n = t_lex(t_wp + 1);
+		if (n != BOR)
+			break;
+		n = t_lex(t_wp += 2);
+	}
 	return res;
 }
 
 static int
 aexpr(enum token n)
 {
-	int res;
+	int res = 1;
 
-	res = nexpr(n);
-	if (t_lex(*++t_wp) == BAND)
-		return aexpr(t_lex(*++t_wp)) && res;
-	t_wp--;
+	for (;;) {
+		if (!nexpr(n))
+			res = 0;
+		n = t_lex(t_wp + 1);
+		if (n != BAND)
+			break;
+		n = t_lex(t_wp += 2);
+	}
 	return res;
 }
 
@@ -212,7 +264,7 @@ static int
 nexpr(enum token n)
 {
 	if (n == UNOT)
-		return !nexpr(t_lex(*++t_wp));
+		return !nexpr(t_lex(++t_wp));
 	return primary(n);
 }
 
@@ -225,10 +277,10 @@ primary(enum token n)
 	if (n == EOI)
 		return 0;		/* missing expression */
 	if (n == LPAREN) {
-		if ((nn = t_lex(*++t_wp)) == RPAREN)
+		if ((nn = t_lex(++t_wp)) == RPAREN)
 			return 0;	/* missing expression */
 		res = oexpr(nn);
-		if (t_lex(*++t_wp) != RPAREN)
+		if (t_lex(++t_wp) != RPAREN)
 			syntax(NULL, "closing paren expected");
 		return res;
 	}
@@ -248,9 +300,9 @@ primary(enum token n)
 		}
 	}
 
-	if (t_lex(t_wp[1]), t_wp_op && t_wp_op->op_type == BINOP) {
+	if (t_lex(t_wp + 1), t_wp_op && t_wp_op->op_type == BINOP) {
 		return binop();
-	}	  
+	}
 
 	return strlen(*t_wp) > 0;
 }
@@ -262,12 +314,12 @@ binop(void)
 	struct t_op const *op;
 
 	opnd1 = *t_wp;
-	(void) t_lex(*++t_wp);
+	(void) t_lex(++t_wp);
 	op = t_wp_op;
 
 	if ((opnd2 = *++t_wp) == (char *)0)
 		syntax(op->op_text, "argument expected");
-		
+
 	switch (op->op_num) {
 	default:
 #ifdef DEBUG
@@ -351,71 +403,39 @@ filstat(char *nm, enum token mode)
 	}
 }
 
-static enum token
-t_lex(char *s)
+static enum token t_lex(char **tp)
 {
 	struct t_op const *op;
-
-	op = ops;
+	char *s = *tp;
 
 	if (s == 0) {
 		t_wp_op = (struct t_op *)0;
 		return EOI;
 	}
-	while (op->op_text) {
-		if (strcmp(s, op->op_text) == 0) {
-			if ((op->op_type == UNOP && isoperand()) ||
-			    (op->op_num == LPAREN && *(t_wp+1) == 0))
-				break;
-			t_wp_op = op;
-			return op->op_num;
-		}
-		op++;
+
+	op = getop(s);
+	if (op && !(op->op_type == UNOP && isoperand(tp)) &&
+	    !(op->op_num == LPAREN && !tp[1])) {
+		t_wp_op = op;
+		return op->op_num;
 	}
+
 	t_wp_op = (struct t_op *)0;
 	return OPERAND;
 }
 
-static int
-isoperand(void)
+static int isoperand(char **tp)
 {
 	struct t_op const *op;
-	char *s, *t;
+	char *s;
 
-	op = ops;
-	if ((s  = *(t_wp+1)) == 0)
+	if (!(s = tp[1]))
 		return 1;
-	if ((t = *(t_wp+2)) == 0)
+	if (!tp[2])
 		return 0;
-	while (op->op_text) {
-		if (strcmp(s, op->op_text) == 0)
-	    		return op->op_type == BINOP &&
-	    		    (t[0] != ')' || t[1] != '\0'); 
-		op++;
-	}
-	return 0;
-}
 
-/* atoi with error detection */
-static int
-getn(const char *s)
-{
-	char *p;
-	long r;
-
-	errno = 0;
-	r = strtol(s, &p, 10);
-
-	if (errno != 0)
-	      error("%s: out of range", s);
-
-	while (isspace((unsigned char)*p))
-	      p++;
-	
-	if (*p)
-	      error("%s: bad number", s);
-
-	return (int) r;
+	op = getop(s);
+	return op && op->op_type == BINOP;
 }
 
 static int
