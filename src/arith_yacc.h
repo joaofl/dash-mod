@@ -1,7 +1,7 @@
 /*-
- * Copyright (c) 1991, 1993
+ * Copyright (c) 1993
  *	The Regents of the University of California.  All rights reserved.
- * Copyright (c) 1997-2005
+ * Copyright (c) 2007
  *	Herbert Xu <herbert@gondor.apana.org.au>.  All rights reserved.
  *
  * This code is derived from software contributed to Berkeley by
@@ -30,50 +30,60 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- *	@(#)expand.h	8.2 (Berkeley) 5/4/95
  */
 
-#include <stdint.h>
+#define ARITH_ASS 1
 
-struct strlist {
-	struct strlist *next;
-	char *text;
+#define ARITH_OR 2
+#define ARITH_AND 3
+#define ARITH_BAD 4
+#define ARITH_NUM 5
+#define ARITH_VAR 6
+#define ARITH_NOT 7
+
+#define ARITH_BINOP_MIN 8
+#define ARITH_LE 8
+#define ARITH_GE 9
+#define ARITH_LT 10
+#define ARITH_GT 11
+#define ARITH_EQ 12
+#define ARITH_REM 13
+#define ARITH_BAND 14
+#define ARITH_LSHIFT 15
+#define ARITH_RSHIFT 16
+#define ARITH_MUL 17
+#define ARITH_ADD 18
+#define ARITH_BOR 19
+#define ARITH_SUB 20
+#define ARITH_BXOR 21
+#define ARITH_DIV 22
+#define ARITH_NE 23
+#define ARITH_BINOP_MAX 24
+
+#define ARITH_ASS_MIN 24
+#define ARITH_REMASS 24
+#define ARITH_BANDASS 25
+#define ARITH_LSHIFTASS 26
+#define ARITH_RSHIFTASS 27
+#define ARITH_MULASS 28
+#define ARITH_ADDASS 29
+#define ARITH_BORASS 30
+#define ARITH_SUBASS 31
+#define ARITH_BXORASS 32
+#define ARITH_DIVASS 33
+#define ARITH_ASS_MAX 34
+
+#define ARITH_LPAREN 34
+#define ARITH_RPAREN 35
+#define ARITH_BNOT 36
+#define ARITH_QMARK 37
+#define ARITH_COLON 38
+
+union yystype {
+	intmax_t val;
+	char *name;
 };
 
+extern union yystype yylval;
 
-struct arglist {
-	struct strlist *list;
-	struct strlist **lastp;
-};
-
-/*
- * expandarg() flags
- */
-#define EXP_FULL	0x1	/* perform word splitting & file globbing */
-#define EXP_TILDE	0x2	/* do normal tilde expansion */
-#define	EXP_VARTILDE	0x4	/* expand tildes in an assignment */
-#define	EXP_REDIR	0x8	/* file glob for a redirection (1 match only) */
-#define EXP_CASE	0x10	/* keeps quotes around for CASE pattern */
-#define EXP_QPAT	0x20	/* pattern in quoted parameter expansion */
-#define EXP_VARTILDE2	0x40	/* expand tildes after colons only */
-#define EXP_WORD	0x80	/* expand word in parameter expansion */
-#define EXP_QUOTED	0x100	/* expand word in double quotes */
-
-
-union node;
-void expandarg(union node *, struct arglist *, int);
-void expari(int);
-#define rmescapes(p) _rmescapes((p), 0)
-char *_rmescapes(char *, int);
-int casematch(union node *, char *);
-
-/* From arith.y */
-intmax_t arith(const char *);
-int expcmd(int , char **);
-#ifdef USE_LEX
-void arith_lex_reset(void);
-#else
-#define arith_lex_reset()
-#endif
 int yylex(void);

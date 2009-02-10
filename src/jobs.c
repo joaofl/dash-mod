@@ -361,7 +361,14 @@ fgcmd(int argc, char **argv)
 	return retval;
 }
 
-int bgcmd(int, char **) __attribute__((__alias__("fgcmd")));
+int bgcmd(int argc, char **argv)
+#ifdef HAVE_ALIAS_ATTRIBUTE
+	__attribute__((__alias__("fgcmd")));
+#else
+{
+	return fgcmd(argc, argv);
+}
+#endif
 
 
 STATIC int
@@ -1235,11 +1242,12 @@ donode:
 		cmdputs("if ");
 		cmdtxt(n->nif.test);
 		cmdputs("; then ");
-		n = n->nif.ifpart;
 		if (n->nif.elsepart) {
-			cmdtxt(n);
+			cmdtxt(n->nif.ifpart);
 			cmdputs("; else ");
 			n = n->nif.elsepart;
+		} else {
+			n = n->nif.ifpart;
 		}
 		p = "; fi";
 		goto dotail;
@@ -1377,12 +1385,7 @@ cmdputs(const char *s)
 				str = "${#";
 			else
 				str = "${";
-			if (!(subtype & VSQUOTE) != !(quoted & 1)) {
-				quoted ^= 1;
-				c = '"';
-			} else
-				goto dostr;
-			break;
+			goto dostr;
 		case CTLENDVAR:
 			str = "\"}" + !(quoted & 1);
 			quoted >>= 1;
@@ -1390,9 +1393,6 @@ cmdputs(const char *s)
 			goto dostr;
 		case CTLBACKQ:
 			str = "$(...)";
-			goto dostr;
-		case CTLBACKQ+CTLQUOTE:
-			str = "\"$(...)\"";
 			goto dostr;
 		case CTLARI:
 			str = "$((";

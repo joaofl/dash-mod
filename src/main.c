@@ -96,6 +96,7 @@ main(int argc, char **argv)
 	volatile int state;
 	struct jmploc jmploc;
 	struct stackmark smark;
+	int login;
 
 #ifdef __GLIBC__
 	dash_errno = __errno_location();
@@ -148,13 +149,13 @@ main(int argc, char **argv)
 	rootpid = getpid();
 	init();
 	setstackmark(&smark);
-	procargs(argc, argv);
-	if (argv[0] && argv[0][0] == '-') {
+	login = procargs(argc, argv);
+	if (login) {
 		state = 1;
 		read_profile("/etc/profile");
 state1:
 		state = 2;
-		read_profile(".profile");
+		read_profile("$HOME/.profile");
 	}
 state2:
 	state = 3;
@@ -168,6 +169,7 @@ state2:
 			read_profile(shinit);
 		}
 	}
+	popstackmark(&smark);
 state3:
 	state = 4;
 	if (minusc)
@@ -259,6 +261,7 @@ read_profile(const char *name)
 {
 	int skip;
 
+	name = expandstr(name);
 	if (setinputfile(name, INPUT_PUSH_FILE | INPUT_NOFILE_OK) < 0)
 		return;
 

@@ -170,7 +170,7 @@ positional parameters of the shell ($1, $2, etc).
 Otherwise, the shell
 reads commands from its standard input.
 .Ss Argument List Processing
-All of the single letter options have a corresponding name that can be
+All of the single letter options that have a corresponding name can be
 used as an argument to the
 .Fl o
 option.
@@ -235,6 +235,8 @@ Useful for debugging.
 Ignore EOF's from input when interactive.
 .It Fl i Em interactive
 Force the shell to behave interactively.
+.It Fl l
+Make dash act as if it had been invoked as a login shell.
 .It Fl m Em monitor
 Turn on job control (set automatically when interactive).
 .It Fl s Em stdin
@@ -389,7 +391,7 @@ The
 is an optional number, as in
 .Sq 3
 (not
-.Sq Bq 3 ,
+.Sq Bq 3 ) ,
 that refers to a file descriptor.
 .Bl -tag -width aaabsfiles -offset indent
 .It [n] Ns \*[Gt] file
@@ -640,17 +642,16 @@ repeat until the exit status of the first list is zero.
 .Pp
 The syntax of the for command is
 .Bd -literal -offset indent
-for variable in word ...
+for variable [ in [ word ... ] ]
 do   list
 done
 .Ed
 .Pp
-The words are expanded, and then the list is executed repeatedly with the
+The words following
+.Pa in
+are expanded, and then the list is executed repeatedly with the
 variable set to each word in turn.
-do and done may be replaced with
-.Dq {
-and
-.Dq } .
+Omitting in word ... is equivalent to in "$@".
 .Pp
 The syntax of the break and continue command is
 .Bd -literal -offset indent
@@ -1779,6 +1780,11 @@ With no arguments, it lists the values of all shell variables.
 If options are given, it sets the specified option
 flags, or clears them as described in the section called
 .Sx Argument List Processing .
+As a special case, if the option is -o or +o and no argument is
+supplied, the shell prints the settings of all its options.  If the
+option is -o, the settings are printed in a human-readable format; if
+the option is +o, the settings are printed in a format suitable for
+reinput to the shell to affect the same option settings.
 .Pp
 The third use of the set command is to set the values of the shell's
 positional parameters to the specified args.
@@ -1934,12 +1940,20 @@ exists and is a socket.
 .It Ar file1 Fl nt Ar file2
 True if
 .Ar file1
-exists and is newer than
+and
+.Ar file2
+exist and
+.Ar file1
+is newer than
 .Ar file2 .
 .It Ar file1 Fl ot Ar file2
 True if
 .Ar file1
-exists and is older than
+and
+.Ar file2
+exist and
+.Ar file1
+is older than
 .Ar file2 .
 .It Ar file1 Fl ef Ar file2
 True if

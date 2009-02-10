@@ -1,13 +1,28 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Define if __attribute__((__alias__())) is supported */
+#undef HAVE_ALIAS_ATTRIBUTE
+
+/* Define to 1 if you have the <alloca.h> header file. */
+#undef HAVE_ALLOCA_H
+
 /* Define to 1 if you have the `bsearch' function. */
 #undef HAVE_BSEARCH
+
+/* Define to 1 if you have the `fnmatch' function. */
+#undef HAVE_FNMATCH
 
 /* Define to 1 if you have the `getpwnam' function. */
 #undef HAVE_GETPWNAM
 
 /* Define to 1 if you have the `getrlimit' function. */
 #undef HAVE_GETRLIMIT
+
+/* Define to 1 if you have the `glob' function. */
+#undef HAVE_GLOB
+
+/* Define to 1 if you have the `imaxdiv' function. */
+#undef HAVE_IMAXDIV
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
