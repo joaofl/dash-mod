@@ -3,8 +3,10 @@ dash (0.5.5.1-1) unstable; urgency=low
   * new upstream release.
     * builds again with DEB_BUILD_OPTIONS=diet (closes: #493301).
   * debian/diff/*.diff: remove; obsolete.
+  * debian/po/es.po: [INTL:es] Spanish debconf template translation
+    for dash (thx Francisco Javier Cuadrado, closes: #513689).
 
- -- Gerrit Pape <pape@smarden.org>  Tue, 10 Feb 2009 22:28:01 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 11 Feb 2009 01:07:29 +0000
 
 dash (0.5.4-12) unstable; urgency=low
 
