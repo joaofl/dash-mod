@@ -8,8 +8,11 @@ dash (0.5.5.1-1) unstable; urgency=low
   * debian/diff/0001--SHELL-execute-EXIT-trap-if-the-shell-...diff:
     new; [SHELL] execute EXIT trap if the shell is killed through a
     signal (thx Chris Lamb for the patch, closes: #390433).
+  * debian/diff/0002--MAN-rename-sh-to-dash-update-DESCRIPTION...diff:
+    new; [MAN] rename sh to dash, update DESCRIPTION and HISTORY (thx
+    jaalto, closes: #499838).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 11 Feb 2009 01:51:24 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 11 Feb 2009 01:53:12 +0000
 
 dash (0.5.4-12) unstable; urgency=low
 
