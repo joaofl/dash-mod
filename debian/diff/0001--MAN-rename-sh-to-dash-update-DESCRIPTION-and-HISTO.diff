@@ -1,7 +1,7 @@
-From d5a457000c9dcf2cb5833838e46b501e9f2f95f5 Mon Sep 17 00:00:00 2001
+From 00d1451b9f5c7bf7c1d41c07900addd442738907 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Wed, 11 Feb 2009 00:05:43 +0000
-Subject: [PATCH 2/3] [MAN] rename sh to dash, update DESCRIPTION and HISTORY
+Subject: [PATCH 1/2] [MAN] rename sh to dash, update DESCRIPTION and HISTORY
 
 Rename sh to dash in the header and synopsis; remove reference to the
 4.4 BSD release in the description, and replace the history information
@@ -62,5 +62,5 @@ index 5a8e2fe..c7771d0 100644
  Setuid shell scripts should be avoided at all costs, as they are a
  significant security risk.
 -- 
-1.6.1.2.346.g8600b3.dirty
+1.6.1.3
 

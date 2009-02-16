@@ -1,7 +1,7 @@
-From 1493636f7939b408f2677e1c27dacb7236fb5d6e Mon Sep 17 00:00:00 2001
+From 1cb75049490ad83076a6f02a63a1563fcf3401f3 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Wed, 11 Feb 2009 01:38:49 +0000
-Subject: [PATCH 3/3] [SHELL] print \n upon EOF (CTRL-D) when run interactively
+Subject: [PATCH 2/2] [SHELL] print \n upon EOF (CTRL-D) when run interactively
 
 Suggested by jidanni through
  http://bugs.debian.org/476422
@@ -33,5 +33,5 @@ index 7d07e2d..5f1ff0e 100644
  			}
  			numeof++;
 -- 
-1.6.1.2.346.g8600b3.dirty
+1.6.1.3
 
