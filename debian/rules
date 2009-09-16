@@ -71,9 +71,11 @@ install-arch: deb-checkdir deb-checkuid build-stamp
 	install -d -m0755 '$(DIR)'/bin
 	install -m0755 build-tmp/src/dash '$(DIR)'/bin/dash
 	$(STRIP) -R .comment -R .note '$(DIR)'/bin/dash
+	ln -s dash '$(DIR)'/bin/sh
 	install -d -m0755 '$(DIR)'/usr/share/man/man1/
 	install -m0644 src/dash.1 '$(DIR)'/usr/share/man/man1/dash.1
 	gzip -9 '$(DIR)'/usr/share/man/man1/dash.1
+	ln -s dash.1.gz '$(DIR)'/usr/share/man/man1/sh.1.gz
 	install -d -m0755 '$(DIR)'/usr/share/menu
 	install -m0644 debian/dash.menu '$(DIR)'/usr/share/menu/dash
 	# changelog

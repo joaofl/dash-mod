@@ -1,0 +1,32 @@
+#!/bin/sh
+set -e
+
+divert() {
+	div=$(dpkg-divert --list $1)
+	distrib=${3:-$1.distrib}
+	if [ -z "$div" ]; then
+		dpkg-divert --package dash --divert $distrib --add $1
+		cp -dp $1 $distrib
+		ln -sf $2 $1
+	fi
+}
+
+divert /bin/sh dash
+divert /usr/share/man/man1/sh.1.gz dash.1.gz \
+	/usr/share/man/man1/sh.distrib.1.gz
+#!/bin/sh
+set -e
+
+divert() {
+	div=$(dpkg-divert --list $1)
+	distrib=${3:-$1.distrib}
+	if [ -z "$div" ]; then
+		dpkg-divert --package dash --divert $distrib --add $1
+		cp -dp $1 $distrib
+		ln -sf $2 $1
+	fi
+}
+
+divert /bin/sh dash
+divert /usr/share/man/man1/sh.1.gz dash.1.gz \
+	/usr/share/man/man1/sh.distrib.1.gz

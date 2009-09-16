@@ -2,23 +2,35 @@
 set -e
 
 check_divert() {
-	div=$(dpkg-divert --list $2)
 	distrib=${4:-$2.distrib}
+	sh_diverter=$(dpkg-divert --listpackage $2)
+	sh_truename=$(dpkg-divert --truename $2)
 	case "$1" in
 	true)
-		if [ -z "$div" ]; then
+		if [ "$sh_diverter" != "dash" ]; then
+			dpkg-divert --remove $2
 			dpkg-divert --package dash --divert $distrib --add $2
+			if [ -n "$sh_truename" ]; then
+				rm -f $sh_truename
+			fi
 			cp -dp $2 $distrib
 			ln -sf $3 $2
 		fi
 		;;
 	false)
-		if [ -n "$div" ] && [ -z "${div%%*by dash}" ]; then
-			mv $distrib $2
+		if [ "$sh_diverter" = "dash" ]; then
+			bash=$(echo "$3"|sed 's/dash/bash/')
 			dpkg-divert --remove $2
+			dpkg-divert --package bash --divert $distrib --add $2
+			if [ -n "$sh_truename" ]; then
+				rm -f $sh_truename
+			fi
+			cp -dp $2 $distrib
+			ln -sf $bash $2
 		fi
 		;;
 	ash)
+		div=$(dpkg-divert --list $2)
 		case $div in
 		'')
 			;;
