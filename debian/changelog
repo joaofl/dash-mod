@@ -17,8 +17,10 @@ dash (0.5.5.1-3) unstable; urgency=low
     patriarca; closes: #539630).
   * debian/po/de.po: [INTL:de] updated German debconf translation (thx
     Helge Kreutzmann; closes: #540221).
+  * debian/po/it.po: [INTL:it] Italian translation (thx Luca Monducci;
+    closes: #540631).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 14:19:49 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 14:21:15 +0000
 
 dash (0.5.5.1-2.3) unstable; urgency=low
 
