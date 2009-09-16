@@ -1,13 +1,13 @@
 # Translation of dash debconf templates to German
-# Copyright (C) Helge Kreutzmann <debian@helgefjell.de>, 2006-2008.
+# Copyright (C) Helge Kreutzmann <debian@helgefjell.de>, 2006-2009.
 # This file is distributed under the same license as the dash package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dash 0.5.4-8\n"
+"Project-Id-Version: dash 0.5.5.1-2.3\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2009-07-27 12:43+0000\n"
-"PO-Revision-Date: 2008-03-06 22:52+0100\n"
+"PO-Revision-Date: 2009-08-03 20:33+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,13 +18,13 @@ msgstr ""
 #. Description
 #: ../dash.templates.in:1001
 msgid "Use dash as the default system shell (/bin/sh)?"
-msgstr ""
+msgstr "Dash als Standard-Systemshell (/bin/sh) verwenden?"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
-msgstr ""
+msgstr "Die Systemshell ist der Standard-Kommandointerpreter für Shell-Skripte."
 
 #. Type: boolean
 #. Description
@@ -33,6 +33,8 @@ msgid ""
 "Using dash as the system shell will improve the system's overall "
 "performance. It does not alter the shell presented to interactive users."
 msgstr ""
+"Dash als Systemshell zu verwenden verbessert die Gesamtleistung des Systems. "
+"Dies verändert nicht die interaktiven Benutzern präsentierte Shell."
 
 #~ msgid "Install dash as /bin/sh?"
 #~ msgstr "Dash als /bin/sh installieren?"

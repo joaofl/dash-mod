@@ -15,8 +15,10 @@ dash (0.5.5.1-3) unstable; urgency=low
     update (thx Yuri Kozlov; closes: #539189).
   * debian/po/fr.po: fr.po: French program translation (thx julien
     patriarca; closes: #539630).
+  * debian/po/de.po: [INTL:de] updated German debconf translation (thx
+    Helge Kreutzmann; closes: #540221).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 14:18:17 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 14:19:49 +0000
 
 dash (0.5.5.1-2.3) unstable; urgency=low
 
