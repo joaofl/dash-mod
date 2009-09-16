@@ -1,8 +1,11 @@
 dash (0.5.5.1-3) unstable; urgency=low
 
   * Thanks Luk Claes for NUMs (closes: #538682).
+  * debian/NEWS: rename to debian/dash.NEWS.Debian.
+  * debian/rules: don't explicitely install dash's NEWS file,
+    debian/implicit takes care of that.
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 13:38:34 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 13:46:44 +0000
 
 dash (0.5.5.1-2.3) unstable; urgency=low
 

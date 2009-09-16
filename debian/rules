@@ -88,8 +88,6 @@ binary-indep: install-indep ash.deb
 binary-arch: install-arch po-templates dash.deb
 	# dash
 	rm -f debian/substvars
-	install -d -m0755 '$(DIR)'/usr/share/doc/dash
-	install -m0644 debian/NEWS '$(DIR)'/usr/share/doc/dash/NEWS.Debian
 	test '$(CC)' != 'gcc' || dpkg-shlibdeps '$(DIR)'/bin/dash
 	dpkg-gencontrol -isp -pdash -P'$(DIR)'
 	dpkg -b '$(DIR)' ..
