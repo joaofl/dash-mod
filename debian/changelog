@@ -4,8 +4,11 @@ dash (0.5.5.1-3) unstable; urgency=low
   * debian/NEWS: rename to debian/dash.NEWS.Debian.
   * debian/rules: don't explicitely install dash's NEWS file,
     debian/implicit takes care of that.
+  * debian/dash.NEWS.Debian: when upgrading existing installations,
+    the system shell will not be changed automatically (closes:
+    #539363).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 13:46:44 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 13:55:11 +0000
 
 dash (0.5.5.1-2.3) unstable; urgency=low
 
