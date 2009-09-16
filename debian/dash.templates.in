@@ -12,8 +12,9 @@ Default: true
 _Description: Use dash as the default system shell (/bin/sh)?
  The system shell is the default command interpreter for shell scripts.
  .
- Using dash as /bin/sh will improve the system's overall performance
- without changing the shell used interactively by the users of this machine.
+ Using dash as the system shell will improve the system's overall
+ performance. It does not alter the shell presented to interactive
+ users.
 # _Description: Install dash as /bin/sh?
 #  The default /bin/sh shell on Debian and Debian-based systems is bash.
 #  .

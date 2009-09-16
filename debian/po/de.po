@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dash 0.5.4-8\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-02 21:54+0000\n"
+"POT-Creation-Date: 2009-07-27 12:43+0000\n"
 "PO-Revision-Date: 2008-03-06 22:52+0100\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -17,25 +17,37 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "Install dash as /bin/sh?"
-msgstr "Dash als /bin/sh installieren?"
+msgid "Use dash as the default system shell (/bin/sh)?"
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
+msgid "The system shell is the default command interpreter for shell scripts."
 msgstr ""
-"Standardm‰ﬂig ist bash als /bin/sh in Debian und auf Debian-basierten "
-"Systemen installiert."
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid ""
-"However, since the default shell is required to be POSIX-compliant, any "
-"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
-"wish to do this because dash is faster and smaller than bash."
+"Using dash as the system shell will improve the system's overall "
+"performance. It does not alter the shell presented to interactive users."
 msgstr ""
-"Da die Standardshell allerdings POSIX-konform sein muss, kann jede Shell, "
-"die (wie Dash) POSIX-konform ist als /bin/sh dienen. Eventuell wollen Sie "
-"Dash verwenden, da Dash schneller und kleiner als Bash ist."
+
+#~ msgid "Install dash as /bin/sh?"
+#~ msgstr "Dash als /bin/sh installieren?"
+
+#~ msgid ""
+#~ "The default /bin/sh shell on Debian and Debian-based systems is bash."
+#~ msgstr ""
+#~ "Standardm‰ﬂig ist bash als /bin/sh in Debian und auf Debian-basierten "
+#~ "Systemen installiert."
+
+#~ msgid ""
+#~ "However, since the default shell is required to be POSIX-compliant, any "
+#~ "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+#~ "wish to do this because dash is faster and smaller than bash."
+#~ msgstr ""
+#~ "Da die Standardshell allerdings POSIX-konform sein muss, kann jede Shell, "
+#~ "die (wie Dash) POSIX-konform ist als /bin/sh dienen. Eventuell wollen Sie "
+#~ "Dash verwenden, da Dash schneller und kleiner als Bash ist."

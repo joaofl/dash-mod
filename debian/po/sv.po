@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dash_0.5.4-11_sv\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-02 21:54+0000\n"
+"POT-Creation-Date: 2009-07-27 12:43+0000\n"
 "PO-Revision-Date: 2008-07-20 10:45+0200\n"
 "Last-Translator: Martin Ågren <martin.agren@gmail.com>\n"
 "Language-Team: Swedish <debian-l10n-swedish@lists.debian.org>\n"
@@ -27,24 +27,37 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "Install dash as /bin/sh?"
-msgstr "Installera dash som /bin/sh?"
+msgid "Use dash as the default system shell (/bin/sh)?"
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
-msgstr "Standardvalet för skalet /bin/sh på Debian och Debianbaserade system är bash."
+msgid "The system shell is the default command interpreter for shell scripts."
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid ""
-"However, since the default shell is required to be POSIX-compliant, any "
-"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
-"wish to do this because dash is faster and smaller than bash."
+"Using dash as the system shell will improve the system's overall "
+"performance. It does not alter the shell presented to interactive users."
 msgstr ""
-"Eftersom standardskalet måste vara POSIX-kompatibelt, kan dock "
-"vilket POSIX-kompatibelt skal som helst, såsom dash, tjänstgöra som /bin/sh. "
-"Du kanske önskar detta eftersom dash är snabbare och mindre än bash."
 
+#~ msgid "Install dash as /bin/sh?"
+#~ msgstr "Installera dash som /bin/sh?"
+
+#~ msgid ""
+#~ "The default /bin/sh shell on Debian and Debian-based systems is bash."
+#~ msgstr ""
+#~ "Standardvalet för skalet /bin/sh på Debian och Debianbaserade system är "
+#~ "bash."
+
+#~ msgid ""
+#~ "However, since the default shell is required to be POSIX-compliant, any "
+#~ "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+#~ "wish to do this because dash is faster and smaller than bash."
+#~ msgstr ""
+#~ "Eftersom standardskalet måste vara POSIX-kompatibelt, kan dock vilket "
+#~ "POSIX-kompatibelt skal som helst, såsom dash, tjänstgöra som /bin/sh. Du "
+#~ "kanske önskar detta eftersom dash är snabbare och mindre än bash."

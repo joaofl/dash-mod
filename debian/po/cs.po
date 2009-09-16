@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dash\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-02 21:54+0000\n"
+"POT-Creation-Date: 2009-07-27 12:43+0000\n"
 "PO-Revision-Date: 2008-06-18 08:24+0200\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
@@ -15,30 +15,42 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "Install dash as /bin/sh?"
-msgstr "Nainstalovat dash jako /bin/sh?"
-
-#. Type: boolean
-#. Description
-#: ../dash.templates.in:1001
-msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
+msgid "Use dash as the default system shell (/bin/sh)?"
 msgstr ""
-"Výchozím shellem /bin/sh je v Debianu a systémech z něj odvozených bash."
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-#| msgid ""
-#| "However, since the distribution policy requires all shell scripts using /"
-#| "bin/sh to be POSIX compliant, any shell that conforms to POSIX, such as "
-#| "dash, can serve as /bin/sh. You may wish to do this because dash is "
-#| "faster and smaller than bash."
+msgid "The system shell is the default command interpreter for shell scripts."
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../dash.templates.in:1001
 msgid ""
-"However, since the default shell is required to be POSIX-compliant, any "
-"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
-"wish to do this because dash is faster and smaller than bash."
+"Using dash as the system shell will improve the system's overall "
+"performance. It does not alter the shell presented to interactive users."
 msgstr ""
-"Protože však politika distribuce vyžaduje, aby byly všechny shellové skripty "
-"využívající /bin/sh kompatibilní s POSIXem, můžete jako /bin/sh použít "
-"jakýkoliv shell splňující normu POSIX, například shell dash. Určitě to stojí "
-"za vyzkoušení, protože dash je rychlejší a menší než bash."
+
+#~ msgid "Install dash as /bin/sh?"
+#~ msgstr "Nainstalovat dash jako /bin/sh?"
+
+#~ msgid ""
+#~ "The default /bin/sh shell on Debian and Debian-based systems is bash."
+#~ msgstr ""
+#~ "Výchozím shellem /bin/sh je v Debianu a systémech z něj odvozených bash."
+
+#~| msgid ""
+#~| "However, since the distribution policy requires all shell scripts using /"
+#~| "bin/sh to be POSIX compliant, any shell that conforms to POSIX, such as "
+#~| "dash, can serve as /bin/sh. You may wish to do this because dash is "
+#~| "faster and smaller than bash."
+#~ msgid ""
+#~ "However, since the default shell is required to be POSIX-compliant, any "
+#~ "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+#~ "wish to do this because dash is faster and smaller than bash."
+#~ msgstr ""
+#~ "Protože však politika distribuce vyžaduje, aby byly všechny shellové "
+#~ "skripty využívající /bin/sh kompatibilní s POSIXem, můžete jako /bin/sh "
+#~ "použít jakýkoliv shell splňující normu POSIX, například shell dash. "
+#~ "Určitě to stojí za vyzkoušení, protože dash je rychlejší a menší než bash."

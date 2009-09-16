@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dash\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-02 21:54+0000\n"
+"POT-Creation-Date: 2009-07-27 12:43+0000\n"
 "PO-Revision-Date: 2008-05-29 14:18+0900\n"
 "Last-Translator: Kenshi Muto <kmuto@deian.org>\n"
 "Language-Team: Japanese <debian-l10n-japanese@lists.debian.org>\n"
@@ -26,20 +26,39 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "Install dash as /bin/sh?"
-msgstr "dash を /bin/sh としてインストールしますか?"
+msgid "Use dash as the default system shell (/bin/sh)?"
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
-msgstr "Debian および Debian ベースのシステムのデフォルトの /bin/sh シェルは bash です。"
+msgid "The system shell is the default command interpreter for shell scripts."
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid ""
-"However, since the default shell is required to be POSIX-compliant, any "
-"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
-"wish to do this because dash is faster and smaller than bash."
-msgstr "Debian システムでは bash がデフォルトの /bin/sh です。しかし、Debian のポリシーによって、/bin/sh を用いる全てのシェルスクリプトは POSIX 準拠でなければならないため、POSIX を満たすシェルはどれでも /bin/sh となることができます。dash は POSIX 準拠ですので、/bin/sh として使うことができます。dash は bash より速くて小さいので、そうしたいと思うかもしれません。"
+"Using dash as the system shell will improve the system's overall "
+"performance. It does not alter the shell presented to interactive users."
+msgstr ""
+
+#~ msgid "Install dash as /bin/sh?"
+#~ msgstr "dash を /bin/sh としてインストールしますか?"
+
+#~ msgid ""
+#~ "The default /bin/sh shell on Debian and Debian-based systems is bash."
+#~ msgstr ""
+#~ "Debian および Debian ベースのシステムのデフォルトの /bin/sh シェルは bash "
+#~ "です。"
+
+#~ msgid ""
+#~ "However, since the default shell is required to be POSIX-compliant, any "
+#~ "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+#~ "wish to do this because dash is faster and smaller than bash."
+#~ msgstr ""
+#~ "Debian システムでは bash がデフォルトの /bin/sh です。しかし、Debian のポ"
+#~ "リシーによって、/bin/sh を用いる全てのシェルスクリプトは POSIX 準拠でなけ"
+#~ "ればならないため、POSIX を満たすシェルはどれでも /bin/sh となることができ"
+#~ "ます。dash は POSIX 準拠ですので、/bin/sh として使うことができます。dash "
+#~ "は bash より速くて小さいので、そうしたいと思うかもしれません。"

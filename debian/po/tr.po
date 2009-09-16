@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: $paket $surum\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-02 21:54+0000\n"
+"POT-Creation-Date: 2009-07-27 12:43+0000\n"
 "PO-Revision-Date: 2008-06-17 01:15+0200\n"
 "Last-Translator: Mert Dirik <mertdirik@gmail.com>\n"
 "Language-Team: Debian L10n Turkish <debian-l10n-turkish@lists.debian.org>\n"
@@ -19,18 +19,36 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "Install dash as /bin/sh?"
-msgstr "dash /bin/sh olarak kurulsun mu?"
+msgid "Use dash as the default system shell (/bin/sh)?"
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
-msgstr "Debian tabanlı sistemlerdeki öntanımlı /bin/sh kabuğu bash'tir."
+msgid "The system shell is the default command interpreter for shell scripts."
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "However, since the default shell is required to be POSIX-compliant, any shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may wish to do this because dash is faster and smaller than bash."
-msgstr "Ama, öntanımlı kabuğun POSIX uyumlu olması gerektiğinden, POSIX standartlarına uyan herhangi bir kabuk, örneğin dash, /bin/sh olarak kullanılabilir. dash bash'ten daha küçük ve daha hızlı olduğundan dash'i /bin/sh olarak kullanmak isteyebilirsiniz."
+msgid ""
+"Using dash as the system shell will improve the system's overall "
+"performance. It does not alter the shell presented to interactive users."
+msgstr ""
 
+#~ msgid "Install dash as /bin/sh?"
+#~ msgstr "dash /bin/sh olarak kurulsun mu?"
+
+#~ msgid ""
+#~ "The default /bin/sh shell on Debian and Debian-based systems is bash."
+#~ msgstr "Debian tabanlı sistemlerdeki öntanımlı /bin/sh kabuğu bash'tir."
+
+#~ msgid ""
+#~ "However, since the default shell is required to be POSIX-compliant, any "
+#~ "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+#~ "wish to do this because dash is faster and smaller than bash."
+#~ msgstr ""
+#~ "Ama, öntanımlı kabuğun POSIX uyumlu olması gerektiğinden, POSIX "
+#~ "standartlarına uyan herhangi bir kabuk, örneğin dash, /bin/sh olarak "
+#~ "kullanılabilir. dash bash'ten daha küçük ve daha hızlı olduğundan dash'i /"
+#~ "bin/sh olarak kullanmak isteyebilirsiniz."

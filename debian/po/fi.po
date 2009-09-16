@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dash 0.5.4-8\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-02 21:54+0000\n"
+"POT-Creation-Date: 2009-07-27 12:43+0000\n"
 "PO-Revision-Date: 2008-03-05 13:25+0200\n"
 "Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
 "Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
@@ -15,26 +15,38 @@ msgstr ""
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "Install dash as /bin/sh?"
-msgstr "Asennetaanko dash linkitettynä tiedostoon /bin/sh?"
+msgid "Use dash as the default system shell (/bin/sh)?"
+msgstr ""
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
-msgid "The default /bin/sh shell on Debian and Debian-based systems is bash."
+msgid "The system shell is the default command interpreter for shell scripts."
 msgstr ""
-"Debianissa ja Debianiin pohjautuvissa järjestelmissä oletuskomentotulkkina /"
-"bin/sh toimii bash."
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid ""
-"However, since the default shell is required to be POSIX-compliant, any "
-"shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
-"wish to do this because dash is faster and smaller than bash."
+"Using dash as the system shell will improve the system's overall "
+"performance. It does not alter the shell presented to interactive users."
 msgstr ""
-"Koska oletuskomentotulkin tulee olla POSIX-yhteensopiva, mikä tahansa "
-"POSIXin vaatimukset täyttävä komentotulkki, esimerkiksi dash, voi toimia /"
-"bin/sh:na. Saatat haluta käyttää dashia, koska se on nopeampi ja pienempi "
-"kuin bash."
+
+#~ msgid "Install dash as /bin/sh?"
+#~ msgstr "Asennetaanko dash linkitettynä tiedostoon /bin/sh?"
+
+#~ msgid ""
+#~ "The default /bin/sh shell on Debian and Debian-based systems is bash."
+#~ msgstr ""
+#~ "Debianissa ja Debianiin pohjautuvissa järjestelmissä "
+#~ "oletuskomentotulkkina /bin/sh toimii bash."
+
+#~ msgid ""
+#~ "However, since the default shell is required to be POSIX-compliant, any "
+#~ "shell that conforms to POSIX, such as dash, can serve as /bin/sh. You may "
+#~ "wish to do this because dash is faster and smaller than bash."
+#~ msgstr ""
+#~ "Koska oletuskomentotulkin tulee olla POSIX-yhteensopiva, mikä tahansa "
+#~ "POSIXin vaatimukset täyttävä komentotulkki, esimerkiksi dash, voi toimia /"
+#~ "bin/sh:na. Saatat haluta käyttää dashia, koska se on nopeampi ja pienempi "
+#~ "kuin bash."
