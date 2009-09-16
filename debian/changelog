@@ -1,3 +1,10 @@
+dash (0.5.5.1-2.1) unstable; urgency=high
+
+  * Non-maintainer upload.
+  * Depend on debian-utils (Closes: #537990).
+
+ -- Luk Claes <luk@debian.org>  Wed, 22 Jul 2009 18:50:45 +0000
+
 dash (0.5.5.1-2) unstable; urgency=low
 
   * debian/diff/0001--SHELL-execute-EXIT-trap-if-the-shell-...diff;

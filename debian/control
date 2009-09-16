@@ -10,6 +10,7 @@ Vcs-Git: http://smarden.org/git/dash.git/
 Package: dash
 Architecture: any
 Pre-Depends: ${shlibs:Depends}
+Depends: debianutils (>= 2.15)
 Description: POSIX-compliant shell
  The Debian Almquist Shell (dash) is a lightweight POSIX-compliant shell
  derived from ash.
