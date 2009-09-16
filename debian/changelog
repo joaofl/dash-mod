@@ -9,8 +9,10 @@ dash (0.5.5.1-3) unstable; urgency=low
     #539363).
   * debian/control: update long description (thx Justin B Rye; closes:
     #546458).
+  * debian/po/sv.po: [INTL:sv] Swedish strings for dash debconf (thx
+    Martin Bagge; closes: #539070).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 14:08:37 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 16 Sep 2009 14:14:46 +0000
 
 dash (0.5.5.1-2.3) unstable; urgency=low
 
