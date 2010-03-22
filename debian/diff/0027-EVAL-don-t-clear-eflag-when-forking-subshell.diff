@@ -1,0 +1,42 @@
+From 1abd8dc248698b21de9ee49407821115d793c45a Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Tue, 29 Sep 2009 12:24:42 +0000
+Subject: [PATCH 27/27] [EVAL] don't clear eflag when forking subshell
+
+According to
+ http://www.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html#tag_02_12
+"A subshell environment shall be created as a duplicate of the shell
+environment, except that signal traps set by that shell environment
+shall be set to the default values."
+
+Currently the eflag is cleared when forking a subshell, e.g.
+
+$ dash -c 'set -e ; z=$(false;echo foo) ; echo $z'
+foo
+
+With this commit the eflag is preserved for subshells, and dash exits 1
+before echo.
+
+The problem was reported by Vincent Lefevre through
+ http://bugs.debian.org/514863
+
+Signed-off-by: Gerrit Pape <pape@smarden.org>
+---
+ src/eval.c |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/src/eval.c b/src/eval.c
+index af3742f..d201054 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -626,7 +626,6 @@ evalbackcmd(union node *n, struct backcmd *result)
+ 				dup2(pip[1], 1);
+ 				close(pip[1]);
+ 			}
+-			eflag = 0;
+ 			evaltreenr(n, EV_EXIT);
+ 			/* NOTREACHED */
+ 		}
+-- 
+1.7.0
+

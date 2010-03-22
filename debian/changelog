@@ -1,3 +1,29 @@
+dash (0.5.5.1-4) unstable; urgency=low
+
+  * debian/diff/0002--SHELL-print-n-upon-EOF-CTRL-D-when-run-...diff:
+    rename to 0023-*.diff.
+  * debian/diff/0001--MAN-rename-sh-to-dash-update-DESCRIPTION-...diff:
+    remove; applied upstream.
+  * debian/diff/0001-*...0022-*.diff: new from upstream git.
+    * debian/diff/0010-*.diff: Add preliminary LINENO support (closes:
+      #540685).
+    * debian/diff/0017-*.diff: Fix syntax array size (closes: #548493).
+    * debian/diff/0009-*.diff: Honor tab as IFS whitespace when
+      splitting fields in readcmd (closes: #429251).
+  * debian/diff/0024-INPUT-exit-127-if-command_file-is-given-...diff:
+    new; exit 127 if command_file is given but does not exist (closes:
+    #548743).
+  * debian/diff/0025-INPUT-exit-127-if-command_file-is-given-...diff:
+    new; exit 127 if command_file is given but is a directory (closes:
+    #548687).
+  * debian/diff/0026-EVAL-with-set-e-exit-the-shell-if-a-...diff: new;
+    with set -e exit the shell if a subshell exits non-zero (closes:
+    #514863).
+  * debian/diff/0027-EVAL-don-t-clear-eflag-when-forking-subshell.diff:
+    new; don't clear eflag when forking subshell (closes: #514863).
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 22 Mar 2010 21:45:46 +0000
+
 dash (0.5.5.1-3) unstable; urgency=low
 
   * Thanks Luk Claes for NUMs (closes: #538682).

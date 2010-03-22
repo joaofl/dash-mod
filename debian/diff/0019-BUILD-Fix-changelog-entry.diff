@@ -1,0 +1,25 @@
+From 23f66c32278cf38c48a384864a35dc011fce01a4 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Tue, 9 Mar 2010 12:35:03 +0800
+Subject: [PATCH 19/27] [BUILD] Fix changelog entry
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 7be8e86..3e68917 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,6 @@
+ 2009-11-26  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+-	Fix off-by-one recordregion in readcmd.
++	* Fix off-by-one recordregion in readcmd.
+ 
+ 2009-09-28  Jim Meyering  <meyering@redhat.com>
+ 
+-- 
+1.7.0
+

@@ -1,0 +1,36 @@
+From 00bd0ce32911dc335a2b8a5ad066d781c47ff7c8 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Tue, 29 Sep 2009 12:24:16 +0000
+Subject: [PATCH 26/27] [EVAL] with set -e exit the shell if a subshell exits non-zero
+
+Example:
+
+$ dash -c 'set -e; (false); echo here'
+here
+
+With this commit, dash exits 1 before echo.
+
+The bug was reported by Stefan Fritsch through
+ http://bugs.debian.org/514863
+
+Signed-off-by: Gerrit Pape <pape@smarden.org>
+---
+ src/eval.c |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/src/eval.c b/src/eval.c
+index 2f195af..af3742f 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -250,6 +250,8 @@ checkexit:
+ 	case NSUBSHELL:
+ 	case NBACKGND:
+ 		evalfn = evalsubshell;
++		if (eflag && !(flags & EV_TESTED))
++			checkexit = ~0;
+ 		goto calleval;
+ 	case NPIPE:
+ 		evalfn = evalpipe;
+-- 
+1.7.0
+

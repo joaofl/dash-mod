@@ -1,7 +1,7 @@
-From 00d1451b9f5c7bf7c1d41c07900addd442738907 Mon Sep 17 00:00:00 2001
+From 956b4bd209a9d17613e419e2b50e0f533600497b Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
-Date: Wed, 11 Feb 2009 00:05:43 +0000
-Subject: [PATCH 1/2] [MAN] rename sh to dash, update DESCRIPTION and HISTORY
+Date: Sat, 23 May 2009 10:05:15 +0800
+Subject: [PATCH 06/27] [MAN] Update manual page to differentiate dash from ash
 
 Rename sh to dash in the header and synopsis; remove reference to the
 4.4 BSD release in the description, and replace the history information
@@ -11,10 +11,27 @@ Suggested by jaalto through
  http://bugs.debian.org/499838
 
 Signed-off-by: Gerrit Pape <pape@smarden.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 ---
+ ChangeLog  |    4 ++++
  src/dash.1 |   19 ++++++++++---------
- 1 files changed, 10 insertions(+), 9 deletions(-)
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
+diff --git a/ChangeLog b/ChangeLog
+index 2c955e5..92af4c2 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -6,6 +6,10 @@
+ 	* Allow newlines after var name in for statements.
+ 	* Use CHKNL to parse case statements.
+ 
++2009-02-22  Gerrit Pape <pape@smarden.org>
++
++	* Update manual page to differentiate dash from ash.
++
+ 2009-01-14  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Add arith_yacc.h to dash_SOURCES.
 diff --git a/src/dash.1 b/src/dash.1
 index 5a8e2fe..c7771d0 100644
 --- a/src/dash.1
@@ -62,5 +79,5 @@ index 5a8e2fe..c7771d0 100644
  Setuid shell scripts should be avoided at all costs, as they are a
  significant security risk.
 -- 
-1.6.1.3
+1.7.0
 

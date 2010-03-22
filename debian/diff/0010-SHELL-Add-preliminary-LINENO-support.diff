@@ -1,0 +1,155 @@
+From 0df96793ef6aa103df228d7dfe56099b7d721a15 Mon Sep 17 00:00:00 2001
+From: Rocky Bernstein <rocky.bernstein@gmail.com>
+Date: Tue, 11 Aug 2009 15:59:33 +1000
+Subject: [PATCH 10/27] [SHELL] Add preliminary LINENO support
+
+Looks like in contrast to what the dash.1 manual page says, expansion
+of PS{1,2,4} does work.
+
+Here is a little patch to set LINENO. The ways in that it is less than
+ideal mirror the ways that the line number error reporting is also
+less than ideal.
+
+For example if you run this:
+
+(
+    x=$((1/0))
+    # Just to add another line
+    # And another
+) # error reports this line
+
+The error reported will be  the closing parenthesis even though I
+think most people would prefer the error to be the one where x was
+set.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog    |    4 ++++
+ src/input.c  |   10 ++++++++++
+ src/input.h  |    1 +
+ src/parser.c |   12 ++++++------
+ src/var.c    |    1 +
+ 5 files changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 247b6e8..a4d814b 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2009-08-11  Rocky Bernstein <rocky.bernstein@gmail.com>
++
++	* Add preliminary LINENO support.
++
+ 2009-08-11  Stefan Potyra <stefan.potyra@informatik.uni-erlangen.de>
+ 
+ 	* Honor tab as IFS whitespace when splitting fields in readcmd.
+diff --git a/src/input.c b/src/input.c
+index 1e198e9..e57ad76 100644
+--- a/src/input.c
++++ b/src/input.c
+@@ -53,6 +53,7 @@
+ #include "alias.h"
+ #include "parser.h"
+ #include "main.h"
++#include "var.h"
+ #ifndef SMALL
+ #include "myhistedit.h"
+ #endif
+@@ -528,3 +529,12 @@ closescript(void)
+ 		parsefile->fd = 0;
+ 	}
+ }
++
++
++int lineno_inc(void)
++{
++	int lineno = plinno++;
++
++	setvarint("LINENO", lineno, 0);
++	return lineno;
++}
+diff --git a/src/input.h b/src/input.h
+index 50a7797..bdf8857 100644
+--- a/src/input.h
++++ b/src/input.h
+@@ -61,6 +61,7 @@ void setinputstring(char *);
+ void popfile(void);
+ void popallfiles(void);
+ void closescript(void);
++int lineno_inc(void);
+ 
+ #define pgetc_macro() \
+ 	(--parsenleft >= 0 ? (signed char)*parsenextc++ : preadbuffer())
+diff --git a/src/parser.c b/src/parser.c
+index 28a46c0..be20ff7 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -776,7 +776,7 @@ xxreadtoken(void)
+ 			continue;
+ 		case '\\':
+ 			if (pgetc() == '\n') {
+-				startlinno = ++plinno;
++				startlinno = lineno_inc();
+ 				if (doprompt)
+ 					setprompt(2);
+ 				continue;
+@@ -784,7 +784,7 @@ xxreadtoken(void)
+ 			pungetc();
+ 			goto breakloop;
+ 		case '\n':
+-			plinno++;
++			lineno_inc();
+ 			needprompt = doprompt;
+ 			RETURN(TNL);
+ 		case PEOF:
+@@ -886,7 +886,7 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
+ 				if (syntax == BASESYNTAX)
+ 					goto endword;	/* exit outer loop */
+ 				USTPUTC(c, out);
+-				plinno++;
++				lineno_inc();
+ 				if (doprompt)
+ 					setprompt(2);
+ 				c = pgetc();
+@@ -1065,7 +1065,7 @@ checkend: {
+ 
+ 		if (c == '\n' || c == PEOF) {
+ 			c = PEOF;
+-			plinno++;
++			lineno_inc();
+ 			needprompt = doprompt;
+ 		} else {
+ 			int len;
+@@ -1315,7 +1315,7 @@ parsebackq: {
+ 
+ 			case '\\':
+                                 if ((pc = pgetc()) == '\n') {
+-					plinno++;
++					lineno_inc();
+ 					if (doprompt)
+ 						setprompt(2);
+ 					/*
+@@ -1340,7 +1340,7 @@ parsebackq: {
+ 				synerror("EOF in backquote substitution");
+ 
+ 			case '\n':
+-				plinno++;
++				lineno_inc();
+ 				needprompt = doprompt;
+ 				break;
+ 
+diff --git a/src/var.c b/src/var.c
+index 7f9af9c..2737fb1 100644
+--- a/src/var.c
++++ b/src/var.c
+@@ -90,6 +90,7 @@ struct var varinit[] = {
+ 	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS2=> ",	0 },
+ 	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS4=+ ",	0 },
+ 	{ 0,	VSTRFIXED|VTEXTFIXED,		"OPTIND=1",	getoptsreset },
++	{ 0,	VSTRFIXED|VTEXTFIXED,		"LINENO=1",	0 },
+ #ifndef SMALL
+ 	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"TERM\0",	0 },
+ 	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"HISTSIZE\0",	sethistsize },
+-- 
+1.7.0
+

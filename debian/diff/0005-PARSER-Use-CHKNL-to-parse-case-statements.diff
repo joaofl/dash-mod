@@ -1,0 +1,47 @@
+From 49b82fcfda542b8db21073e6fceb4ac79984600d Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 22 Feb 2009 19:51:13 +0800
+Subject: [PATCH 05/27] [PARSER] Use CHKNL to parse case statements
+
+Instead of open-coding the newline loop, use the CHKNL flag to
+get readtoken to eat the newlines before the in keyword for the
+case statement.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog    |    1 +
+ src/parser.c |    6 ++----
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index d7e0f79..2c955e5 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -4,6 +4,7 @@
+ 	* Remove EXSIG.
+ 	* Do not close stderr when /dev/tty fails to open.
+ 	* Allow newlines after var name in for statements.
++	* Use CHKNL to parse case statements.
+ 
+ 2009-01-14  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/parser.c b/src/parser.c
+index 425c457..dad1037 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -402,10 +402,8 @@ TRACE(("expecting DO got %s %s\n", tokname[got], got == TWORD ? wordtext : ""));
+ 		n2->narg.text = wordtext;
+ 		n2->narg.backquote = backquotelist;
+ 		n2->narg.next = NULL;
+-		do {
+-			checkkwd = CHKKWD | CHKALIAS;
+-		} while (readtoken() == TNL);
+-		if (lasttoken != TIN)
++		checkkwd = CHKNL | CHKKWD | CHKALIAS;
++		if (readtoken() != TIN)
+ 			synexpect(TIN);
+ 		cpp = &n1->ncase.cases;
+ next_case:
+-- 
+1.7.0
+

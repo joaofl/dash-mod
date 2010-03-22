@@ -1,0 +1,56 @@
+From 22e8fb41be2bfd0e6757c80d6365af9080a3b4a1 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 22 Feb 2009 19:47:52 +0800
+Subject: [PATCH 04/27] [PARSER] Allow newlines after var name in for statements
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+POSIX allows newlines before the "in" keyword in for statements
+so we should too.
+
+Thanks to Maximilian Bernöcker for reporting this.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog    |    1 +
+ src/parser.c |    4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index dcb7182..d7e0f79 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -3,6 +3,7 @@
+ 	* Fix dowait signal race.
+ 	* Remove EXSIG.
+ 	* Do not close stderr when /dev/tty fails to open.
++	* Allow newlines after var name in for statements.
+ 
+ 2009-01-14  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/parser.c b/src/parser.c
+index ab66f30..425c457 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -357,7 +357,7 @@ TRACE(("expecting DO got %s %s\n", tokname[got], got == TWORD ? wordtext : ""));
+ 		n1 = (union node *)stalloc(sizeof (struct nfor));
+ 		n1->type = NFOR;
+ 		n1->nfor.var = wordtext;
+-		checkkwd = CHKKWD | CHKALIAS;
++		checkkwd = CHKNL | CHKKWD | CHKALIAS;
+ 		if (readtoken() == TIN) {
+ 			app = &ap;
+ 			while (readtoken() == TWORD) {
+@@ -383,7 +383,7 @@ TRACE(("expecting DO got %s %s\n", tokname[got], got == TWORD ? wordtext : ""));
+ 			 * Newline or semicolon here is optional (but note
+ 			 * that the original Bourne shell only allowed NL).
+ 			 */
+-			if (lasttoken != TNL && lasttoken != TSEMI)
++			if (lasttoken != TSEMI)
+ 				tokpushback++;
+ 		}
+ 		checkkwd = CHKNL | CHKKWD | CHKALIAS;
+-- 
+1.7.0
+

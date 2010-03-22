@@ -1,0 +1,177 @@
+From ed25e9f97e007f684146f729bb5cdeaf91b668b6 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 22 Feb 2009 18:16:13 +0800
+Subject: [PATCH 02/27] [SIGNAL] Remove EXSIG
+
+Now that waitcmd no longer uses EXSIG we can remove it.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog   |    1 +
+ src/error.c |   14 ++++----------
+ src/error.h |   11 -----------
+ src/eval.c  |   12 ++----------
+ src/trap.c  |    6 ++----
+ src/trap.h  |    1 -
+ 6 files changed, 9 insertions(+), 36 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 8f58d96..d87e5d4 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,6 +1,7 @@
+ 2009-02-22  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Fix dowait signal race.
++	* Remove EXSIG.
+ 
+ 2009-01-14  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/error.c b/src/error.c
+index 7f165c1..e304d3d 100644
+--- a/src/error.c
++++ b/src/error.c
+@@ -51,7 +51,6 @@
+ #include "show.h"
+ #include "eval.h"
+ #include "parser.h"
+-#include "trap.h"
+ #include "system.h"
+ 
+ 
+@@ -98,19 +97,14 @@ exraise(int e)
+ 
+ void
+ onint(void) {
+-	int i;
+ 
+ 	intpending = 0;
+ 	sigclearmask();
+-	i = EXSIG;
+-	if (gotsig[SIGINT - 1] && !trap[SIGINT]) {
+-		if (!(rootshell && iflag)) {
+-			signal(SIGINT, SIG_DFL);
+-			raise(SIGINT);
+-		}
+-		i = EXINT;
++	if (!(rootshell && iflag)) {
++		signal(SIGINT, SIG_DFL);
++		raise(SIGINT);
+ 	}
+-	exraise(i);
++	exraise(EXINT);
+ 	/* NOTREACHED */
+ }
+ 
+diff --git a/src/error.h b/src/error.h
+index dd1fc3f..3162e15 100644
+--- a/src/error.h
++++ b/src/error.h
+@@ -69,7 +69,6 @@ extern int exception;
+ #define EXSHELLPROC 2	/* execute a shell procedure */
+ #define EXEXEC 3	/* command execution failed */
+ #define EXEXIT 4	/* exit the shell */
+-#define EXSIG 5		/* trapped signal in wait(1) */
+ 
+ 
+ /*
+@@ -81,7 +80,6 @@ extern int exception;
+ 
+ extern int suppressint;
+ extern volatile sig_atomic_t intpending;
+-extern int exsig;
+ 
+ #define barrier() ({ __asm__ __volatile__ ("": : :"memory"); })
+ #define INTOFF \
+@@ -117,15 +115,6 @@ void __inton(void);
+ 	})
+ #define CLEAR_PENDING_INT intpending = 0
+ #define int_pending() intpending
+-#define EXSIGON() \
+-	({ \
+-		exsig++; \
+-		barrier(); \
+-		if (pendingsigs) \
+-			exraise(EXSIG); \
+-		0; \
+-	})
+-/* EXSIG is turned off by evalbltin(). */
+ 
+ void exraise(int) __attribute__((__noreturn__));
+ #ifdef USE_NORETURN
+diff --git a/src/eval.c b/src/eval.c
+index 0b449ee..b90a354 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -863,20 +863,13 @@ bail:
+ 		}
+ 		if (evalbltin(cmdentry.u.cmd, argc, argv)) {
+ 			int status;
+-			int i, j;
++			int i;
+ 
+ 			i = exception;
+ 			if (i == EXEXIT)
+ 				goto raise;
+ 
+-			status = 2;
+-			j = 0;
+-			if (i == EXINT)
+-				j = SIGINT;
+-			if (i == EXSIG)
+-				j = pendingsigs;
+-			if (j)
+-				status = j + 128;
++			status = (i == EXINT) ? SIGINT + 128 : 2;
+ 			exitstatus = status;
+ 
+ 			if (i == EXINT || spclbltin > 0) {
+@@ -926,7 +919,6 @@ cmddone:
+ 	exitstatus |= outerr(out1);
+ 	freestdout();
+ 	commandname = savecmdname;
+-	exsig = 0;
+ 	handler = savehandler;
+ 
+ 	return i;
+diff --git a/src/trap.c b/src/trap.c
+index 53663ae..5b8b046 100644
+--- a/src/trap.c
++++ b/src/trap.c
+@@ -73,11 +73,9 @@ char *trap[NSIG];
+ /* current value of signal */
+ char sigmode[NSIG - 1];
+ /* indicates specified signal received */
+-char gotsig[NSIG - 1];
++static char gotsig[NSIG - 1];
+ /* last pending signal */
+ volatile sig_atomic_t pendingsigs;
+-/* do we generate EXSIG events */
+-int exsig;
+ 
+ extern char *signal_names[];
+ 
+@@ -278,7 +276,7 @@ onsig(int signo)
+ 	gotsig[signo - 1] = 1;
+ 	pendingsigs = signo;
+ 
+-	if (exsig || (signo == SIGINT && !trap[SIGINT])) {
++	if (signo == SIGINT && !trap[SIGINT]) {
+ 		if (!suppressint)
+ 			onint();
+ 		intpending = 1;
+diff --git a/src/trap.h b/src/trap.h
+index 50c1587..f19a66b 100644
+--- a/src/trap.h
++++ b/src/trap.h
+@@ -37,7 +37,6 @@
+ #include <signal.h>
+ 
+ extern char *trap[];
+-extern char gotsig[];
+ extern char sigmode[];
+ extern volatile sig_atomic_t pendingsigs;
+ 
+-- 
+1.7.0
+

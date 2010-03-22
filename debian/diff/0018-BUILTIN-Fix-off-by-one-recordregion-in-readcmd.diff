@@ -1,0 +1,58 @@
+From 72811e307d07c8e5902a7f73ea6491eabb93a4ce Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Thu, 26 Nov 2009 11:55:22 +0800
+Subject: [PATCH 18/27] [BUILTIN] Fix off-by-one recordregion in readcmd
+
+Alexey Gladkov <gladkov.alexey@gmail.com> wrote:
+>
+> I found another example:
+>
+> $ tr -d '[:print:]' < /etc/passwd |tr -d '\t\n' |wc -c
+> 0
+>
+> $ dash -c 'while read o p; do printf "[%s] [%s]\n" "$o" "$p"; done <
+> /etc/passwd' |tr -d '[:print:]' |tr -d '[:space:]' |wc -c
+> 61
+>
+> bug is not fixed yet :(
+
+This bug is caused by an off-by-one error in the recordregion
+call in readcmd.  It included the terminating NUL in the region
+which causes ifsbreakup to include the string after it for scanning.
+
+Setting the correct length fixes the problem.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog       |    4 ++++
+ src/miscbltin.c |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index fabb0e1..7be8e86 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2009-11-26  Herbert Xu <herbert@gondor.apana.org.au>
++
++	Fix off-by-one recordregion in readcmd.
++
+ 2009-09-28  Jim Meyering  <meyering@redhat.com>
+ 
+ 	don't read-uninitialized for \177 in a here-doc
+diff --git a/src/miscbltin.c b/src/miscbltin.c
+index ec9872d..046f2f2 100644
+--- a/src/miscbltin.c
++++ b/src/miscbltin.c
+@@ -84,7 +84,7 @@ readcmd_handle_line(char *line, char **ap, size_t len)
+ 	backup = sstrdup(line);
+ 
+ 	arglist.lastp = &arglist.list;
+-	recordregion(0, len, 0);
++	recordregion(0, len - 1, 0);
+ 	
+ 	ifsbreakup(s, &arglist);
+ 	*arglist.lastp = NULL;
+-- 
+1.7.0
+

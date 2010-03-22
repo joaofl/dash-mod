@@ -1,0 +1,45 @@
+From fcc4134a7b76d82d39dea635c41ec593a41d6d19 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Sun, 22 Feb 2009 19:29:48 +0800
+Subject: [PATCH 03/27] [JOBS] Do not close stderr when /dev/tty fails to open
+
+As it stands if we fail to open /dev/tty we end up closing stderr
+after saving it at a higher fd.
+
+Thanks to David van Gorkom for reporting this.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ ChangeLog  |    1 +
+ src/jobs.c |    3 +++
+ 2 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index d87e5d4..dcb7182 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -2,6 +2,7 @@
+ 
+ 	* Fix dowait signal race.
+ 	* Remove EXSIG.
++	* Do not close stderr when /dev/tty fails to open.
+ 
+ 2009-01-14  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+diff --git a/src/jobs.c b/src/jobs.c
+index 69a84f7..b1ab7ab 100644
+--- a/src/jobs.c
++++ b/src/jobs.c
+@@ -195,6 +195,9 @@ setjobctl(int on)
+ 			while (!isatty(fd))
+ 				if (--fd < 0)
+ 					goto out;
++			fd = dup(fd);
++			if (fd < 0)
++				goto out;
+ 		}
+ 		fd = savefd(fd);
+ 		do { /* while we are in the background */
+-- 
+1.7.0
+
