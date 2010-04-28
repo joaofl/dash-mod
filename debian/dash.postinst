@@ -28,7 +28,7 @@ check_divert() {
 		if [ "$diverter" = "dash" ]; then
 			# Simple hack. We also divert sh(1), remember?
 			bash=$(echo "$ltarget"|sed 's/dash/bash/')
-			dpkg-divert --remove $dfile
+			dpkg-divert --package dash --remove $dfile
 			# The diversion is added as if we were bash, leaving
 			# no diversion would lead to a file conflict later
 			# when re-checked by dpkg
