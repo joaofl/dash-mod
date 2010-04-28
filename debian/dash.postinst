@@ -1,35 +1,49 @@
 #!/bin/sh
 set -e
 
+# $1: case, $2: dfile, $3: ltarget [, $4: distrib]
 check_divert() {
-	distrib=${4:-$2.distrib}
-	sh_diverter=$(dpkg-divert --listpackage $2)
-	sh_truename=$(dpkg-divert --truename $2)
+	dfile=$2; ltarget=$3
+	distrib=${4:-$dfile.distrib}
+	diverter=$(dpkg-divert --listpackage $dfile)
+	truename=$(dpkg-divert --truename $dfile)
 	case "$1" in
 	true)
-		if [ "$sh_diverter" != "dash" ]; then
-			dpkg-divert --remove $2
-			dpkg-divert --package dash --divert $distrib --add $2
-			if [ -n "$sh_truename" ]; then
-				rm -f $sh_truename
+		if [ "$diverter" != "dash" ]; then
+			# change the diversion's owner from $diverter to dash:
+			dpkg-divert --remove $dfile
+			dpkg-divert --package dash --divert $distrib --add $dfile
+			# remove the old equivalent of $distrib, if it existed:
+			# or $dfile if there was no previous diversion! -- should never happen, unless preinst failed
+			if [ -n "$truename" ]; then
+				rm -f $truename
 			fi
-			cp -dp $2 $distrib
-			ln -sf $3 $2
+			# Safely create a slink to $ltarget at $dfile
+			# by first making a copy of $dfile at $distrib
+			cp -dp $dfile $distrib
+			ln -sf $ltarget $dfile
 		fi
 		;;
 	false)
-		if [ "$sh_diverter" = "dash" ]; then
-			bash=$(echo "$3"|sed 's/dash/bash/')
-			dpkg-divert --remove $2
-			dpkg-divert --package bash --divert $distrib --add $2
-			if [ -n "$sh_truename" ]; then
-				rm -f $sh_truename
+		if [ "$diverter" = "dash" ]; then
+			# Simple hack. We also divert sh(1), remember?
+			bash=$(echo "$ltarget"|sed 's/dash/bash/')
+			dpkg-divert --remove $dfile
+			# The diversion is added as if we were bash, leaving
+			# no diversion would lead to a file conflict later
+			# when re-checked by dpkg
+			dpkg-divert --package bash --divert $distrib --add $dfile
+			# ugh? $truename should always be set (to $distrib)
+			if [ -n "$truename" ]; then
+				rm -f $truename
 			fi
-			cp -dp $2 $distrib
-			ln -sf $bash $2
+			# Point everything back to bash
+			cp -dp $dfile $distrib
+			ln -sf $bash $dfile
 		fi
 		;;
 	ash)
+		# Code not modified by the NMU:
 		div=$(dpkg-divert --list $2)
 		case $div in
 		'')
