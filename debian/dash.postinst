@@ -56,7 +56,7 @@ check_divert() {
 			if [ -e "$dst" ]; then
 				mv "$dst" "$dst.dash-tmp"
 			fi
-			dpkg-divert --remove $2
+			dpkg-divert --package ash --remove $2
 			if [ -e "$dst.dash-tmp" ]; then
 				mv "$dst.dash-tmp" "$dst"
 			fi
