@@ -20,7 +20,7 @@ check_divert() {
 		if [ -e "$dst" ]; then
 			mv "$dst" "$dst.ash-tmp"
 		fi
-		dpkg-divert --remove $1
+		dpkg-divert --package ash --remove $1
 		if [ -e "$dst.ash-tmp" ]; then
 			mv "$dst.ash-tmp" "$dst"
 		fi
