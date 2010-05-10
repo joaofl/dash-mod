@@ -37,7 +37,18 @@ dash (0.5.5.1-4) unstable; urgency=low
   * debian/diff/0028-EVAL-Fix-command-crash.diff: new; Fix command --
     crash (closes: #579543).
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 10 May 2010 23:11:01 +0000
+  [ Raphael Geissert ]
+  * Document "/bin/sh -> dash" NMU changes
+  * Pass package name to dpkg-divert when removing diversion
+  * Simplify prerm by making dpkg-divert do most of the work
+  * Pass --package name to dpkg-divert call to replace ash's diversion
+  * Quoting style changes
+  * Let the postinst script abort if there was already a diversion in
+    place
+  * Pass --package name to dpkg-divert call to remove ash's diversion
+  * Add watch file
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 10 May 2010 23:12:45 +0000
 
 dash (0.5.5.1-3) unstable; urgency=low
 
