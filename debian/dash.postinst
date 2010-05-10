@@ -9,14 +9,14 @@ check_divert() {
 	truename=$(dpkg-divert --truename $dfile)
 	case "$1" in
 	true)
-		if [ "$diverter" != "dash" ]; then
+		if [ "$diverter" != dash ]; then
 			# change the diversion's owner from $diverter to dash:
 			dpkg-divert --remove $dfile
 			dpkg-divert --package dash --divert $distrib --add $dfile
 			# remove the old equivalent of $distrib, if it existed:
 			# or $dfile if there was no previous diversion! -- should never happen, unless preinst failed
 			if [ -n "$truename" ]; then
-				rm -f $truename
+				rm -f "$truename"
 			fi
 			# Safely create a slink to $ltarget at $dfile
 			# by first making a copy of $dfile at $distrib
@@ -25,7 +25,7 @@ check_divert() {
 		fi
 		;;
 	false)
-		if [ "$diverter" = "dash" ]; then
+		if [ "$diverter" = dash ]; then
 			# Simple hack. We also divert sh(1), remember?
 			bash=$(echo "$ltarget"|sed 's/dash/bash/')
 			dpkg-divert --package dash --remove $dfile
@@ -35,7 +35,7 @@ check_divert() {
 			dpkg-divert --package bash --divert $distrib --add $dfile
 			# ugh? $truename should always be set (to $distrib)
 			if [ -n "$truename" ]; then
-				rm -f $truename
+				rm -f "$truename"
 			fi
 			# Point everything back to bash
 			cp -dp $dfile $distrib
