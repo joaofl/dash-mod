@@ -1,3 +1,14 @@
+dash (0.5.5.1-5) unstable; urgency=low
+
+  * debian/diff/0029-Revert-BUILTIN-Fix-off-by-one-recordregion-...diff,
+    debian/diff/0030-Revert-BUILTIN-Avoid-compiler-warnings-on-...diff,
+    debian/diff/0031-Revert-BUILTIN-Fix-NUL-termination-in-readcmd.diff,
+    debian/diff/0032-Revert-BUILTIN-Honor-tab-as-IFS-whitespace-...diff:
+    new; revert "Honor tab as IFS whitespace when splitting fields in
+    readcmd" fix (re-opens: #429251, closes: #581351).
+
+ -- Gerrit Pape <pape@smarden.org>  Thu, 13 May 2010 23:06:46 +0000
+
 dash (0.5.5.1-4) unstable; urgency=low
 
   * debian/diff/0002--SHELL-print-n-upon-EOF-CTRL-D-when-run-...diff:

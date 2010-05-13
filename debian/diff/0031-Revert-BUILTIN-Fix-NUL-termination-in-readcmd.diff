@@ -1,0 +1,43 @@
+From 1f0ab4b470ac89d9974817c5e52466a84745e580 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Thu, 13 May 2010 23:01:45 +0000
+Subject: [PATCH] Revert "[BUILTIN] Fix NUL termination in readcmd"
+
+This reverts commit cdb7c72699056856ac123d1ba4ab0e8595edbeb9.
+
+Conflicts:
+
+	ChangeLog
+---
+ ChangeLog       |    1 -
+ src/miscbltin.c |    2 +-
+ 2 files changed, 1 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index e7d8ecf..a1b9fb9 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -25,7 +25,6 @@
+ 
+ 2009-08-31  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+-	* Fix NUL termination in readcmd.
+ 	* Lookup PWD after going through CDPATH.
+ 
+ 2009-08-11  Herbert Xu <herbert@gondor.apana.org.au>
+diff --git a/src/miscbltin.c b/src/miscbltin.c
+index be746b2..cca0f6c 100644
+--- a/src/miscbltin.c
++++ b/src/miscbltin.c
+@@ -182,7 +182,7 @@ resetbs:
+ 		backslash = 0;
+ 	}
+ 	STACKSTRNUL(p);
+-	readcmd_handle_line(stackblock(), ap, p + 1 - (char *)stackblock());
++	readcmd_handle_line(stackblock(), ap, p - (char *)stackblock());
+ 	return status;
+ }
+ 
+-- 
+1.5.6.5
+
