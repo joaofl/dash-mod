@@ -1,7 +1,7 @@
-From 378b8cbb7cdc87b85a5b683000b28012eb058d3b Mon Sep 17 00:00:00 2001
-From: Jim Meyering <jim@meyering.net>
-Date: Wed, 4 Nov 2009 16:38:31 -0500
-Subject: [PATCH 17/27] [PARSER] Fix syntax array size
+From 0b3970775d8abb16d97d1b176916890708bed145 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 26 May 2010 11:05:30 +0000
+Subject: [PATCH] [PARSER] Fix syntax array size
 
 On Mon, Sep 28, 2009 at 11:00:05AM +0200, Jim Meyering wrote:
 > A DEL (0177, dec 127) byte in a here-document would cause dash to
@@ -15,32 +15,15 @@ On Mon, Sep 28, 2009 at 11:00:05AM +0200, Jim Meyering wrote:
 > Don't emit explicit array dimension in declaration.
 
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- ChangeLog      |   13 +++++++++++++
- src/mksyntax.c |    6 +++---
- 2 files changed, 16 insertions(+), 3 deletions(-)
+(cherry picked from commit 378b8cbb7cdc87b85a5b683000b28012eb058d3b)
 
-diff --git a/ChangeLog b/ChangeLog
-index d9dcb0c..fabb0e1 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,16 @@
-+2009-09-28  Jim Meyering  <meyering@redhat.com>
-+
-+	don't read-uninitialized for \177 in a here-doc
-+	A DEL (0177, dec 127) byte in a here-document would cause dash to
-+	access uninitialized memory at the end of one of the syntax.c tables,
-+	since those tables are sized to accommodate a maximum index of
-+	BASESYNTAX + 126.  Make the generated tables one byte larger.
-+	printf ':<<\\E\n\200y\nE'|./dash
-+	* src/mksyntax.c (filltable): Use 258, not 257 as the size,
-+	so that BASESYNTAX(=130) + 127 is a valid index.
-+	(print): Likewise.
-+	Don't emit explicit array dimension in declaration.
-+
- 2009-08-31  Eric Blake <ebb9@byu.net>
- 
- 	* Avoid compiler warnings on isdigit.
+Conflicts:
+
+	ChangeLog
+---
+ src/mksyntax.c |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
 diff --git a/src/mksyntax.c b/src/mksyntax.c
 index 7a8a9ae..a23c18c 100644
 --- a/src/mksyntax.c
@@ -67,5 +50,5 @@ index 7a8a9ae..a23c18c 100644
  			fputs("      ", cfile);
  		} else if ((i & 03) == 0) {
 -- 
-1.7.0
+1.6.0.3
 

@@ -1,7 +1,7 @@
-From c84e7b68f29dff8481bb738caa41e0cf20baf5c4 Mon Sep 17 00:00:00 2001
+From ef03fa018f8d3250745f52f3faa2b495be01b849 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Tue, 29 Sep 2009 11:16:26 +0000
-Subject: [PATCH 25/27] [INPUT] exit 127 if command_file is given but is a directory
+Subject: [PATCH] [INPUT] exit 127 if command_file is given but is a directory
 
 This commit makes dash exit with return code 127 instead of 0 if
 started as non-interactive shell with a command_file specified as
@@ -14,10 +14,10 @@ The wrong exit code was reported by Jari Aalto
  1 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/src/input.c b/src/input.c
-index c1e3e54..7ab1de6 100644
+index 4693bcf..d965d2a 100644
 --- a/src/input.c
 +++ b/src/input.c
-@@ -206,6 +206,10 @@ retry:
+@@ -205,6 +205,10 @@ retry:
  				}
  			}
  		}
@@ -29,5 +29,5 @@ index c1e3e54..7ab1de6 100644
  	return nr;
  }
 -- 
-1.7.0
+1.6.0.3
 

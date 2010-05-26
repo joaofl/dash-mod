@@ -1,7 +1,7 @@
-From ea2cf705d50024b09e00f8f5bf9c666429bccfa5 Mon Sep 17 00:00:00 2001
-From: Jilles Tjoelker <jilles@stack.nl>
-Date: Wed, 10 Mar 2010 13:29:11 +0800
-Subject: [PATCH 22/27] [ARITH] Fix logical or result value
+From 6625527dfd497d9420f151886fef73cbe0b2cade Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 26 May 2010 11:08:12 +0000
+Subject: [PATCH] [ARITH] Fix logical or result value
 
 Another change I'm making to the arith code is making || return 0 or 1
 only, matching C, POSIX and other shells.
@@ -11,23 +11,15 @@ details like the exact meaning of 'noeval' to scripts such that they may
 come to depend on them.
 
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- ChangeLog        |    4 ++++
- src/arith_yacc.c |    2 +-
- 2 files changed, 5 insertions(+), 1 deletions(-)
+(cherry picked from commit ea2cf705d50024b09e00f8f5bf9c666429bccfa5)
 
-diff --git a/ChangeLog b/ChangeLog
-index e6e82f1..0802048 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,7 @@
-+2010-03-10  Jilles Tjoelker <jilles@stack.nl>
-+
-+	* Fix logical or result value.
-+
- 2010-03-09  Herbert Xu <herbert@gondor.apana.org.au>
- 
- 	* Fix binary operator parsing.
+Conflicts:
+
+	ChangeLog
+---
+ src/arith_yacc.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 diff --git a/src/arith_yacc.c b/src/arith_yacc.c
 index 74b95f8..6c5a720 100644
 --- a/src/arith_yacc.c
@@ -42,5 +34,5 @@ index 74b95f8..6c5a720 100644
  
  static intmax_t cond(int token, union yystype *val, int op, int noeval)
 -- 
-1.7.0
+1.6.0.3
 

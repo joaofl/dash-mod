@@ -1,3 +1,18 @@
+dash (0.5.5.1-6) unstable; urgency=high
+
+  * debian/diff/0001-JOBS-Fix-dowait-signal-race.diff,
+    debian/diff/0002-SIGNAL-Remove-EXSIG.diff: remove (closes: #581425).
+  * debian/diff/: remove patches with reverts (0009, 0013, 0015, 0018,
+    0019).
+  * debian/diff/0010-SHELL-Add-preliminary-LINENO-support.diff: remove
+    (re-opens: #540685, closes: #582952).
+  * debian/diff/0015--BUILTIN-Use-TMPDIR-in-mkbuiltins.diff,
+    debian/diff/0016--BUILTIN-Make-trap-signal-name-number-...diff,
+    debian/diff/0017--JOBS-Fix-for-job-control-off-warning.diff: new;
+    cherry-picked from upstream git.
+
+ -- Gerrit Pape <pape@smarden.org>  Wed, 26 May 2010 11:32:17 +0000
+
 dash (0.5.5.1-5) unstable; urgency=low
 
   * debian/diff/0029-Revert-BUILTIN-Fix-off-by-one-recordregion-...diff,

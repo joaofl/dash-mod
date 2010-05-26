@@ -1,7 +1,7 @@
-From 6c0398654015de53269a2ef32eae3c7b560875dd Mon Sep 17 00:00:00 2001
-From: Herbert Xu <herbert@gondor.apana.org.au>
-Date: Sat, 27 Jun 2009 20:38:23 +0800
-Subject: [PATCH 07/27] [REDIR] Fix incorrect savefd conversions
+From cf4a1ec67599e10062c621c1abfc6157eb74eaa9 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 26 May 2010 10:57:14 +0000
+Subject: [PATCH] [REDIR] Fix incorrect savefd conversions
 
 When I added savefd we may end up closing stderr if that is how
 we get to the tty.  This patch fixes by adding a second argument
@@ -9,26 +9,18 @@ to indicate what fd should be closed which lets jobs.c get around
 the problem.
 
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit 6c0398654015de53269a2ef32eae3c7b560875dd)
+
+Conflicts:
+
+	ChangeLog
 ---
- ChangeLog   |    4 ++++
  src/input.c |    2 +-
  src/jobs.c  |    8 +++-----
  src/redir.c |    6 +++---
  src/redir.h |    2 +-
- 5 files changed, 12 insertions(+), 10 deletions(-)
+ 4 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/ChangeLog b/ChangeLog
-index 92af4c2..2f52f75 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,7 @@
-+2009-05-23  Herbert Xu <herbert@gondor.apana.org.au>
-+
-+	* Fix incorrect savefd conversions.
-+
- 2009-02-22  Herbert Xu <herbert@gondor.apana.org.au>
- 
- 	* Fix dowait signal race.
 diff --git a/src/input.c b/src/input.c
 index 27c4fd1..1e198e9 100644
 --- a/src/input.c
@@ -43,10 +35,10 @@ index 27c4fd1..1e198e9 100644
  out:
  	INTON;
 diff --git a/src/jobs.c b/src/jobs.c
-index b1ab7ab..a4fada0 100644
+index 83e6e62..e33485d 100644
 --- a/src/jobs.c
 +++ b/src/jobs.c
-@@ -189,17 +189,15 @@ setjobctl(int on)
+@@ -188,17 +188,15 @@ setjobctl(int on)
  	if (on == jobctl || rootshell == 0)
  		return;
  	if (on) {
@@ -111,5 +103,5 @@ index a8e6630..d1d160e 100644
  int redirectsafe(union node *, int);
  
 -- 
-1.7.0
+1.6.0.3
 

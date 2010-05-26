@@ -1,7 +1,7 @@
-From 7877713690c498bb74823542231a81362e8eedb3 Mon Sep 17 00:00:00 2001
-From: Herbert Xu <herbert@gondor.apana.org.au>
-Date: Mon, 31 Aug 2009 22:06:41 +1000
-Subject: [PATCH 16/27] [CD] Lookup PWD after going through CDPATH
+From 48faff27a570d47cc5a53bd364580ae9bb71c894 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 26 May 2010 11:04:04 +0000
+Subject: [PATCH] [CD] Lookup PWD after going through CDPATH
 
 On Tue, Jul 14, 2009 at 09:39:03PM +0000, Eric Blake wrote:
 > For the cd command, POSIX 2008 requires that after all pathnames in CDPATH
@@ -23,23 +23,15 @@ This patch fixes the problem.
 
 Reported-by: Eric Blake <ebb9@byu.net>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- ChangeLog |    1 +
- src/cd.c  |   21 +++++++++++----------
- 2 files changed, 12 insertions(+), 10 deletions(-)
+(cherry picked from commit 7877713690c498bb74823542231a81362e8eedb3)
 
-diff --git a/ChangeLog b/ChangeLog
-index cb08ae5..d9dcb0c 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -9,6 +9,7 @@
- 2009-08-31  Herbert Xu <herbert@gondor.apana.org.au>
- 
- 	* Fix NUL termination in readcmd.
-+	* Lookup PWD after going through CDPATH.
- 
- 2009-08-11  Herbert Xu <herbert@gondor.apana.org.au>
- 
+Conflicts:
+
+	ChangeLog
+---
+ src/cd.c |   21 +++++++++++----------
+ 1 files changed, 11 insertions(+), 10 deletions(-)
+
 diff --git a/src/cd.c b/src/cd.c
 index 3770664..9a69b69 100644
 --- a/src/cd.c
@@ -88,5 +80,5 @@ index 3770664..9a69b69 100644
  	/* NOTREACHED */
  out:
 -- 
-1.7.0
+1.6.0.3
 

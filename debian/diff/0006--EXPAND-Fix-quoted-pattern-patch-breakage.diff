@@ -1,7 +1,7 @@
-From 0d7d66039b614b642c775432fd64aa8c11f9a64d Mon Sep 17 00:00:00 2001
-From: Herbert Xu <herbert@gondor.apana.org.au>
-Date: Sat, 27 Jun 2009 21:00:39 +0800
-Subject: [PATCH 08/27] [EXPAND] Fix quoted pattern patch breakage
+From cd02edadb694c029a5dae31ee66fc2a98a4dd365 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 26 May 2010 10:59:45 +0000
+Subject: [PATCH] [EXPAND] Fix quoted pattern patch breakage
 
 The change
 
@@ -14,25 +14,17 @@ This patch fixes this by limiting the change to just quoted
 patterns.
 
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit 0d7d66039b614b642c775432fd64aa8c11f9a64d)
+
+Conflicts:
+
+	ChangeLog
 ---
- ChangeLog      |    4 ++++
  src/expand.c   |    4 +++-
  src/mksyntax.c |    5 ++---
  src/parser.c   |    1 -
- 4 files changed, 9 insertions(+), 5 deletions(-)
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/ChangeLog b/ChangeLog
-index 2f52f75..e6a1d26 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,7 @@
-+2009-06-27  Herbert Xu <herbert@gondor.apana.org.au>
-+
-+	* Fix quoted pattern patch breakage.
-+
- 2009-05-23  Herbert Xu <herbert@gondor.apana.org.au>
- 
- 	* Fix incorrect savefd conversions.
 diff --git a/src/expand.c b/src/expand.c
 index e4c4c8b..7995d40 100644
 --- a/src/expand.c
@@ -91,5 +83,5 @@ index dad1037..28a46c0 100644
  				if (c == PEOF) {
  					USTPUTC(CTLESC, out);
 -- 
-1.7.0
+1.6.0.3
 

@@ -1,9 +1,9 @@
-From 6e8e09255888c506c8f434b5905f13683f8dcf51 Mon Sep 17 00:00:00 2001
-From: Matthew Burgess <matthew@linuxfromscratch.org>
-Date: Mon, 31 Aug 2009 20:26:42 +1000
-Subject: [PATCH 14/27] [BUILTIN] Add another missing LC_COLLATE to mkbuiltins
+From e16d25b379e58b15a6eea9b2a06541b5a1b52d55 Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 26 May 2010 11:02:55 +0000
+Subject: [PATCH] [BUILTIN] Add another missing LC_COLLATE to mkbuiltins
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 
 On Sat, Aug 15, 2009 at 06:07:16PM +0000, Matthew Burgess wrote:
@@ -33,23 +33,15 @@ On Sat, Aug 15, 2009 at 06:07:16PM +0000, Matthew Burgess wrote:
 I've changed it to use LC_COLLATE.
 
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- ChangeLog      |    4 ++++
- src/mkbuiltins |    2 +-
- 2 files changed, 5 insertions(+), 1 deletions(-)
+(cherry picked from commit 6e8e09255888c506c8f434b5905f13683f8dcf51)
 
-diff --git a/ChangeLog b/ChangeLog
-index 13c9010..a726af4 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,3 +1,7 @@
-+2009-08-31  Matthew Burgess <matthew@linuxfromscratch.org>
-+
-+	* Add another missing LC_COLLATE to mkbuiltins.
-+
- 2009-08-31  Herbert Xu <herbert@gondor.apana.org.au>
- 
- 	* Fix NUL termination in readcmd.
+Conflicts:
+
+	ChangeLog
+---
+ src/mkbuiltins |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
 diff --git a/src/mkbuiltins b/src/mkbuiltins
 index 977edb4..064cb76 100644
 --- a/src/mkbuiltins
@@ -64,5 +56,5 @@ index 977edb4..064cb76 100644
  	awk '{	printf "#define %s (builtincmd + %d)\n", $3, $1}'
  printf '\n#define NUMBUILTINS %d\n' $(wc -l < $temp2)
 -- 
-1.7.0
+1.6.0.3
 

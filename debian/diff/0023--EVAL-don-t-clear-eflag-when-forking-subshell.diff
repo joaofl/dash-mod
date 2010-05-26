@@ -1,7 +1,7 @@
-From 1abd8dc248698b21de9ee49407821115d793c45a Mon Sep 17 00:00:00 2001
+From 1d79e106d6166e6049864c8022481e4b57e06319 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Tue, 29 Sep 2009 12:24:42 +0000
-Subject: [PATCH 27/27] [EVAL] don't clear eflag when forking subshell
+Subject: [PATCH] [EVAL] don't clear eflag when forking subshell
 
 According to
  http://www.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html#tag_02_12
@@ -26,7 +26,7 @@ Signed-off-by: Gerrit Pape <pape@smarden.org>
  1 files changed, 0 insertions(+), 1 deletions(-)
 
 diff --git a/src/eval.c b/src/eval.c
-index af3742f..d201054 100644
+index ce1f411..4547845 100644
 --- a/src/eval.c
 +++ b/src/eval.c
 @@ -626,7 +626,6 @@ evalbackcmd(union node *n, struct backcmd *result)
@@ -38,5 +38,5 @@ index af3742f..d201054 100644
  			/* NOTREACHED */
  		}
 -- 
-1.7.0
+1.6.0.3
 

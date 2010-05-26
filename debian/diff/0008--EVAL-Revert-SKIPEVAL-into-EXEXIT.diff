@@ -1,33 +1,25 @@
-From d53f173bb00bcc1d89ceb9e82b7d7e2b2a8dd852 Mon Sep 17 00:00:00 2001
-From: Herbert Xu <herbert@gondor.apana.org.au>
-Date: Tue, 11 Aug 2009 20:56:53 +1000
-Subject: [PATCH 12/27] [EVAL] Revert SKIPEVAL into EXEXIT
+From 8b8bbadfc21e929c2324e5972abdd71d9c3381df Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Wed, 26 May 2010 11:01:59 +0000
+Subject: [PATCH] [EVAL] Revert SKIPEVAL into EXEXIT
 
 Now that eval handles EV_TESTED correctly, we can remove the
 SKIPEVAL hack and simply use EXEXIT for set -e.
 
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit d53f173bb00bcc1d89ceb9e82b7d7e2b2a8dd852)
+
+Conflicts:
+
+	ChangeLog
 ---
- ChangeLog  |    1 +
  src/eval.c |   11 +++--------
  src/eval.h |    1 -
  src/main.c |    9 ++-------
- 4 files changed, 6 insertions(+), 16 deletions(-)
+ 3 files changed, 5 insertions(+), 16 deletions(-)
 
-diff --git a/ChangeLog b/ChangeLog
-index beaad36..9d397e4 100644
---- a/ChangeLog
-+++ b/ChangeLog
-@@ -1,6 +1,7 @@
- 2009-08-11  Herbert Xu <herbert@gondor.apana.org.au>
- 
- 	* Pass EV_TESTED into evalcmd.
-+	* Revert SKIPEVAL into EXEXIT.
- 
- 2009-08-11  Rocky Bernstein <rocky.bernstein@gmail.com>
- 
 diff --git a/src/eval.c b/src/eval.c
-index 66c2209..2f195af 100644
+index 249bfc1..904e81b 100644
 --- a/src/eval.c
 +++ b/src/eval.c
 @@ -309,15 +309,10 @@ setstatus:
@@ -91,5 +83,5 @@ index 7d07e2d..2bff956 100644
  
  
 -- 
-1.7.0
+1.6.0.3
 
