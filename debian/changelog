@@ -1,3 +1,19 @@
+dash (0.5.5.1-7) unstable; urgency=low
+
+  [ Raphael Geissert ]
+  * Re-add code to allow taking over bash's diversion (Closes: #82554).
+
+  [ Gerrit Pape ]
+  * debian/dash.README.source: new; document how to use the Debian
+    package source.
+  * debian/po/pt_BR.po: [INTL:pt_BR] Brazilian Portuguese debconf
+    templates (thx Adriano Rafael Gomes; closes: #582973).
+  * debian/po/da.po: [INTL:da] Danish translation of the debconf
+    templates Dash (thx Joe Dalton; closes: #584484).
+  * debian/implicit: update to revision 60d9070.
+
+ -- Gerrit Pape <pape@smarden.org>  Thu, 10 Jun 2010 01:56:32 +0000
+
 dash (0.5.5.1-6) unstable; urgency=high
 
   * debian/diff/0001-JOBS-Fix-dowait-signal-race.diff,
