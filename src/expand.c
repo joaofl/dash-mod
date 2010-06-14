@@ -117,9 +117,6 @@ STATIC char *evalvar(char *, int);
 STATIC size_t strtodest(const char *, const char *, int);
 STATIC void memtodest(const char *, size_t, const char *, int);
 STATIC ssize_t varvalue(char *, int, int);
-STATIC void recordregion(int, int, int);
-STATIC void removerecordregions(int); 
-STATIC void ifsbreakup(char *, struct arglist *);
 STATIC void ifsfree(void);
 STATIC void expandmeta(struct strlist *, int);
 #ifdef HAVE_GLOB
@@ -213,8 +210,6 @@ expandarg(union node *arg, struct arglist *arglist, int flag)
 		exparg.lastp = &exparg.list;
 		expandmeta(exparg.list, flag);
 	} else {
-		if (flag & EXP_REDIR) /*XXX - for now, just remove escapes */
-			rmescapes(p);
 		sp = (struct strlist *)stalloc(sizeof (struct strlist));
 		sp->text = p;
 		*exparg.lastp = sp;
@@ -412,7 +407,7 @@ lose:
 }
 
 
-STATIC void 
+void 
 removerecordregions(int endoff)
 {
 	if (ifslastp == NULL)
@@ -869,7 +864,9 @@ memtodest(const char *p, size_t len, const char *syntax, int quotes) {
 		int c = (signed char)*p++;
 		if (c) {
 			if ((quotes & QUOTES_ESC) &&
-			    (syntax[c] == CCTL || syntax[c] == CDBACK))
+			    ((syntax[c] == CCTL) ||
+			     (((quotes & EXP_FULL) || syntax != BASESYNTAX) &&
+			      syntax[c] == CBACK)))
 				USTPUTC(CTLESC, q);
 		} else if (!(quotes & QUOTES_KEEPNUL))
 			continue;
@@ -999,7 +996,7 @@ value:
  * string for IFS characters.
  */
 
-STATIC void
+void
 recordregion(int start, int end, int nulonly)
 {
 	struct ifsregion *ifsp;
@@ -1026,7 +1023,7 @@ recordregion(int start, int end, int nulonly)
  * strings to the argument list.  The regions of the string to be
  * searched for IFS characters have been stored by recordregion.
  */
-STATIC void
+void
 ifsbreakup(char *string, struct arglist *arglist)
 {
 	struct ifsregion *ifsp;

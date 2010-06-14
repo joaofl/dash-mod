@@ -357,7 +357,7 @@ TRACE(("expecting DO got %s %s\n", tokname[got], got == TWORD ? wordtext : ""));
 		n1 = (union node *)stalloc(sizeof (struct nfor));
 		n1->type = NFOR;
 		n1->nfor.var = wordtext;
-		checkkwd = CHKKWD | CHKALIAS;
+		checkkwd = CHKNL | CHKKWD | CHKALIAS;
 		if (readtoken() == TIN) {
 			app = &ap;
 			while (readtoken() == TWORD) {
@@ -383,7 +383,7 @@ TRACE(("expecting DO got %s %s\n", tokname[got], got == TWORD ? wordtext : ""));
 			 * Newline or semicolon here is optional (but note
 			 * that the original Bourne shell only allowed NL).
 			 */
-			if (lasttoken != TNL && lasttoken != TSEMI)
+			if (lasttoken != TSEMI)
 				tokpushback++;
 		}
 		checkkwd = CHKNL | CHKKWD | CHKALIAS;
@@ -402,10 +402,8 @@ TRACE(("expecting DO got %s %s\n", tokname[got], got == TWORD ? wordtext : ""));
 		n2->narg.text = wordtext;
 		n2->narg.backquote = backquotelist;
 		n2->narg.next = NULL;
-		do {
-			checkkwd = CHKKWD | CHKALIAS;
-		} while (readtoken() == TNL);
-		if (lasttoken != TIN)
+		checkkwd = CHKNL | CHKKWD | CHKALIAS;
+		if (readtoken() != TIN)
 			synexpect(TIN);
 		cpp = &n1->ncase.cases;
 next_case:
@@ -778,7 +776,7 @@ xxreadtoken(void)
 			continue;
 		case '\\':
 			if (pgetc() == '\n') {
-				startlinno = ++plinno;
+				startlinno = lineno_inc();
 				if (doprompt)
 					setprompt(2);
 				continue;
@@ -786,7 +784,7 @@ xxreadtoken(void)
 			pungetc();
 			goto breakloop;
 		case '\n':
-			plinno++;
+			lineno_inc();
 			needprompt = doprompt;
 			RETURN(TNL);
 		case PEOF:
@@ -888,7 +886,7 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
 				if (syntax == BASESYNTAX)
 					goto endword;	/* exit outer loop */
 				USTPUTC(c, out);
-				plinno++;
+				lineno_inc();
 				if (doprompt)
 					setprompt(2);
 				c = pgetc();
@@ -903,7 +901,6 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
 				break;
 			/* backslash */
 			case CBACK:
-			case CDBACK:
 				c = pgetc2();
 				if (c == PEOF) {
 					USTPUTC(CTLESC, out);
@@ -1068,7 +1065,7 @@ checkend: {
 
 		if (c == '\n' || c == PEOF) {
 			c = PEOF;
-			plinno++;
+			lineno_inc();
 			needprompt = doprompt;
 		} else {
 			int len;
@@ -1318,7 +1315,7 @@ parsebackq: {
 
 			case '\\':
                                 if ((pc = pgetc()) == '\n') {
-					plinno++;
+					lineno_inc();
 					if (doprompt)
 						setprompt(2);
 					/*
@@ -1343,7 +1340,7 @@ parsebackq: {
 				synerror("EOF in backquote substitution");
 
 			case '\n':
-				plinno++;
+				lineno_inc();
 				needprompt = doprompt;
 				break;
 

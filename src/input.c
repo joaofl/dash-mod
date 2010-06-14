@@ -53,6 +53,7 @@
 #include "alias.h"
 #include "parser.h"
 #include "main.h"
+#include "var.h"
 #ifndef SMALL
 #include "myhistedit.h"
 #endif
@@ -410,7 +411,7 @@ setinputfile(const char *fname, int flags)
 		sh_error("Can't open %s", fname);
 	}
 	if (fd < 10)
-		fd = savefd(fd);
+		fd = savefd(fd, fd);
 	setinputfd(fd, flags & INPUT_PUSH_FILE);
 out:
 	INTON;
@@ -527,4 +528,13 @@ closescript(void)
 		close(parsefile->fd);
 		parsefile->fd = 0;
 	}
+}
+
+
+int lineno_inc(void)
+{
+	int lineno = plinno++;
+
+	setvarint("LINENO", lineno, 0);
+	return lineno;
 }

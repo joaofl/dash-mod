@@ -1,3 +1,107 @@
+2010-06-05  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Release 0.5.6.1.
+
+2010-05-29  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Continue after EINTR in read(1) with no pending signals.
+
+2010-05-27  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix wait regression where it does not wait for all jobs.
+
+2010-05-27  Jilles Tjoelker <jilles@stack.nl>
+
+	* Fix corruption of redirections with byte 0x81.
+
+2010-05-03  Gerrit Pape <pape@smarden.org>
+
+	* Fix command -- crash.
+
+2010-04-02  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Make trap signal name/number errors non-fatal.
+	* Release 0.5.6.
+
+2010-04-02  maximilian attems <max@stro.at>
+
+	* Use TMPDIR in mkbuiltins.
+
+2010-03-10  Jilles Tjoelker <jilles@stack.nl>
+
+	* Fix logical or result value.
+
+2010-03-09  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix binary operator parsing.
+
+2009-11-26  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix off-by-one recordregion in readcmd.
+
+2009-09-28  Jim Meyering  <meyering@redhat.com>
+
+	don't read-uninitialized for \177 in a here-doc
+	A DEL (0177, dec 127) byte in a here-document would cause dash to
+	access uninitialized memory at the end of one of the syntax.c tables,
+	since those tables are sized to accommodate a maximum index of
+	BASESYNTAX + 126.  Make the generated tables one byte larger.
+	printf ':<<\\E\n\200y\nE'|./dash
+	* src/mksyntax.c (filltable): Use 258, not 257 as the size,
+	so that BASESYNTAX(=130) + 127 is a valid index.
+	(print): Likewise.
+	Don't emit explicit array dimension in declaration.
+
+2009-08-31  Eric Blake <ebb9@byu.net>
+
+	* Avoid compiler warnings on isdigit.
+
+2009-08-31  Matthew Burgess <matthew@linuxfromscratch.org>
+
+	* Add another missing LC_COLLATE to mkbuiltins.
+
+2009-08-31  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix NUL termination in readcmd.
+	* Lookup PWD after going through CDPATH.
+
+2009-08-11  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Pass EV_TESTED into evalcmd.
+	* Revert SKIPEVAL into EXEXIT.
+
+2009-08-11  Rocky Bernstein <rocky.bernstein@gmail.com>
+
+	* Add preliminary LINENO support.
+
+2009-08-11  Stefan Potyra <stefan.potyra@informatik.uni-erlangen.de>
+
+	* Honor tab as IFS whitespace when splitting fields in readcmd.
+
+2009-06-30  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Do not truncate file for FROMTO redirection.
+
+2009-06-27  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix quoted pattern patch breakage.
+
+2009-05-23  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix incorrect savefd conversions.
+
+2009-02-22  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix dowait signal race.
+	* Remove EXSIG.
+	* Do not close stderr when /dev/tty fails to open.
+	* Allow newlines after var name in for statements.
+	* Use CHKNL to parse case statements.
+
+2009-02-22  Gerrit Pape <pape@smarden.org>
+
+	* Update manual page to differentiate dash from ash.
+
 2009-01-14  Herbert Xu <herbert@gondor.apana.org.au>
 
 	* Add arith_yacc.h to dash_SOURCES.

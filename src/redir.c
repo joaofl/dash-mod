@@ -145,7 +145,7 @@ redirect(union node *redir, int flags)
 			if (likely(i == EMPTY)) {
 				i = CLOSED;
 				if (fd != newfd) {
-					i = savefd(fd);
+					i = savefd(fd, fd);
 					fd = -1;
 				}
 			}
@@ -192,7 +192,7 @@ openredirect(union node *redir)
 		break;
 	case NFROMTO:
 		fname = redir->nfile.expfname;
-		if ((f = open64(fname, O_RDWR|O_CREAT|O_TRUNC, 0666)) < 0)
+		if ((f = open64(fname, O_RDWR|O_CREAT, 0666)) < 0)
 			goto ecreate;
 		break;
 	case NTO:
@@ -399,7 +399,7 @@ RESET {
  */
 
 int
-savefd(int from)
+savefd(int from, int ofd)
 {
 	int newfd;
 	int err;
@@ -407,7 +407,7 @@ savefd(int from)
 	newfd = fcntl(from, F_DUPFD, 10);
 	err = newfd < 0 ? errno : 0;
 	if (err != EBADF) {
-		close(from);
+		close(ofd);
 		if (err)
 			sh_error("%d: %s", from, strerror(err));
 		else
