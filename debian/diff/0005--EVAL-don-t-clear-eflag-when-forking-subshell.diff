@@ -1,4 +1,4 @@
-From 1d79e106d6166e6049864c8022481e4b57e06319 Mon Sep 17 00:00:00 2001
+From 97f998abf5eceaaf2d0c637b2b3ebd938403a946 Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
 Date: Tue, 29 Sep 2009 12:24:42 +0000
 Subject: [PATCH] [EVAL] don't clear eflag when forking subshell
@@ -26,7 +26,7 @@ Signed-off-by: Gerrit Pape <pape@smarden.org>
  1 files changed, 0 insertions(+), 1 deletions(-)
 
 diff --git a/src/eval.c b/src/eval.c
-index ce1f411..4547845 100644
+index be007a6..a430179 100644
 --- a/src/eval.c
 +++ b/src/eval.c
 @@ -626,7 +626,6 @@ evalbackcmd(union node *n, struct backcmd *result)

@@ -1,3 +1,18 @@
+dash (0.5.6.1-1~exp0) experimental; urgency=low
+
+  * merge branch debian-sid.
+  * new upstream version.
+  * 0006--INPUT-exit-127-if-command_file-is-given-but-doesn-t.diff: new;
+    replaces 0020--INPUT-exit-127-...diff, 0021--INPUT-exit-127-...diff.
+  * debian/diff/0001-...0016-...diff: remove; included upstream.
+  * debian/diff/0024--SHELL-Add-preliminary-LINENO-support.diff: remove;
+    included upstream.
+  * 0001--JOBS-Fix-for-job-control-off-warning.diff,
+    0002--EVAL-Force-fork-if-any-trap-is-set-not-just-on-EXI.diff: new;
+    from branch upstream/master.
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 14 Jun 2010 00:48:45 +0000
+
 dash (0.5.5.1-7) unstable; urgency=low
 
   [ Raphael Geissert ]
@@ -14,6 +29,13 @@ dash (0.5.5.1-7) unstable; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Thu, 10 Jun 2010 01:56:32 +0000
 
+dash (0.5.5.1-7~exp0) experimental; urgency=low
+
+  * debian/diff/0024--SHELL-Add-preliminary-LINENO-support.diff: new
+    from upstream git; Add preliminary LINENO support.
+
+ -- Gerrit Pape <pape@smarden.org>  Wed, 26 May 2010 15:16:38 +0000
+
 dash (0.5.5.1-6) unstable; urgency=high
 
   * debian/diff/0001-JOBS-Fix-dowait-signal-race.diff,
@@ -26,8 +48,10 @@ dash (0.5.5.1-6) unstable; urgency=high
     debian/diff/0016--BUILTIN-Make-trap-signal-name-number-...diff,
     debian/diff/0017--JOBS-Fix-for-job-control-off-warning.diff: new;
     cherry-picked from upstream git.
+  * debian/po/pt_BR.po: [INTL:pt_BR] Brazilian Portuguese debconf
+    templates (thx Adriano Rafael Gomes; closes: #582973).
 
- -- Gerrit Pape <pape@smarden.org>  Wed, 26 May 2010 11:32:17 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 26 May 2010 12:25:47 +0000
 
 dash (0.5.5.1-5) unstable; urgency=low
 

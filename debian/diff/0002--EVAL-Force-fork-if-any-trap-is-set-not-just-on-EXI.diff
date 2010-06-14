@@ -1,0 +1,139 @@
+From ef403fd7012d7afed54eb7c55c83859f133ed7e3 Mon Sep 17 00:00:00 2001
+From: Jilles Tjoelker <jilles@stack.nl>
+Date: Thu, 27 May 2010 16:08:00 +0800
+Subject: [PATCH] [EVAL] Force fork if any trap is set, not just on EXIT
+
+In some cases the shell executes a subshell or an external command in
+the current process. This is not done if a trap on EXIT has been set, so
+that that trap can execute after the subshell or external command has
+finished. Extend that check to all traps. (A trap is "set" if a
+non-empty command string has been attached to it.)
+
+Improve encapsulation by exporting an accessor function for this and
+making the trap array static again.
+
+This is much like FreeBSD SVN r194127, enhanced to apply to subshells
+also (see FreeBSD SVN r194774).
+
+Example:
+  dash -c '{ trap "echo moo" TERM; sleep 3; }& sleep 1; kill $!;wait'
+This should print "moo" after 3 seconds.
+
+Example:
+  dash -c '{ trap "echo moo" TERM; (sleep 3) }& sleep 1; kill $!;wait'
+The same.
+
+Example:
+  dash -c '{ trap "echo moo" TERM; sleep 3; :; }& sleep 1; kill $!;wait'
+This works correctly even without this patch.
+
+Signed-off-by: Jilles Tjoelker <jilles@stack.nl>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
+ src/eval.c |    4 ++--
+ src/trap.c |   19 ++++++++++++++-----
+ src/trap.h |    7 ++++++-
+ 3 files changed, 22 insertions(+), 8 deletions(-)
+
+diff --git a/src/eval.c b/src/eval.c
+index 62d9d5d..e7c95cc 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -448,7 +448,7 @@ evalsubshell(union node *n, int flags)
+ 	int status;
+ 
+ 	expredir(n->nredir.redirect);
+-	if (!backgnd && flags & EV_EXIT && !trap[0])
++	if (!backgnd && flags & EV_EXIT && !have_traps())
+ 		goto nofork;
+ 	INTOFF;
+ 	jp = makejob(n, 1);
+@@ -829,7 +829,7 @@ bail:
+ 	switch (cmdentry.cmdtype) {
+ 	default:
+ 		/* Fork off a child process if necessary. */
+-		if (!(flags & EV_EXIT) || trap[0]) {
++		if (!(flags & EV_EXIT) || have_traps()) {
+ 			INTOFF;
+ 			jp = makejob(cmd, 1);
+ 			if (forkshell(jp, cmd, FORK_FG) != 0) {
+diff --git a/src/trap.c b/src/trap.c
+index 8d59abc..7bd60ab 100644
+--- a/src/trap.c
++++ b/src/trap.c
+@@ -69,7 +69,9 @@
+ 
+ 
+ /* trap handler commands */
+-char *trap[NSIG];
++static char *trap[NSIG];
++/* number of non-null traps */
++int trapcnt;
+ /* current value of signal */
+ char sigmode[NSIG - 1];
+ /* indicates specified signal received */
+@@ -127,11 +129,17 @@ trapcmd(int argc, char **argv)
+ 		if (action) {
+ 			if (action[0] == '-' && action[1] == '\0')
+ 				action = NULL;
+-			else
++			else {
++				if (*action)
++					trapcnt++;
+ 				action = savestr(action);
++			}
+ 		}
+-		if (trap[signo])
++		if (trap[signo]) {
++			if (*trap[signo])
++				trapcnt--;
+ 			ckfree(trap[signo]);
++		}
+ 		trap[signo] = action;
+ 		if (signo != 0)
+ 			setsignal(signo);
+@@ -152,16 +160,17 @@ clear_traps(void)
+ {
+ 	char **tp;
+ 
++	INTOFF;
+ 	for (tp = trap ; tp < &trap[NSIG] ; tp++) {
+ 		if (*tp && **tp) {	/* trap not NULL or SIG_IGN */
+-			INTOFF;
+ 			ckfree(*tp);
+ 			*tp = NULL;
+ 			if (tp != &trap[0])
+ 				setsignal(tp - trap);
+-			INTON;
+ 		}
+ 	}
++	trapcnt = 0;
++	INTON;
+ }
+ 
+ 
+diff --git a/src/trap.h b/src/trap.h
+index 105e57b..bdd7944 100644
+--- a/src/trap.h
++++ b/src/trap.h
+@@ -36,7 +36,7 @@
+ 
+ #include <signal.h>
+ 
+-extern char *trap[];
++extern int trapcnt;
+ extern char sigmode[];
+ extern volatile sig_atomic_t pendingsigs;
+ extern int gotsigchld;
+@@ -50,3 +50,8 @@ int dotrap(void);
+ void setinteractive(int);
+ void exitshell(void) __attribute__((__noreturn__));
+ int decode_signal(const char *, int);
++
++static inline int have_traps(void)
++{
++	return trapcnt;
++}
+-- 
+1.6.0.3
+
