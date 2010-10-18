@@ -10,6 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2009-08-03 20:33+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +25,8 @@ msgstr "Dash als Standard-Systemshell (/bin/sh) verwenden?"
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
-msgstr "Die Systemshell ist der Standard-Kommandointerpreter für Shell-Skripte."
+msgstr ""
+"Die Systemshell ist der Standard-Kommandointerpreter für Shell-Skripte."
 
 #. Type: boolean
 #. Description
