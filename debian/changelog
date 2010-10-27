@@ -1,3 +1,11 @@
+dash (0.5.5.1-7.2) unstable; urgency=low
+
+  * Non-maintainer upload to correct previous NMU.
+  * Drop dependency on debconf as that change was not agreed
+    with the maintainer when the NMU was prepared.
+
+ -- Christian Perrier <bubulle@debian.org>  Wed, 27 Oct 2010 08:10:28 +0200
+
 dash (0.5.5.1-7.1) unstable; urgency=low
 
   * Non-maintainer upload with maintainer approval.
