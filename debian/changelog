@@ -1,3 +1,13 @@
+dash (0.5.5.1-7.3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Modify the preinst to use /bin/bash rather than /bin/sh to avoid having
+    to rely on /bin/sh being available during unpack.  (Closes: #546528)
+  * Adapt preinst diversion handling to be idempotent; thanks to
+    Jonathan Nieder.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 17 Nov 2010 21:41:30 +0000
+
 dash (0.5.5.1-7.2) unstable; urgency=low
 
   * Non-maintainer upload to correct previous NMU.
