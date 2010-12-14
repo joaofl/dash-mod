@@ -1,6 +1,25 @@
 #!/bin/sh
 set -e
 
+# $1: dfile, $2: link target, $3: distrib
+replace_with_link() {
+	dfile=$1; ltarget=$2; distrib=$3
+	temp=$dfile.tmp
+	# Safely create a symlink to $ltarget at $dfile, first
+	# making a backup of $dfile (the file being diverted)
+	# in $distrib.
+	#
+	# The cp / ln -s / mv dance avoids having to live without
+	# $dfile (think: /bin/sh) for even a moment, so applications
+	# running in parallel can continue without trouble.
+	# See dash.preinst for details.
+	if [ -e "$dfile" ]; then
+		cp -dp "$dfile" "$distrib"
+	fi
+	ln -sf "$ltarget" "$temp"
+	mv -f "$temp" "$dfile"
+}
+
 # $1: case, $2: dfile, $3: ltarget [, $4: distrib]
 check_divert() {
 	dfile=$2; ltarget=$3
@@ -28,10 +47,7 @@ check_divert() {
 			if [ -n "$truename" ]; then
 			       rm -f "$truename"
 			fi
-			# Safely create a slink to $ltarget at $dfile
-			# by first making a copy of $dfile at $distrib
-			cp -dp $dfile $distrib
-			ln -sf $ltarget $dfile
+			replace_with_link $dfile $ltarget $distrib
 		fi
 		;;
 	false)
@@ -48,8 +64,7 @@ check_divert() {
 				rm -f "$truename"
 			fi
 			# Point everything back to bash
-			cp -dp $dfile $distrib
-			ln -sf $bash $dfile
+			replace_with_link $dfile $bash $distrib
 		fi
 		;;
 	ash)
@@ -75,7 +90,8 @@ check_divert() {
 			if [ "$dst" != $distrib ] && [ -e "$dst" ]; then
 				mv "$dst" $distrib
 			fi
-			ln -sf $3 $2
+			ln -sf $3 $2.tmp
+			mv -f $2.tmp $2
 			;;
 		*)
 			d=${2%/*}
@@ -83,7 +99,8 @@ check_divert() {
 				[ -h $2 ] && [ -f $2 ] && [ -f $d/$5 ] &&
 				cmp $2 $d/$5
 			then
-				ln -sf $3 $2
+				ln -sf $3 $2.tmp
+				mv -f $2.tmp $2
 			fi
 			;;
 		esac

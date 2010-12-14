@@ -1,3 +1,14 @@
+dash (0.5.5.1-7.4) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * dash.preinst: Do not error out if /bin/sh or its manpage is
+    not already present (thx Brian Potkin; closes: #606756).
+  * dash.postinst: Cope with missing files.  Atomically replace
+    /bin/sh and its manpage rather than removing and re-creating them
+    (thx Adam D. Barratt).
+
+ -- Jonathan Nieder <jrnieder@gmail.com>  Tue, 14 Dec 2010 01:33:42 -0600
+
 dash (0.5.5.1-7.3) unstable; urgency=medium
 
   * Non-maintainer upload.
