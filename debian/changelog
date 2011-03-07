@@ -13,6 +13,49 @@ dash (0.5.6.1-1~exp0) experimental; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Mon, 14 Jun 2010 00:48:45 +0000
 
+dash (0.5.5.1-7.4) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * dash.preinst: Do not error out if /bin/sh or its manpage is
+    not already present (thx Brian Potkin; closes: #606756).
+  * dash.postinst: Cope with missing files.  Atomically replace
+    /bin/sh and its manpage rather than removing and re-creating them
+    (thx Adam D. Barratt).
+
+ -- Jonathan Nieder <jrnieder@gmail.com>  Tue, 14 Dec 2010 01:33:42 -0600
+
+dash (0.5.5.1-7.3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Modify the preinst to use /bin/bash rather than /bin/sh to avoid having
+    to rely on /bin/sh being available during unpack.  (Closes: #546528)
+  * Adapt preinst diversion handling to be idempotent; thanks to
+    Jonathan Nieder.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 17 Nov 2010 21:41:30 +0000
+
+dash (0.5.5.1-7.2) unstable; urgency=low
+
+  * Non-maintainer upload to correct previous NMU.
+  * Drop dependency on debconf as that change was not agreed
+    with the maintainer when the NMU was prepared.
+
+ -- Christian Perrier <bubulle@debian.org>  Wed, 27 Oct 2010 08:10:28 +0200
+
+dash (0.5.5.1-7.1) unstable; urgency=low
+
+  * Non-maintainer upload with maintainer approval.
+  * Add "debconf | debconf-2.0" to dependencies as this package is
+    using debconf
+  * Explicitly re-include the text of the BSD licence as
+    /usr/share/common-licenses/BSD could be dropped in the future
+    because of minor wording changes in the different version of
+    the BSD licence text
+  * Fix pending l10n issues. Debconf translations:
+    - Czech (Miroslav Kure).  Closes: #598331
+    - Finnish (Esko Arajärvi).  Closes: #600518
+
+ -- Christian Perrier <bubulle@debian.org>  Mon, 18 Oct 2010 09:39:14 +0200
 dash (0.5.5.1-7) unstable; urgency=low
 
   [ Raphael Geissert ]
@@ -28,13 +71,6 @@ dash (0.5.5.1-7) unstable; urgency=low
   * debian/implicit: update to revision 60d9070.
 
  -- Gerrit Pape <pape@smarden.org>  Thu, 10 Jun 2010 01:56:32 +0000
-
-dash (0.5.5.1-7~exp0) experimental; urgency=low
-
-  * debian/diff/0024--SHELL-Add-preliminary-LINENO-support.diff: new
-    from upstream git; Add preliminary LINENO support.
-
- -- Gerrit Pape <pape@smarden.org>  Wed, 26 May 2010 15:16:38 +0000
 
 dash (0.5.5.1-6) unstable; urgency=high
 
@@ -1126,7 +1162,7 @@ ash (0.3.8-14) unstable; urgency=low
 
   * Divert sh.1.gz to sh.distrib.1.gz (closes: #102251).
   * Added HETIO support for ^D and ^U (Aaron Lehmann, closes: #102215).
-  * Added Spaniash translation of debconf templates (Carlos Valdivia Yag e,
+  * Added Spaniash translation of debconf templates (Carlos Valdivia Yag\00e,
     closes: #103040).
   * Added versioned build-time dependency on groff.
 

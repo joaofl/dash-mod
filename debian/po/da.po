@@ -13,6 +13,7 @@ msgstr ""
 "PO-Revision-Date: 2010-06-03 17:30+01:00\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <debian-l10n-danish@lists.debian.org> \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -36,8 +37,5 @@ msgid ""
 "Using dash as the system shell will improve the system's overall "
 "performance. It does not alter the shell presented to interactive users."
 msgstr ""
-"Brug af dash som systemskal vil forbedre systemets generelle "
-"ydeevne. Den ændrer ikke på skallen vist til interaktive brugere."
-
-
-
+"Brug af dash som systemskal vil forbedre systemets generelle ydeevne. Den "
+"ændrer ikke på skallen vist til interaktive brugere."

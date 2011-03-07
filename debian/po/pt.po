@@ -12,6 +12,7 @@ msgstr ""
 "PO-Revision-Date: 2010-04-16 22:37+0100\n"
 "Last-Translator: Miguel Figueiredo <elmig@debianpt.org>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +27,9 @@ msgstr "Utilizar o dash como shell predefinida do sistema (/bin/sh)?"
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
-msgstr "A shell do sistema é o interpretador de comandos predefinido para scripts da shell."
+msgstr ""
+"A shell do sistema é o interpretador de comandos predefinido para scripts da "
+"shell."
 
 #. Type: boolean
 #. Description

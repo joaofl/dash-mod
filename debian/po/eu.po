@@ -13,6 +13,7 @@ msgstr ""
 "PO-Revision-Date: 2010-04-12 12:28+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +30,9 @@ msgstr "Erabili dash sistemako shell lehenetsi gisa (/bin/sh)?"
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
-msgstr "Sistemako shell-a komandoen interpretatzaile lehenetsia da shell-eko script-entzako."
+msgstr ""
+"Sistemako shell-a komandoen interpretatzaile lehenetsia da shell-eko script-"
+"entzako."
 
 #. Type: boolean
 #. Description
@@ -60,4 +63,3 @@ msgstr ""
 #~ "duenez, POSIX-ekin bat datorren edozein shell, hala nola dash, /bin/sh "
 #~ "gisa ezar daiteke. Aldaketa hau egitea nahi izan dezakezu, dash "
 #~ "bizkorragoa eta txikiagoa baita bash baino."
-
