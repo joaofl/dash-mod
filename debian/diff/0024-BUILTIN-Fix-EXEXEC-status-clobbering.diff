@@ -1,0 +1,49 @@
+From 5df6131dc484e27fc6b3ee31950236da483e1834 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Thu, 7 Oct 2010 10:55:15 +0800
+Subject: [BUILTIN] Fix EXEXEC status clobbering
+
+evalcommand always clobbers the exit status in case of an EXEXEC
+which means that exec always fails with exit status 2 regardless
+of what it actually returns.
+
+This patch adds the missing check for EXEXEC so that the correct
+exit status is preserved.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit 7f684260a2426ac61c06d2e4822429b00437ae24)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog  |    4 ++++
+ src/eval.c |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 4a1f925..0c08e7d 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2010-10-07  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fix EXEXEC status clobbering.
++
+ 2010-09-08  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Fix ifsfirst/ifslastp leak.
+diff --git a/src/eval.c b/src/eval.c
+index 5b8d36b..b966749 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -854,7 +854,7 @@ bail:
+ 			int i;
+ 
+ 			i = exception;
+-			if (i == EXEXIT)
++			if (i == EXEXIT || i == EXEXEC)
+ 				goto raise;
+ 
+ 			status = (i == EXINT) ? SIGINT + 128 : 2;
+-- 
+1.7.4.1
+

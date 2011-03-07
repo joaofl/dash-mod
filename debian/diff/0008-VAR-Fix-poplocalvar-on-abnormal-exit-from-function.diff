@@ -1,0 +1,137 @@
+From c07ad12d6739fb8922484ffd84b729d2bfaee1aa Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Thu, 27 May 2010 11:32:55 +0800
+Subject: [VAR] Fix poplocalvar on abnormal exit from function
+
+The new localvar code broke the abnormal exit from functions
+and built-ins by not restoring the original localvar state.
+
+This patch fixes this by storing the previous localvar state so
+that we always unwind correctly in case of an abnormal exit.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit 127788364951212c356aadc39deb21e01b0161c8)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog  |    4 ++++
+ src/eval.c |    5 +++--
+ src/var.c  |   14 +++++++++++---
+ src/var.h  |    5 ++++-
+ 4 files changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index c53a5f3..24b7dc6 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2010-05-27  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fix poplocalvar on abnormal exit from function.
++
+ 2010-05-26  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Replace cmdenviron with localvars.
+diff --git a/src/eval.c b/src/eval.c
+index a6981a9..2cd931b 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -681,6 +681,7 @@ evalcommand(union node *cmd, int flags, struct backcmd *backcmd)
+ evalcommand(union node *cmd, int flags)
+ #endif
+ {
++	struct localvar_list *localvar_stop;
+ 	struct stackmark smark;
+ 	union node *argp;
+ 	struct arglist arglist;
+@@ -703,7 +704,7 @@ evalcommand(union node *cmd, int flags)
+ 	/* First expand the arguments. */
+ 	TRACE(("evalcommand(0x%lx, %d) called\n", (long)cmd, flags));
+ 	setstackmark(&smark);
+-	pushlocalvars();
++	localvar_stop = pushlocalvars();
+ 	back_exitstatus = 0;
+ 
+ 	cmdentry.cmdtype = CMDBUILTIN;
+@@ -837,7 +838,6 @@ bail:
+ 			if (forkshell(jp, cmd, FORK_FG) != 0) {
+ 				exitstatus = waitforjob(jp);
+ 				INTON;
+-				poplocalvars(0);
+ 				break;
+ 			}
+ 			FORCEINTON;
+@@ -878,6 +878,7 @@ raise:
+ 
+ out:
+ 	popredir(execcmd);
++	unwindlocalvars(localvar_stop);
+ 	if (lastarg)
+ 		/* dsl: I think this is intended to be used to support
+ 		 * '_' in 'vi' command mode during line editing...
+diff --git a/src/var.c b/src/var.c
+index 40bd3fd..f456fbd 100644
+--- a/src/var.c
++++ b/src/var.c
+@@ -144,8 +144,7 @@ INIT {
+ }
+ 
+ RESET {
+-	while (localvar_stack)
+-		poplocalvars(0);
++	unwindlocalvars(0);
+ }
+ #endif
+ 
+@@ -570,7 +569,7 @@ poplocalvars(int keep)
+ /*
+  * Create a new localvar environment.
+  */
+-void pushlocalvars(void)
++struct localvar_list *pushlocalvars(void)
+ {
+ 	struct localvar_list *ll;
+ 
+@@ -580,6 +579,15 @@ void pushlocalvars(void)
+ 	ll->next = localvar_stack;
+ 	localvar_stack = ll;
+ 	INTON;
++
++	return ll->next;
++}
++
++
++void unwindlocalvars(struct localvar_list *stop)
++{
++	while (localvar_stack != stop)
++		poplocalvars(0);
+ }
+ 
+ 
+diff --git a/src/var.h b/src/var.h
+index ef6d583..7e7e505 100644
+--- a/src/var.h
++++ b/src/var.h
+@@ -69,6 +69,8 @@ struct localvar {
+ 	const char *text;		/* saved text */
+ };
+ 
++struct localvar_list;
++
+ 
+ extern struct localvar *localvars;
+ extern struct var varinit[];
+@@ -139,8 +141,9 @@ int showvars(const char *, int, int);
+ int exportcmd(int, char **);
+ int localcmd(int, char **);
+ void mklocal(char *);
+-void pushlocalvars(void);
++struct localvar_list *pushlocalvars(void);
+ void poplocalvars(int);
++void unwindlocalvars(struct localvar_list *stop);
+ int unsetcmd(int, char **);
+ void unsetvar(const char *);
+ int varcmp(const char *, const char *);
+-- 
+1.7.4.1
+

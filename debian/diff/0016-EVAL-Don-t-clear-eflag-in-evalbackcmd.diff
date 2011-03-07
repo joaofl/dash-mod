@@ -1,7 +1,7 @@
-From 97f998abf5eceaaf2d0c637b2b3ebd938403a946 Mon Sep 17 00:00:00 2001
+From 19b62c48a796acfbcf7a64739076b44225bbab0a Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
-Date: Tue, 29 Sep 2009 12:24:42 +0000
-Subject: [PATCH] [EVAL] don't clear eflag when forking subshell
+Date: Mon, 28 Jun 2010 17:11:58 +1000
+Subject: [EVAL] Don't clear eflag in evalbackcmd
 
 According to
  http://www.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html#tag_02_12
@@ -21,15 +21,32 @@ The problem was reported by Vincent Lefevre through
  http://bugs.debian.org/514863
 
 Signed-off-by: Gerrit Pape <pape@smarden.org>
----
- src/eval.c |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit cdfb42fd67558847b689c69b6fdd23016e7220eb)
 
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog  |    4 ++++
+ src/eval.c |    1 -
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 4769054..d19dbbc 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2010-06-28  Gerrit Pape <pape@smarden.org>
++
++	* Don't clear eflag in evalbackcmd.
++
+ 2010-05-29  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Continue after EINTR in read(1) with no pending signals.
 diff --git a/src/eval.c b/src/eval.c
-index be007a6..a430179 100644
+index 439f881..d142412 100644
 --- a/src/eval.c
 +++ b/src/eval.c
-@@ -626,7 +626,6 @@ evalbackcmd(union node *n, struct backcmd *result)
+@@ -625,7 +625,6 @@ evalbackcmd(union node *n, struct backcmd *result)
  				dup2(pip[1], 1);
  				close(pip[1]);
  			}
@@ -38,5 +55,5 @@ index be007a6..a430179 100644
  			/* NOTREACHED */
  		}
 -- 
-1.6.0.3
+1.7.4.1
 

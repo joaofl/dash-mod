@@ -1,0 +1,98 @@
+From bc24bd4aaf63b279caaf8f2bf114012b6b2c8256 Mon Sep 17 00:00:00 2001
+From: Tim Allen <screwtape@froup.com>
+Date: Wed, 2 Mar 2011 23:22:53 +1100
+Subject: [EVAL] Make ". /dev/null" return 0
+
+The POSIX specification for the dot command states:
+
+    EXIT STATUS
+        Returns the value of the last command executed, or a zero exit
+        status if no command is executed.
+
+If an empty file is sourced, then in the terms of POSIX, "no command
+is executed", so the exit status should be zero. Here's a simple test
+case:
+
+	false
+	. /dev/null
+	[ $? = 0 ] && echo "Success" || echo "Failure"
+
+The behavior is most problematic when combined with "set -e", as in
+the following snippet.
+
+	set -e
+	if [ "$FILETYPE" != "shell" ]; then
+		run_external_script "$FILEPATH"
+	else
+		. "$FILEPATH"
+	fi
+
+If FILETYPE is set to "shell" and FILEPATH points to an empty file,
+since the condition returns a non-zero exit status (which is protected
+from "set -e" by the if statement), the shell takes the "else" branch,
+sources the empty file, and then checks the last exit status again.
+Because the exit status from the condition hasn't been cleared,
+"set -e" causes the shell to exit even though no un-handled error has
+occurred.
+
+It would be tempting to fix this by resetting exitstatus to 0 at the
+start of dotcmd, but that would regress the following case, from
+v0.5.3~42 (Do not clobber exit status in dotcmd., 2005-03-03):
+
+	$ cat printstatus.sh
+	echo $?
+	$ false
+	$ . ./printstatus.sh
+	1
+
+So use the following trick instead, imitating evalcmd.
+
+Signed-off-by: Timothy Allen <screwtape@froup.com>
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ src/main.c |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/main.c b/src/main.c
+index 17cc57c..1614ffb 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -202,6 +202,7 @@ cmdloop(int top)
+ 	union node *n;
+ 	struct stackmark smark;
+ 	int inter;
++	int status = 0;
+ 	int numeof = 0;
+ 
+ 	TRACE(("cmdloop(%d) called\n", top));
+@@ -242,6 +243,7 @@ cmdloop(int top)
+ 			job_warning = (job_warning == 2) ? 1 : 0;
+ 			numeof = 0;
+ 			evaltree(n, 0);
++			status = exitstatus;
+ 		}
+ 		popstackmark(&smark);
+ 
+@@ -252,7 +254,7 @@ cmdloop(int top)
+ 		}
+ 	}
+ 
+-	return 0;
++	return status;
+ }
+ 
+ 
+@@ -332,9 +334,8 @@ dotcmd(int argc, char **argv)
+ 		fullname = find_dot_file(argv[1]);
+ 		setinputfile(fullname, INPUT_PUSH_FILE);
+ 		commandname = fullname;
+-		cmdloop(0);
++		status = cmdloop(0);
+ 		popfile();
+-		status = exitstatus;
+ 	}
+ 	return status;
+ }
+-- 
+1.7.4.1
+

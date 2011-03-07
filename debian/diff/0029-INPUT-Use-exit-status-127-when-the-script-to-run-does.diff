@@ -1,0 +1,61 @@
+From 37cf7f5ba73b4e3bb92a0ae1be5352b0c7f8d9aa Mon Sep 17 00:00:00 2001
+From: Gerrit Pape <pape@smarden.org>
+Date: Sun, 28 Nov 2010 20:32:00 +0800
+Subject: [INPUT] Use exit status 127 when the script to run does not exist
+
+This commit makes dash exit with return code 127 instead of 2 if
+started as non-interactive shell with a non-existent command_file
+specified as argument (or a directory), as documented in
+ http://www.opengroup.org/onlinepubs/009695399/utilities/sh.html#tag_04_128_14
+
+The wrong exit code was reported by Clint Adams and Jari Aalto through
+ http://bugs.debian.org/548743
+ http://bugs.debian.org/548687
+
+Signed-off-by: Gerrit Pape <pape@smarden.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit 34f60a3781ea8f17f3d2a1a743a9aab9b31a296f)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog   |    4 ++++
+ src/input.c |    4 +++-
+ 2 files changed, 7 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 7f0de2c..1110970 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2010-11-28  Gerrit Pape <pape@smarden.org>
++
++	* Use exit status 127 when the script to run does not exist.
++
+ 2010-11-28  Philipp Weis <pweis@pweis.com>
+ 
+ 	* Document optional open parenthesis for case patterns.
+diff --git a/src/input.c b/src/input.c
+index e57ad76..bd3a9a2 100644
+--- a/src/input.c
++++ b/src/input.c
+@@ -42,6 +42,7 @@
+  * This file implements the input routines used by the parser.
+  */
+ 
++#include "eval.h"
+ #include "shell.h"
+ #include "redir.h"
+ #include "syntax.h"
+@@ -408,7 +409,8 @@ setinputfile(const char *fname, int flags)
+ 	if ((fd = open(fname, O_RDONLY)) < 0) {
+ 		if (flags & INPUT_NOFILE_OK)
+ 			goto out;
+-		sh_error("Can't open %s", fname);
++		exitstatus = 127;
++		exerror(EXERROR, "Can't open %s", fname);
+ 	}
+ 	if (fd < 10)
+ 		fd = savefd(fd, fd);
+-- 
+1.7.4.1
+

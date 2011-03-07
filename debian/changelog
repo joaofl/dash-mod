@@ -1,17 +1,31 @@
-dash (0.5.6.1-1~exp0) experimental; urgency=low
+dash (0.5.6.1-1~exp1) experimental; urgency=low
 
-  * merge branch debian-sid.
-  * new upstream version.
-  * 0006--INPUT-exit-127-if-command_file-is-given-but-doesn-t.diff: new;
-    replaces 0020--INPUT-exit-127-...diff, 0021--INPUT-exit-127-...diff.
-  * debian/diff/0001-...0016-...diff: remove; included upstream.
-  * debian/diff/0024--SHELL-Add-preliminary-LINENO-support.diff: remove;
-    included upstream.
-  * 0001--JOBS-Fix-for-job-control-off-warning.diff,
-    0002--EVAL-Force-fork-if-any-trap-is-set-not-just-on-EXI.diff: new;
-    from branch upstream/master.
+  * new upstream release.
+    * add preliminary LINENO support (closes: #540685, reopens:
+      #582952).
+    * fix corruption of redirections with byte 0x81 (closes:
+      #532302).
+    * honor tab as IFS whitespace in read (closes: #429251,
+      #607174).
+  * debian/diff/:
+    - remove patches applied upstream (0001-0016, 0020).
+    - 0021--INPUT-exit-127...diff: remove; patch is faulty
+      (reopens: #548687).
+    - 0022--EVAL-with-set-e-exit: remove; fixed upstream.
+    - 0019--SHELL-print-n-upon...diff: rename to 0034-*.
+    - 0001...0033: new from the upstream "master" branch.
+    - 0035-PARSER-Remove-backslash-before...diff: new from the
+      mailing list: remove backslashes used to escape closing
+      braces in ${...} expressions (thx Jilles Tjoelker).
+    - 0036-BUILTIN-Fix-corruption-of-reads...diff: new from the
+      mailing list: do not corrupt input by removing CTLESC bytes
+      ('\x81') in readcmd (thx Alexey Gladkov).
+    - 0037-EVAL-Make-.-dev-null-return-0.diff: new from the
+      mailing list: dotcmd should yield status 0 when no command
+      is executed (thx Tim Allen, closes: #615922).
+  * debian/watch: document upstream source location.
 
- -- Gerrit Pape <pape@smarden.org>  Mon, 14 Jun 2010 00:48:45 +0000
+ -- Jonathan Nieder <jrnieder@gmail.com>  Sun, 06 Mar 2011 21:11:25 -0600
 
 dash (0.5.5.1-7.4) unstable; urgency=low
 
@@ -56,6 +70,7 @@ dash (0.5.5.1-7.1) unstable; urgency=low
     - Finnish (Esko Arajärvi).  Closes: #600518
 
  -- Christian Perrier <bubulle@debian.org>  Mon, 18 Oct 2010 09:39:14 +0200
+
 dash (0.5.5.1-7) unstable; urgency=low
 
   [ Raphael Geissert ]
@@ -1162,7 +1177,7 @@ ash (0.3.8-14) unstable; urgency=low
 
   * Divert sh.1.gz to sh.distrib.1.gz (closes: #102251).
   * Added HETIO support for ^D and ^U (Aaron Lehmann, closes: #102215).
-  * Added Spaniash translation of debconf templates (Carlos Valdivia Yag\00e,
+  * Added Spaniash translation of debconf templates (Carlos Valdivia Yag e,
     closes: #103040).
   * Added versioned build-time dependency on groff.
 

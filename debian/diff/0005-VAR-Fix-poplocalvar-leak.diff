@@ -1,0 +1,71 @@
+From 20191acada96847ff26fe6edb70ab278f446486e Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Tue, 25 May 2010 18:14:32 +0800
+Subject: [VAR] Fix poplocalvar leak
+
+When a variable is marked as local, we set VSTRFIXED on its vp
+recored.  However, poplocalvar never clears this flag for variables
+that were unset to begin with.  Thus if you ever made an unset
+variable local, it would get the VSTRFIXED bit and stick around
+forever.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit 55ffc36246d6536cd81e44f3c8c32bd3cd04afb8)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog |    4 ++++
+ src/var.c |    8 +++-----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index b15cb92..2bfa42a 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2010-05-25  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fix poplocalvar leak.
++
+ 2010-05-24  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Add localvars nesting.
+diff --git a/src/var.c b/src/var.c
+index de1a5f5..fc6d367 100644
+--- a/src/var.c
++++ b/src/var.c
+@@ -543,7 +543,8 @@ poplocalvars(void)
+ 			memcpy(optlist, lvp->text, sizeof(optlist));
+ 			ckfree(lvp->text);
+ 			optschanged();
+-		} else if ((lvp->flags & (VUNSET|VSTRFIXED)) == VUNSET) {
++		} else if (lvp->flags == VUNSET) {
++			vp->flags &= ~(VSTRFIXED|VREADONLY);
+ 			unsetvar(vp->text);
+ 		} else {
+ 			if (vp->func)
+@@ -627,8 +628,6 @@ unsetvar(const char *s)
+ 		retval = 1;
+ 		if (flags & VREADONLY)
+ 			goto out;
+-		if (flags & VUNSET)
+-			goto ok;
+ 		if ((flags & VSTRFIXED) == 0) {
+ 			INTOFF;
+ 			if ((flags & (VTEXTFIXED|VSTACK)) == 0)
+@@ -636,11 +635,10 @@ unsetvar(const char *s)
+ 			*vpp = vp->next;
+ 			ckfree(vp);
+ 			INTON;
+-		} else {
++		} else if (!(flags & VUNSET)) {
+ 			setvar(s, 0, 0);
+ 			vp->flags &= ~VEXPORT;
+ 		}
+-ok:
+ 		retval = 0;
+ 	}
+ 
+-- 
+1.7.4.1
+

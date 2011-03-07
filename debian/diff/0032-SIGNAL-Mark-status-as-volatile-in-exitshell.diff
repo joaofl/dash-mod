@@ -1,0 +1,49 @@
+From b358c9cc9e1ec9fc8c0443b457894eea3b01cb70 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
+Date: Sun, 28 Nov 2010 20:55:20 +0800
+Subject: [SIGNAL] Mark status as volatile in exitshell
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+trap.c: In function 'exitshell':
+trap.c:354: warning: variable 'status' might be clobbered by 'longjmp' or 'vfork'
+
+Signed-off-by: Maciej Żenczykowski <zenczykowski@gmail.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit b262e08555a5be355514224d3b47ae48ab447436)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog  |    4 ++++
+ src/trap.c |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index a3ffd3e..c8d979f 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2010-11-28  Maciej Żenczykowski <zenczykowski@gmail.com>
++
++	* Mark status as volatile in exitshell.
++
+ 2010-11-28  Jonathan Nieder <jrnieder@gmail.com>
+ 
+ 	* Use EXEXIT in place of EXEXEC.
+diff --git a/src/trap.c b/src/trap.c
+index 3d28485..17316c9 100644
+--- a/src/trap.c
++++ b/src/trap.c
+@@ -366,7 +366,7 @@ exitshell(void)
+ {
+ 	struct jmploc loc;
+ 	char *p;
+-	int status;
++	volatile int status;
+ 
+ #ifdef HETIO
+ 	hetio_reset_term();
+-- 
+1.7.4.1
+
