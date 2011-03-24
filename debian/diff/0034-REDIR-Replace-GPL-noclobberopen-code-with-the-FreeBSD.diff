@@ -1,0 +1,144 @@
+From 228504d9c2c17bff4c761f1b2a54e7a4993f3ea2 Mon Sep 17 00:00:00 2001
+From: Jilles Tjoelker <jilles@stack.nl>
+Date: Thu, 10 Mar 2011 16:52:13 +0800
+Subject: [REDIR] Replace GPL noclobberopen code with the FreeBSD version
+
+Replace noclobberopen() from bash with the FreeBSD code for noclobber
+opens.
+
+This also reduces code size by eliminating an unnecessary check.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit f78674ed6f95b594dcac0e96d6a76c5f64aa2cbf)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog   |    4 +++
+ src/redir.c |   77 +++++++++++-----------------------------------------------
+ 2 files changed, 19 insertions(+), 62 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 926e597..320b6ec 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2011-03-10  Jilles Tjoelker <jilles@stack.nl>
++
++	* Replace GPL noclobberopen code with the FreeBSD version.
++
+ 2010-11-28  Maciej Żenczykowski <zenczykowski@gmail.com>
+ 
+ 	* Mark status as volatile in exitshell.
+diff --git a/src/redir.c b/src/redir.c
+index b4e49c0..f96a76b 100644
+--- a/src/redir.c
++++ b/src/redir.c
+@@ -84,7 +84,6 @@ STATIC void dupredirect(union node *, int, char[10]);
+ STATIC void dupredirect(union node *, int);
+ #endif
+ STATIC int openhere(union node *);
+-STATIC int noclobberopen(const char *);
+ 
+ 
+ /*
+@@ -168,6 +167,7 @@ redirect(union node *redir, int flags)
+ STATIC int
+ openredirect(union node *redir)
+ {
++	struct stat64 sb;
+ 	char *fname;
+ 	int f;
+ 
+@@ -186,8 +186,21 @@ openredirect(union node *redir)
+ 		/* Take care of noclobber mode. */
+ 		if (Cflag) {
+ 			fname = redir->nfile.expfname;
+-			if ((f = noclobberopen(fname)) < 0)
++			if (stat64(fname, &sb) < 0) {
++				if ((f = open64(fname, O_WRONLY|O_CREAT|O_EXCL, 0666)) < 0)
++					goto ecreate;
++			} else if (!S_ISREG(sb.st_mode)) {
++				if ((f = open64(fname, O_WRONLY, 0666)) < 0)
++					goto ecreate;
++				if (fstat64(f, &sb) < 0 && S_ISREG(sb.st_mode)) {
++					close(f);
++					errno = EEXIST;
++					goto ecreate;
++				}
++			} else {
++				errno = EEXIST;
+ 				goto ecreate;
++			}
+ 			break;
+ 		}
+ 		/* FALLTHROUGH */
+@@ -397,66 +410,6 @@ savefd(int from, int ofd)
+ }
+ 
+ 
+-/*
+- * Open a file in noclobber mode.
+- * The code was copied from bash.
+- */
+-int
+-noclobberopen(fname)
+-	const char *fname;
+-{
+-	int r, fd;
+-	struct stat64 finfo, finfo2;
+-
+-	/*
+-	 * If the file exists and is a regular file, return an error
+-	 * immediately.
+-	 */
+-	r = stat64(fname, &finfo);
+-	if (r == 0 && S_ISREG(finfo.st_mode)) {
+-		errno = EEXIST;
+-		return -1;
+-	}
+-
+-	/*
+-	 * If the file was not present (r != 0), make sure we open it
+-	 * exclusively so that if it is created before we open it, our open
+-	 * will fail.  Make sure that we do not truncate an existing file.
+-	 * Note that we don't turn on O_EXCL unless the stat failed -- if the
+-	 * file was not a regular file, we leave O_EXCL off.
+-	 */
+-	if (r != 0)
+-		return open64(fname, O_WRONLY|O_CREAT|O_EXCL, 0666);
+-	fd = open64(fname, O_WRONLY|O_CREAT, 0666);
+-
+-	/* If the open failed, return the file descriptor right away. */
+-	if (fd < 0)
+-		return fd;
+-
+-	/*
+-	 * OK, the open succeeded, but the file may have been changed from a
+-	 * non-regular file to a regular file between the stat and the open.
+-	 * We are assuming that the O_EXCL open handles the case where FILENAME
+-	 * did not exist and is symlinked to an existing file between the stat
+-	 * and open.
+-	 */
+-
+-	/*
+-	 * If we can open it and fstat the file descriptor, and neither check
+-	 * revealed that it was a regular file, and the file has not been
+-	 * replaced, return the file descriptor.
+-	 */
+-	 if (fstat64(fd, &finfo2) == 0 && !S_ISREG(finfo2.st_mode) &&
+-	     finfo.st_dev == finfo2.st_dev && finfo.st_ino == finfo2.st_ino)
+-	 	return fd;
+-
+-	/* The file has been replaced.  badness. */
+-	close(fd);
+-	errno = EEXIST;
+-	return -1;
+-}
+-
+-
+ int
+ redirectsafe(union node *redir, int flags)
+ {
+-- 
+1.7.4.1
+

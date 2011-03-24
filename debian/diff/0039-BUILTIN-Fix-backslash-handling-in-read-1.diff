@@ -1,0 +1,177 @@
+From 9cd05d675ed39940d62bd6543288c472bd0e65a9 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Fri, 11 Mar 2011 11:07:42 +0800
+Subject: [BUILTIN] Fix backslash handling in read(1)
+
+The new read(1) implementation incorrectly assumes that ifsbreakup
+ignores characters escaped by CTLESC.  As such it fails to handle
+backslashes except for escaping newlines.
+
+This patch makes it use recordregion for every part that isn't
+escaped by a backslash.
+
+Reported-by: Jilles Tjoelker <jilles@stack.nl>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit 6e1c8399e82c015f4e9d7d67e98d70541a3ef2d0)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog       |    4 ++++
+ src/expand.c    |    1 -
+ src/miscbltin.c |   38 ++++++++++++++++++++++++++------------
+ src/mystring.c  |    1 +
+ src/mystring.h  |    1 +
+ 5 files changed, 32 insertions(+), 13 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 92f46d5..9404282 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2011-03-11  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fix backslash handling in read(1).
++
+ 2011-03-10  Jonathan Nieder <jrnieder@gmail.com>
+ 
+ 	* Dotcmd should exit with zero when doing nothing.
+diff --git a/src/expand.c b/src/expand.c
+index 6bee5c5..7a9b157 100644
+--- a/src/expand.c
++++ b/src/expand.c
+@@ -1597,7 +1597,6 @@ char *
+ _rmescapes(char *str, int flag)
+ {
+ 	char *p, *q, *r;
+-	static const char qchars[] = { CTLESC, CTLQUOTEMARK, 0 };
+ 	unsigned inquotes;
+ 	int notescaped;
+ 	int globbing;
+diff --git a/src/miscbltin.c b/src/miscbltin.c
+index 800cbbb..f507381 100644
+--- a/src/miscbltin.c
++++ b/src/miscbltin.c
+@@ -71,21 +71,22 @@
+  *  @param len length of line including trailing '\0'
+  */
+ static void
+-readcmd_handle_line(char *line, char **ap, size_t len)
++readcmd_handle_line(char *s, char **ap)
+ {
+ 	struct arglist arglist;
+ 	struct strlist *sl;
+-	char *s, *backup;
++	char *backup;
++	char *line;
+ 
+ 	/* ifsbreakup will fiddle with stack region... */
+-	s = grabstackstr(line + len);
++	line = stackblock();
++	s = grabstackstr(s);
+ 
+ 	/* need a copy, so that delimiters aren't lost
+ 	 * in case there are more fields than variables */
+ 	backup = sstrdup(line);
+ 
+ 	arglist.lastp = &arglist.list;
+-	recordregion(0, len - 1, 0);
+ 	
+ 	ifsbreakup(s, &arglist);
+ 	*arglist.lastp = NULL;
+@@ -137,11 +138,12 @@ int
+ readcmd(int argc, char **argv)
+ {
+ 	char **ap;
+-	int backslash;
+ 	char c;
+ 	int rflag;
+ 	char *prompt;
+ 	char *p;
++	int startloc;
++	int newloc;
+ 	int status;
+ 	int i;
+ 
+@@ -161,9 +163,12 @@ readcmd(int argc, char **argv)
+ 	}
+ 	if (*(ap = argptr) == NULL)
+ 		sh_error("arg count");
++
+ 	status = 0;
+-	backslash = 0;
+ 	STARTSTACKSTR(p);
++
++	goto start;
++
+ 	for (;;) {
+ 		switch (read(0, &c, 1)) {
+ 		case 1:
+@@ -178,26 +183,35 @@ readcmd(int argc, char **argv)
+ 		}
+ 		if (c == '\0')
+ 			continue;
+-		if (backslash || c == CTLESC) {
++		if (newloc >= startloc) {
+ 			if (c == '\n')
+ 				goto resetbs;
+-			STPUTC(CTLESC, p);
+ 			goto put;
+ 		}
+ 		if (!rflag && c == '\\') {
+-			backslash++;
++			newloc = p - (char *)stackblock();
+ 			continue;
+ 		}
+ 		if (c == '\n')
+ 			break;
+ put:
+-		STPUTC(c, p);
++		CHECKSTRSPACE(2, p);
++		if (strchr(qchars, c))
++			USTPUTC(CTLESC, p);
++		USTPUTC(c, p);
++
++		if (newloc >= startloc) {
+ resetbs:
+-		backslash = 0;
++			recordregion(startloc, newloc, 0);
++start:
++			startloc = p - (char *)stackblock();
++			newloc = startloc - 1;
++		}
+ 	}
+ out:
++	recordregion(startloc, p - (char *)stackblock(), 0);
+ 	STACKSTRNUL(p);
+-	readcmd_handle_line(stackblock(), ap, p + 1 - (char *)stackblock());
++	readcmd_handle_line(p + 1, ap);
+ 	return status;
+ }
+ 
+diff --git a/src/mystring.c b/src/mystring.c
+index ce48c82..bbb6b77 100644
+--- a/src/mystring.c
++++ b/src/mystring.c
+@@ -62,6 +62,7 @@ const char spcstr[] = " ";
+ const char snlfmt[] = "%s\n";
+ const char dolatstr[] = { CTLQUOTEMARK, CTLVAR, VSNORMAL, '@', '=',
+ 			  CTLQUOTEMARK, '\0' };
++const char qchars[] = { CTLESC, CTLQUOTEMARK, 0 };
+ const char illnum[] = "Illegal number: %s";
+ const char homestr[] = "HOME";
+ 
+diff --git a/src/mystring.h b/src/mystring.h
+index 2e0540a..3522523 100644
+--- a/src/mystring.h
++++ b/src/mystring.h
+@@ -41,6 +41,7 @@ extern const char snlfmt[];
+ extern const char spcstr[];
+ extern const char dolatstr[];
+ #define DOLATSTRLEN 6
++extern const char qchars[];
+ extern const char illnum[];
+ extern const char homestr[];
+ 
+-- 
+1.7.4.1
+

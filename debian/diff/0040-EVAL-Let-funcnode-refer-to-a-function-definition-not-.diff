@@ -1,0 +1,95 @@
+From dcf97fb841b5e80d2f96e0882c317f7851cf87a4 Mon Sep 17 00:00:00 2001
+From: Harald van Dijk <harald@gigawatt.nl>
+Date: Tue, 15 Mar 2011 15:44:47 +0800
+Subject: [EVAL] Let funcnode refer to a function definition, not its first command
+
+It is not unrelated: I changed the meaning of struct funcnode's field n
+to refer to the function definition, rather than the list of the
+function's commands, because I needed to refer to the function
+definition node from evalfun, which only gets passed a funcnode. But it
+is something that could be applied independently (without being useful
+by itself), so I've attached it as a separate patch for easier review.
+
+Signed-off-by: Harald van Dijk <harald@gigawatt.nl>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit accde25e09f39d3aca64a50c72f23bf84d312757)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog  |    4 ++++
+ src/eval.c |    4 ++--
+ src/exec.c |    4 ++--
+ src/exec.h |    2 +-
+ 4 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 9404282..4884cf2 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2011-03-15  Harald van Dijk <harald@gigawatt.nl>
++
++	* Let funcnode refer to a function definition, not its first command.
++
+ 2011-03-11  Herbert Xu <herbert@gondor.apana.org.au>
+ 
+ 	* Fix backslash handling in read(1).
+diff --git a/src/eval.c b/src/eval.c
+index 6e5c43e..9f4388a 100644
+--- a/src/eval.c
++++ b/src/eval.c
+@@ -296,7 +296,7 @@ calleval:
+ 		}
+ 		goto success;
+ 	case NDEFUN:
+-		defun(n->narg.text, n->narg.next);
++		defun(n);
+ success:
+ 		status = 0;
+ setstatus:
+@@ -954,7 +954,7 @@ evalfun(struct funcnode *func, int argc, char **argv, int flags)
+ 	shellparam.optind = 1;
+ 	shellparam.optoff = -1;
+ 	pushlocalvars();
+-	evaltree(&func->n, flags & EV_TESTED);
++	evaltree(func->n.narg.next, flags & EV_TESTED);
+ 	poplocalvars(0);
+ funcdone:
+ 	INTOFF;
+diff --git a/src/exec.c b/src/exec.c
+index b273420..7ae34c4 100644
+--- a/src/exec.c
++++ b/src/exec.c
+@@ -688,14 +688,14 @@ addcmdentry(char *name, struct cmdentry *entry)
+  */
+ 
+ void
+-defun(char *name, union node *func)
++defun(union node *func)
+ {
+ 	struct cmdentry entry;
+ 
+ 	INTOFF;
+ 	entry.cmdtype = CMDFUNCTION;
+ 	entry.u.func = copyfunc(func);
+-	addcmdentry(name, &entry);
++	addcmdentry(func->narg.text, &entry);
+ 	INTON;
+ }
+ 
+diff --git a/src/exec.h b/src/exec.h
+index daa6f10..9ccb305 100644
+--- a/src/exec.h
++++ b/src/exec.h
+@@ -71,7 +71,7 @@ void changepath(const char *);
+ #ifdef notdef
+ void getcmdentry(char *, struct cmdentry *);
+ #endif
+-void defun(char *, union node *);
++void defun(union node *);
+ void unsetfunc(const char *);
+ int typecmd(int, char **);
+ int commandcmd(int, char **);
+-- 
+1.7.4.1
+

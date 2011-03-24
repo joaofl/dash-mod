@@ -1,0 +1,91 @@
+From 5dad22a88bedf7dde00b199b7266ca1d27363e61 Mon Sep 17 00:00:00 2001
+From: Herbert Xu <herbert@gondor.apana.org.au>
+Date: Tue, 15 Mar 2011 17:41:53 +0800
+Subject: [PARSER] Fix clobbering of checkkwd
+
+On Sun, Nov 07, 2010 at 02:21:21AM +0000, Jonathan Nieder wrote:
+>
+> Just ran into some strange behavior:
+>
+> $ cat test.sh
+> #!/bin/sh
+> echo hello >greeting
+> cat <<EOF &&
+> $(cat greeting)
+> EOF
+> {
+> 	echo $?
+> 	cat greeting
+> } >/dev/null
+>
+>
+> $ sh test.sh
+> hello
+> test.sh: 7: {: not found
+> 127
+> hello
+> test.sh: 10: Syntax error: "}" unexpected
+>
+> bash, mksh, pdksh, and ksh93 all print hello as expected.  The problem
+> is reproducible with all versions of dash in the git repo.
+
+This is caused by the clobbering of checkkwd due to readtoken
+recursion while parsing a here document.
+
+This patch fixes it by saving the original value of checkkwd.
+
+Reported-by: Jonathan Nieder <jrnieder@gmail.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+(cherry picked from commit ec2c84d3c4dba4b74440d72bdd1de416a9acd2a9)
+
+Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+---
+ ChangeLog    |    4 ++++
+ src/parser.c |    5 +++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 2b7c114..8e6e991 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2011-03-15  Herbert Xu <herbert@gondor.apana.org.au>
++
++	* Fix clobbering of checkkwd.
++
+ 2011-03-15  Jonathan Nieder <jrnieder@gmail.com>
+ 
+ 	* Free IFS state after here document expansion.
+diff --git a/src/parser.c b/src/parser.c
+index 0bfd620..528d005 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -687,6 +687,7 @@ STATIC int
+ readtoken(void)
+ {
+ 	int t;
++	int kwd = checkkwd;
+ #ifdef DEBUG
+ 	int alreadyseen = tokpushback;
+ #endif
+@@ -697,7 +698,7 @@ top:
+ 	/*
+ 	 * eat newlines
+ 	 */
+-	if (checkkwd & CHKNL) {
++	if (kwd & CHKNL) {
+ 		while (t == TNL) {
+ 			parseheredoc();
+ 			t = xxreadtoken();
+@@ -711,7 +712,7 @@ top:
+ 	/*
+ 	 * check for keywords
+ 	 */
+-	if (checkkwd & CHKKWD) {
++	if (kwd & CHKKWD) {
+ 		const char *const *pp;
+ 
+ 		if ((pp = findkwd(wordtext))) {
+-- 
+1.7.4.1
+

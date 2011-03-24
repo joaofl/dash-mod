@@ -1,3 +1,19 @@
+dash (0.5.6.1-1~exp2) experimental; urgency=low
+
+  * debian/diff/:
+    - 0036-BUILTIN-Fix-corruption-of-reads...diff: remove; fixed
+      upstream.
+    - 0037-EVAL-Make-.-dev-null-return-.diff: remove; applied
+      upstream.
+    - 0034-SHELL-print-n-upon...diff: rename to 0045-*.
+    - 0035-PARSER-Remove-backslash...diff: rename to 0046-*.
+    - 0034...0044: new from the upstream "master" branch.
+    - 0042-EXPAND-Free-IFS-state...diff: new from upstream:
+      do not let parameter expansion in here documents corrupt word
+      splitting state (thx Aurelien Jarno; closes: #618023).
+
+ -- Jonathan Nieder <jrnieder@gmail.com>  Thu, 24 Mar 2011 17:24:05 -0500
+
 dash (0.5.6.1-1~exp1) experimental; urgency=low
 
   * new upstream release.
