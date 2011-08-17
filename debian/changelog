@@ -6,6 +6,23 @@ dash (0.5.8-2.6) UNRELEASED; urgency=medium
     - debian/diff/9001-Add-privmode-Part-1.diff
     - debian/diff/9002-Add-privmode-Part-2.diff
 
+  [ Jonathan Nieder ]
+  * debian/dash.preinst:
+    - rewrite in C (closes: #604873).
+    - if dash's copy of /bin/sh is not already diverted, divert it
+      on behalf of bash.  This ensures extracting a new version of
+      dash does not overwrite /bin/sh and handling of that symlink
+      is left to postinst.  Likewise for .../man/man1/sh.1.gz.
+    - if /bin/sh is not executable (for example because it is a
+      symlink to a nonexistent file), replace it with a symlink to
+      dash.  Likewise for /usr/share/man/man1/sh.1.gz.
+  * debian/dash.postinst:
+    - remove workaround for dpkg bug #160848 ("dpkg-divert --remove"
+      silently enabling --rename).  The dash package already depends
+      on dpkg 1.15.0 or later, which has the fix.
+    - respect local diversions.
+    - clarify.
+
  -- Andrew Shadura <andrewsh@debian.org>  Fri, 05 Jan 2018 17:44:39 +0100
 
 dash (0.5.8-2.5) unstable; urgency=low
