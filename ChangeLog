@@ -1,23 +1,170 @@
-2010-06-05  Herbert Xu <herbert@gondor.apana.org.au>
+2011-07-08  Herbert Xu <herbert@gondor.apana.org.au>
 
-	* Release 0.5.6.1.
+	* Release 0.5.7.
+
+2011-07-07  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Optimize dash -c "command" to avoid a fork.
+	* Eliminate unnecessary promotion in echocmd.
+
+2011-05-25  Jim Meyering  <meyering@redhat.com>
+
+	* Avoid using undefined handler.
+
+2011-05-23  Jim Meyering  <meyering@redhat.com>
+
+	* Avoid gcc warning: variable 'oldstackp' set but not used.
+	* Avoid clang warning about dead store to "size".
+
+2011-05-22  Jonathan Nieder <jrnieder@gmail.com>
+
+	* Make outc an inline function.
+
+2011-05-02  Kalle Olavi Niemitalo <kon@iki.fi>
+
+	* Remove spurious space in descriptions of PS1, PS2, PS4.
+
+2011-04-10  Jonathan Nieder <jrnieder@gmail.com>
+ 
+	* Remove unused EV_BACKCMD flag.
+
+2011-03-15  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix clobbering of checkkwd.
+
+2011-03-15  Jonathan Nieder <jrnieder@gmail.com>
+
+	* Free IFS state after here document expansion.
+	* Use va_copy when reusing a va_list.
+
+2011-03-15  Harald van Dijk <harald@gigawatt.nl>
+
+	* Let funcnode refer to a function definition, not its first command.
+	* Improve LINENO support.
+
+2011-03-15  Brian Koropoff <bkoropoff@gmail.com>
+
+	* Port to Solaris.
+
+2011-03-11  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix backslash handling in read(1).
+
+2011-03-10  Jonathan Nieder <jrnieder@gmail.com>
+
+	* Dotcmd should exit with zero when doing nothing.
+
+2011-03-10  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix CTLESC clobbering by read(1).
+
+2011-03-10  Brian Koropoff <bkoropoff@gmail.com>
+
+	* Port to AIX.
+
+2011-03-10  Jilles Tjoelker <jilles@stack.nl>
+
+	* Replace GPL noclobberopen code with the FreeBSD version.
+	* Do not split the result of tilde expansion.
+
+2010-11-28  Maciej Żenczykowski <zenczykowski@gmail.com>
+
+	* Mark status as volatile in exitshell.
+
+2010-11-28  Jonathan Nieder <jrnieder@gmail.com>
+
+	* Use EXEXIT in place of EXEXEC.
+	* Stop documenting EXSHELLPROC.
+
+2010-11-28  Gerrit Pape <pape@smarden.org>
+
+	* Use exit status 127 when the script to run does not exist.
+
+2010-11-28  Philipp Weis <pweis@pweis.com>
+
+	* Document optional open parenthesis for case patterns.
+
+2010-11-28  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fixed trap/return regression due to SKIPEVAL removal.
+	* Allow the originator of EXERROR to set the exit status.
+	* Free IFS state in evalbackcmd.
+
+2010-10-18  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix ifsfirst/ifslastp leak in casematch.
+
+2010-10-07  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix EXEXEC status clobbering.
+
+2010-09-08  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix ifsfirst/ifslastp leak.
+	* Fix trailing field bug in read(1).
+
+2010-09-08  maximilian attems <max@stro.at>
+
+	* Debug compile fix.
+
+2010-09-08  Jilles Tjoelker <jilles@stack.nl>
+
+	* Fix varinit ordering that broke fc.
+
+2010-07-06  Gerrit Pape <pape@smarden.org>
+
+	* Check exit for eval NSUBSHELL.
+
+2010-07-06  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix loss of variables when hash collides.
+	* Removed dead code for eval NPIPE.
+
+2010-06-28  Gerrit Pape <pape@smarden.org>
+
+	* Don't clear eflag in evalbackcmd.
 
 2010-05-29  Herbert Xu <herbert@gondor.apana.org.au>
 
 	* Continue after EINTR in read(1) with no pending signals.
 
-2010-05-27  Herbert Xu <herbert@gondor.apana.org.au>
-
-	* Fix wait regression where it does not wait for all jobs.
-
 2010-05-27  Jilles Tjoelker <jilles@stack.nl>
 
+	* Force fork if any trap is set, not just on EXIT.
 	* Fix corruption of redirections with byte 0x81.
+
+2010-05-27  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix poplocalvar on abnormal exit from function.
+	* Do not poplocalvars prematurely on regular utilities.
+	* Move null redirect checks into caller.
+	* Fix popredir on abnormal exit from built-in.
+	* Fix wait regression where it does not wait for all jobs.
+
+2010-05-26  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Replace cmdenviron with localvars.
+
+2010-05-25  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Fix poplocalvar leak.
+	* Move unsetvar functionality into setvareq.
+
+2010-05-24  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Add localvars nesting, local now fails outside functions.
 
 2010-05-03  Gerrit Pape <pape@smarden.org>
 
 	* Fix command -- crash.
 
+2010-04-15  H. Peter Anvin <hpa@zytor.com>
+
+	* Fix for job control off warning.
+
+2010-04-02  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Use faccessat if available.
 2010-04-02  Herbert Xu <herbert@gondor.apana.org.au>
 
 	* Make trap signal name/number errors non-fatal.

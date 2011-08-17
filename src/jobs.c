@@ -36,7 +36,9 @@
 #include <signal.h>
 #include <unistd.h>
 #include <stdlib.h>
+#ifdef HAVE_PATHS_H
 #include <paths.h>
+#endif
 #include <sys/types.h>
 #include <sys/param.h>
 #ifdef BSD
@@ -426,9 +428,11 @@ sprint_status(char *s, int status, int sigonly)
 #endif
 		}
 		col = fmtstr(s, 32, strsignal(st));
+#ifdef WCOREDUMP
 		if (WCOREDUMP(status)) {
 			col += fmtstr(s + col, 16, " (core dumped)");
 		}
+#endif
 	} else if (!sigonly) {
 		if (st)
 			col = fmtstr(s, 16, "Done(%d)", st);
@@ -1189,8 +1193,7 @@ commandtext(union node *n)
 	STARTSTACKSTR(cmdnextc);
 	cmdtxt(n);
 	name = stackblock();
-	TRACE(("commandtext: name %p, end %p\n\t\"%s\"\n",
-		name, cmdnextc, ps->cmd));
+	TRACE(("commandtext: name %p, end %p\n", name, cmdnextc));
 	return savestr(name);
 }
 
@@ -1285,7 +1288,7 @@ dotail:
 		p = "; done";
 		goto dodo;
 	case NDEFUN:
-		cmdputs(n->narg.text);
+		cmdputs(n->ndefun.text);
 		p = "() { ... }";
 		goto dotail2;
 	case NCMD:

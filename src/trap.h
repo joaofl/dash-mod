@@ -36,7 +36,7 @@
 
 #include <signal.h>
 
-extern char *trap[];
+extern int trapcnt;
 extern char sigmode[];
 extern volatile sig_atomic_t pendingsigs;
 extern int gotsigchld;
@@ -46,7 +46,12 @@ void clear_traps(void);
 void setsignal(int);
 void ignoresig(int);
 void onsig(int);
-int dotrap(void);
+void dotrap(void);
 void setinteractive(int);
 void exitshell(void) __attribute__((__noreturn__));
 int decode_signal(const char *, int);
+
+static inline int have_traps(void)
+{
+	return trapcnt;
+}

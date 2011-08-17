@@ -42,7 +42,7 @@
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
+#include <inttypes.h>
 #include <limits.h>
 #include <string.h>
 #include <fnmatch.h>
@@ -117,7 +117,6 @@ STATIC char *evalvar(char *, int);
 STATIC size_t strtodest(const char *, const char *, int);
 STATIC void memtodest(const char *, size_t, const char *, int);
 STATIC ssize_t varvalue(char *, int, int);
-STATIC void ifsfree(void);
 STATIC void expandmeta(struct strlist *, int);
 #ifdef HAVE_GLOB
 STATIC void addglob(const glob_t *);
@@ -191,13 +190,12 @@ expandarg(union node *arg, struct arglist *arglist, int flag)
 
 	argbackq = arg->narg.backquote;
 	STARTSTACKSTR(expdest);
-	ifsfirst.next = NULL;
-	ifslastp = NULL;
 	argstr(arg->narg.text, flag);
 	p = _STPUTC('\0', expdest);
 	expdest = p - 1;
 	if (arglist == NULL) {
-		return;			/* here document expanded */
+		/* here document expanded */
+		goto out;
 	}
 	p = grabstackstr(p);
 	exparg.lastp = &exparg.list;
@@ -215,13 +213,14 @@ expandarg(union node *arg, struct arglist *arglist, int flag)
 		*exparg.lastp = sp;
 		exparg.lastp = &sp->next;
 	}
-	if (ifsfirst.next)
-		ifsfree();
 	*exparg.lastp = NULL;
 	if (exparg.list) {
 		*arglist->lastp = exparg.list;
 		arglist->lastp = exparg.lastp;
 	}
+
+out:
+	ifsfree();
 }
 
 
@@ -368,7 +367,6 @@ exptilde(char *startp, char *p, int flag)
 	char *name;
 	const char *home;
 	int quotes = flag & QUOTES_ESC;
-	int startloc;
 
 	name = p + 1;
 
@@ -397,9 +395,7 @@ done:
 	if (!home || !*home)
 		goto lose;
 	*p = c;
-	startloc = expdest - (char *)stackblock();
 	strtodest(home, SQSYNTAX, quotes);
-	recordregion(startloc, expdest - (char *)stackblock(), 0);
 	return (p);
 lose:
 	*p = c;
@@ -1108,22 +1104,25 @@ add:
 	arglist->lastp = &sp->next;
 }
 
-STATIC void
-ifsfree(void)
+void ifsfree(void)
 {
-	struct ifsregion *p;
+	struct ifsregion *p = ifsfirst.next;
+
+	if (!p)
+		goto out;
 
 	INTOFF;
-	p = ifsfirst.next;
 	do {
 		struct ifsregion *ifsp;
 		ifsp = p->next;
 		ckfree(p);
 		p = ifsp;
 	} while (p);
-	ifslastp = NULL;
 	ifsfirst.next = NULL;
 	INTON;
+
+out:
+	ifslastp = NULL;
 }
 
 
@@ -1601,7 +1600,6 @@ char *
 _rmescapes(char *str, int flag)
 {
 	char *p, *q, *r;
-	static const char qchars[] = { CTLESC, CTLQUOTEMARK, 0 };
 	unsigned inquotes;
 	int notescaped;
 	int globbing;
@@ -1678,9 +1676,9 @@ casematch(union node *pattern, char *val)
 	setstackmark(&smark);
 	argbackq = pattern->narg.backquote;
 	STARTSTACKSTR(expdest);
-	ifslastp = NULL;
 	argstr(pattern->narg.text, EXP_TILDE | EXP_CASE);
 	STACKSTRNUL(expdest);
+	ifsfree();
 	result = patmatch(stackblock(), val);
 	popstackmark(&smark);
 	return result;
@@ -1696,7 +1694,7 @@ cvtnum(intmax_t num)
 	int len = max_int_length(sizeof(num));
 
 	expdest = makestrspace(len, expdest);
-	len = fmtstr(expdest, len, "%jd", num);
+	len = fmtstr(expdest, len, "%" PRIdMAX, num);
 	STADJUST(len, expdest);
 	return len;
 }
@@ -1718,3 +1716,13 @@ varunset(const char *end, const char *var, const char *umsg, int varflags)
 	}
 	sh_error("%.*s: %s%s", end - var - 1, var, msg, tail);
 }
+
+#ifdef mkinit
+
+INCLUDE "expand.h"
+
+RESET {
+	ifsfree();
+}
+
+#endif

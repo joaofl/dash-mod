@@ -34,7 +34,7 @@
  *	@(#)expand.h	8.2 (Berkeley) 5/4/95
  */
 
-#include <stdint.h>
+#include <inttypes.h>
 
 struct strlist {
 	struct strlist *next;
@@ -70,6 +70,7 @@ int casematch(union node *, char *);
 void recordregion(int, int, int);
 void removerecordregions(int); 
 void ifsbreakup(char *, struct arglist *);
+void ifsfree(void);
 
 /* From arith.y */
 intmax_t arith(const char *);

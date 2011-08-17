@@ -37,7 +37,6 @@
 extern char *commandname;	/* currently executing command */
 extern int exitstatus;		/* exit status of last command */
 extern int back_exitstatus;	/* exit status of backquoted command */
-extern struct strlist *cmdenviron;  /* environment for builtin command */
 
 
 struct backcmd {		/* result of evalbackcmd */
@@ -46,6 +45,10 @@ struct backcmd {		/* result of evalbackcmd */
 	int nleft;		/* number of chars in buffer */
 	struct job *jp;		/* job structure for command */
 };
+
+/* flags in argument to evaltree */
+#define EV_EXIT 01		/* exit after evaluating tree */
+#define EV_TESTED 02		/* exit status is checked; ignore -e flag */
 
 int evalstring(char *, int);
 union node;	/* BLETCH for ansi C */

@@ -69,7 +69,9 @@
 
 
 /* trap handler commands */
-char *trap[NSIG];
+static char *trap[NSIG];
+/* number of non-null traps */
+int trapcnt;
 /* current value of signal */
 char sigmode[NSIG - 1];
 /* indicates specified signal received */
@@ -127,11 +129,17 @@ trapcmd(int argc, char **argv)
 		if (action) {
 			if (action[0] == '-' && action[1] == '\0')
 				action = NULL;
-			else
+			else {
+				if (*action)
+					trapcnt++;
 				action = savestr(action);
+			}
 		}
-		if (trap[signo])
+		if (trap[signo]) {
+			if (*trap[signo])
+				trapcnt--;
 			ckfree(trap[signo]);
+		}
 		trap[signo] = action;
 		if (signo != 0)
 			setsignal(signo);
@@ -152,16 +160,17 @@ clear_traps(void)
 {
 	char **tp;
 
+	INTOFF;
 	for (tp = trap ; tp < &trap[NSIG] ; tp++) {
 		if (*tp && **tp) {	/* trap not NULL or SIG_IGN */
-			INTOFF;
 			ckfree(*tp);
 			*tp = NULL;
 			if (tp != &trap[0])
 				setsignal(tp - trap);
-			INTON;
 		}
 	}
+	trapcnt = 0;
+	INTON;
 }
 
 
@@ -300,8 +309,7 @@ onsig(int signo)
  * handlers while we are executing a trap handler.
  */
 
-int
-dotrap(void)
+void dotrap(void)
 {
 	char *p;
 	char *q;
@@ -323,10 +331,8 @@ dotrap(void)
 		evalstring(p, 0);
 		exitstatus = savestatus;
 		if (evalskip)
-			return evalskip;
+			break;
 	}
-
-	return 0;
 }
 
 
@@ -360,7 +366,7 @@ exitshell(void)
 {
 	struct jmploc loc;
 	char *p;
-	int status;
+	volatile int status;
 
 #ifdef HETIO
 	hetio_reset_term();

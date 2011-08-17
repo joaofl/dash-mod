@@ -44,7 +44,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <stdint.h>
+#include <inttypes.h>
 
 #include "shell.h"
 #include "options.h"
@@ -71,29 +71,40 @@
  *  @param len length of line including trailing '\0'
  */
 static void
-readcmd_handle_line(char *line, char **ap, size_t len)
+readcmd_handle_line(char *s, char **ap)
 {
 	struct arglist arglist;
 	struct strlist *sl;
-	char *s, *backup;
+	char *backup;
+	char *line;
 
 	/* ifsbreakup will fiddle with stack region... */
-	s = grabstackstr(line + len);
+	line = stackblock();
+	s = grabstackstr(s);
 
 	/* need a copy, so that delimiters aren't lost
 	 * in case there are more fields than variables */
 	backup = sstrdup(line);
 
 	arglist.lastp = &arglist.list;
-	recordregion(0, len - 1, 0);
 	
 	ifsbreakup(s, &arglist);
 	*arglist.lastp = NULL;
-	removerecordregions(0);
+	ifsfree();
 
-	for (sl = arglist.list; sl; sl = sl->next) {
+	sl = arglist.list;
+
+	do {
+		if (!sl) {
+			/* nullify remaining arguments */
+			do {
+				setvar(*ap, nullstr, 0);
+			} while (*++ap);
+
+			return;
+		}
 		/* remaining fields present, but no variables left. */
-		if (!ap[1]) {
+		if (!ap[1] && sl->next) {
 			size_t offset;
 			char *remainder;
 
@@ -110,12 +121,7 @@ readcmd_handle_line(char *line, char **ap, size_t len)
 		/* set variable to field */
 		rmescapes(sl->text);
 		setvar(*ap, sl->text, 0);
-		ap++;
-	}
-
-	/* nullify remaining arguments */
-	do {
-		setvar(*ap, nullstr, 0);
+		sl = sl->next;
 	} while (*++ap);
 }
 
@@ -131,11 +137,12 @@ int
 readcmd(int argc, char **argv)
 {
 	char **ap;
-	int backslash;
 	char c;
 	int rflag;
 	char *prompt;
 	char *p;
+	int startloc;
+	int newloc;
 	int status;
 	int i;
 
@@ -156,8 +163,8 @@ readcmd(int argc, char **argv)
 	if (*(ap = argptr) == NULL)
 		sh_error("arg count");
 	status = 0;
-	backslash = 0;
 	STARTSTACKSTR(p);
+	goto start;
 	for (;;) {
 		switch (read(0, &c, 1)) {
 		case 1:
@@ -172,26 +179,32 @@ readcmd(int argc, char **argv)
 		}
 		if (c == '\0')
 			continue;
-		if (backslash) {
+		if (newloc >= startloc) {
 			if (c == '\n')
 				goto resetbs;
-			STPUTC(CTLESC, p);
 			goto put;
 		}
 		if (!rflag && c == '\\') {
-			backslash++;
+			newloc = p - (char *)stackblock();
 			continue;
 		}
 		if (c == '\n')
 			break;
 put:
-		STPUTC(c, p);
+		CHECKSTRSPACE(2, p);
+		if (strchr(qchars, c))
+			USTPUTC(CTLESC, p);
+		USTPUTC(c, p);
+
+		if (newloc >= startloc) {
 resetbs:
-		backslash = 0;
+			recordregion(startloc, newloc, 0);
+start:
+			startloc = p - (char *)stackblock();
+			newloc = startloc - 1;
 	}
-out:
 	STACKSTRNUL(p);
-	readcmd_handle_line(stackblock(), ap, p + 1 - (char *)stackblock());
+	readcmd_handle_line(p + 1, ap);
 	return status;
 }
 
@@ -390,7 +403,7 @@ static void printlim(enum limtype how, const struct rlimit *limit,
 		out1fmt("unlimited\n");
 	else {
 		val /= l->factor;
-		out1fmt("%jd\n", (intmax_t) val);
+		out1fmt("%" PRIdMAX "\n", (intmax_t) val);
 	}
 }
 

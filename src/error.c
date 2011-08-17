@@ -62,6 +62,7 @@ struct jmploc *handler;
 int exception;
 int suppressint;
 volatile sig_atomic_t intpending;
+int errlinno;
 
 
 static void exverror(int, const char *, va_list)
@@ -116,13 +117,12 @@ exvwarning2(const char *msg, va_list ap)
 	const char *fmt;
 
 	errs = out2;
-	name = arg0 ?: "sh";
-	fmt = "%s: ";
-	if (commandname) {
-		name = commandname;
+	name = arg0 ? arg0 : "sh";
+	if (!commandname)
 		fmt = "%s: %d: ";
-	}
-	outfmt(errs, fmt, name, startlinno);
+	else
+		fmt = "%s: %d: %s: ";
+	outfmt(errs, fmt, name, errlinno, commandname);
 	doformat(errs, msg, ap);
 #if FLUSHERR
 	outc('\n', errs);
@@ -143,8 +143,11 @@ exverror(int cond, const char *msg, va_list ap)
 {
 #ifdef DEBUG
 	if (msg) {
+		va_list aq;
 		TRACE(("exverror(%d, \"", cond));
-		TRACEV((msg, ap));
+		va_copy(aq, ap);
+		TRACEV((msg, aq));
+		va_end(aq);
 		TRACE(("\") pid=%d\n", getpid()));
 	} else
 		TRACE(("exverror(%d, NULL) pid=%d\n", cond, getpid()));
@@ -162,6 +165,8 @@ void
 sh_error(const char *msg, ...)
 {
 	va_list ap;
+
+	exitstatus = 2;
 
 	va_start(ap, msg);
 	exverror(EXERROR, msg, ap);

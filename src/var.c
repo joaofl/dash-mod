@@ -33,8 +33,11 @@
  */
 
 #include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
+#ifdef HAVE_PATHS_H
 #include <paths.h>
+#endif
 
 /*
  * Shell variables.
@@ -44,7 +47,6 @@
 #include "output.h"
 #include "expand.h"
 #include "nodes.h"	/* for other headers */
-#include "eval.h"	/* defines cmdenviron */
 #include "exec.h"
 #include "syntax.h"
 #include "options.h"
@@ -64,7 +66,12 @@
 #define VTABSIZE 39
 
 
-struct localvar *localvars;
+struct localvar_list {
+	struct localvar_list *next;
+	struct localvar *lv;
+};
+
+MKINIT struct localvar_list *localvar_stack;
 
 const char defpathvar[] =
 	"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
@@ -74,6 +81,10 @@ const char defifsvar[] = "IFS= \t\n";
 const char defifs[] = " \t\n";
 #endif
 
+int lineno;
+char linenovar[sizeof("LINENO=")+sizeof(int)*CHAR_BIT/3+1] = "LINENO=";
+
+/* Some macros in var.h depend on the order, add new variables to the end. */
 struct var varinit[] = {
 #if ATTY
 	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"ATTY\0",	0 },
@@ -90,7 +101,7 @@ struct var varinit[] = {
 	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS2=> ",	0 },
 	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS4=+ ",	0 },
 	{ 0,	VSTRFIXED|VTEXTFIXED,		"OPTIND=1",	getoptsreset },
-	{ 0,	VSTRFIXED|VTEXTFIXED,		"LINENO=1",	0 },
+	{ 0,	VSTRFIXED|VTEXTFIXED,		linenovar,	0 },
 #ifndef SMALL
 	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"TERM\0",	0 },
 	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"HISTSIZE\0",	sethistsize },
@@ -99,7 +110,6 @@ struct var varinit[] = {
 
 STATIC struct var *vartab[VTABSIZE];
 
-STATIC void mklocal(char *);
 STATIC struct var **hashvar(const char *);
 STATIC int vpcmp(const void *, const void *);
 STATIC struct var **findvar(struct var **, const char *);
@@ -139,6 +149,10 @@ INIT {
 			p = 0;
 	setpwd(p, 0);
 }
+
+RESET {
+	unwindlocalvars(0);
+}
 #endif
 
 
@@ -173,13 +187,13 @@ initvar(void)
  * flags of the variable.  If val is NULL, the variable is unset.
  */
 
-void
-setvar(const char *name, const char *val, int flags)
+struct var *setvar(const char *name, const char *val, int flags)
 {
 	char *p, *q;
 	size_t namelen;
 	char *nameeq;
 	size_t vallen;
+	struct var *vp;
 
 	q = endofname(name);
 	p = strchrnul(q, '=');
@@ -199,8 +213,10 @@ setvar(const char *name, const char *val, int flags)
 		p = mempcpy(p, val, vallen);
 	}
 	*p = '\0';
-	setvareq(nameeq, flags | VNOSAVE);
+	vp = setvareq(nameeq, flags | VNOSAVE);
 	INTON;
+
+	return vp;
 }
 
 /*
@@ -213,7 +229,7 @@ intmax_t setvarint(const char *name, intmax_t val, int flags)
 	int len = max_int_length(sizeof(val));
 	char buf[len];
 
-	fmtstr(buf, len, "%jd", val);
+	fmtstr(buf, len, "%" PRIdMAX, val);
 	setvar(name, buf, flags);
 	return val;
 }
@@ -228,14 +244,14 @@ intmax_t setvarint(const char *name, intmax_t val, int flags)
  * Called with interrupts off.
  */
 
-void
-setvareq(char *s, int flags)
+struct var *setvareq(char *s, int flags)
 {
 	struct var *vp, **vpp;
 
 	vpp = hashvar(s);
 	flags |= (VEXPORT & (((unsigned) (1 - aflag)) - 1));
-	vp = *findvar(vpp, s);
+	vpp = findvar(vpp, s);
+	vp = *vpp;
 	if (vp) {
 		if (vp->flags & VREADONLY) {
 			const char *n;
@@ -248,7 +264,7 @@ setvareq(char *s, int flags)
 		}
 
 		if (flags & VNOSET)
-			return;
+			goto out;
 
 		if (vp->func && (flags & VNOFUNC) == 0)
 			(*vp->func)(strchrnul(s, '=') + 1);
@@ -256,10 +272,22 @@ setvareq(char *s, int flags)
 		if ((vp->flags & (VTEXTFIXED|VSTACK)) == 0)
 			ckfree(vp->text);
 
+		if (((flags & (VEXPORT|VREADONLY|VSTRFIXED|VUNSET)) |
+		     (vp->flags & VSTRFIXED)) == VUNSET) {
+			*vpp = vp->next;
+			ckfree(vp);
+out_free:
+			if ((flags & (VTEXTFIXED|VSTACK|VNOSAVE)) == VNOSAVE)
+				ckfree(s);
+			goto out;
+		}
+
 		flags |= vp->flags & ~(VTEXTFIXED|VSTACK|VNOSAVE|VUNSET);
 	} else {
 		if (flags & VNOSET)
-			return;
+			goto out;
+		if ((flags & (VEXPORT|VREADONLY|VSTRFIXED|VUNSET)) == VUNSET)
+			goto out_free;
 		/* not found */
 		vp = ckmalloc(sizeof (*vp));
 		vp->next = *vpp;
@@ -270,6 +298,9 @@ setvareq(char *s, int flags)
 		s = savestr(s);
 	vp->text = s;
 	vp->flags = flags;
+
+out:
+	return vp;
 }
 
 
@@ -304,6 +335,9 @@ lookupvar(const char *name)
 	struct var *v;
 
 	if ((v = *findvar(hashvar(name), name)) && !(v->flags & VUNSET)) {
+		if (v == &vlineno && v->text == linenovar) {
+			fmtstr(linenovar+7, sizeof(linenovar)-7, "%d", lineno);
+		}
 		return strchrnul(v->text, '=') + 1;
 	}
 	return NULL;
@@ -312,24 +346,6 @@ lookupvar(const char *name)
 intmax_t lookupvarint(const char *name)
 {
 	return atomax(lookupvar(name) ?: nullstr, 0);
-}
-
-
-
-/*
- * Search the environment of a builtin command.
- */
-
-char *
-bltinlookup(const char *name)
-{
-	struct strlist *sp;
-
-	for (sp = cmdenviron ; sp ; sp = sp->next) {
-		if (varequal(sp->text, name))
-			return strchrnul(sp->text, '=') + 1;
-	}
-	return lookupvar(name);
 }
 
 
@@ -446,6 +462,9 @@ localcmd(int argc, char **argv)
 {
 	char *name;
 
+	if (!localvar_stack)
+		sh_error("not in a function");
+
 	argv = argptr;
 	while ((name = *argv++) != NULL) {
 		mklocal(name);
@@ -461,8 +480,7 @@ localcmd(int argc, char **argv)
  * "-" as a special case.
  */
 
-STATIC void
-mklocal(char *name)
+void mklocal(char *name)
 {
 	struct localvar *lvp;
 	struct var **vpp;
@@ -483,10 +501,9 @@ mklocal(char *name)
 		eq = strchr(name, '=');
 		if (vp == NULL) {
 			if (eq)
-				setvareq(name, VSTRFIXED);
+				vp = setvareq(name, VSTRFIXED);
 			else
-				setvar(name, NULL, VSTRFIXED);
-			vp = *vpp;	/* the new variable */
+				vp = setvar(name, NULL, VSTRFIXED);
 			lvp->flags = VUNSET;
 		} else {
 			lvp->text = vp->text;
@@ -497,8 +514,8 @@ mklocal(char *name)
 		}
 	}
 	lvp->vp = vp;
-	lvp->next = localvars;
-	localvars = lvp;
+	lvp->next = localvar_stack->lv;
+	localvar_stack->lv = lvp;
 	INTON;
 }
 
@@ -509,20 +526,45 @@ mklocal(char *name)
  */
 
 void
-poplocalvars(void)
+poplocalvars(int keep)
 {
-	struct localvar *lvp;
+	struct localvar_list *ll;
+	struct localvar *lvp, *next;
 	struct var *vp;
 
-	while ((lvp = localvars) != NULL) {
-		localvars = lvp->next;
+	INTOFF;
+	ll = localvar_stack;
+	localvar_stack = ll->next;
+
+	next = ll->lv;
+	ckfree(ll);
+
+	while ((lvp = next) != NULL) {
+		next = lvp->next;
 		vp = lvp->vp;
 		TRACE(("poplocalvar %s", vp ? vp->text : "-"));
-		if (vp == NULL) {	/* $- saved */
+		if (keep) {
+			int bits = VSTRFIXED;
+
+			if (lvp->flags != VUNSET) {
+				if (vp->text == lvp->text)
+					bits |= VTEXTFIXED;
+				else if (!(lvp->flags & (VTEXTFIXED|VSTACK)))
+					ckfree(lvp->text);
+			}
+
+			vp->flags &= ~bits;
+			vp->flags |= (lvp->flags & bits);
+
+			if ((vp->flags &
+			     (VEXPORT|VREADONLY|VSTRFIXED|VUNSET)) == VUNSET)
+				unsetvar(vp->text);
+		} else if (vp == NULL) {	/* $- saved */
 			memcpy(optlist, lvp->text, sizeof(optlist));
 			ckfree(lvp->text);
 			optschanged();
-		} else if ((lvp->flags & (VUNSET|VSTRFIXED)) == VUNSET) {
+		} else if (lvp->flags == VUNSET) {
+			vp->flags &= ~(VSTRFIXED|VREADONLY);
 			unsetvar(vp->text);
 		} else {
 			if (vp->func)
@@ -534,6 +576,32 @@ poplocalvars(void)
 		}
 		ckfree(lvp);
 	}
+	INTON;
+}
+
+
+/*
+ * Create a new localvar environment.
+ */
+struct localvar_list *pushlocalvars(void)
+{
+	struct localvar_list *ll;
+
+	INTOFF;
+	ll = ckmalloc(sizeof(*ll));
+	ll->lv = NULL;
+	ll->next = localvar_stack;
+	localvar_stack = ll;
+	INTON;
+
+	return ll->next;
+}
+
+
+void unwindlocalvars(struct localvar_list *stop)
+{
+	while (localvar_stack != stop)
+		poplocalvars(0);
 }
 
 
@@ -549,7 +617,6 @@ unsetcmd(int argc, char **argv)
 	char **ap;
 	int i;
 	int flag = 0;
-	int ret = 0;
 
 	while ((i = nextopt("vf")) != '\0') {
 		flag = i;
@@ -557,15 +624,13 @@ unsetcmd(int argc, char **argv)
 
 	for (ap = argptr; *ap ; ap++) {
 		if (flag != 'f') {
-			i = unsetvar(*ap);
-			ret |= i;
-			if (!(i & 2))
-				continue;
+			unsetvar(*ap);
+			continue;
 		}
 		if (flag != 'v')
 			unsetfunc(*ap);
 	}
-	return ret & 1;
+	return 0;
 }
 
 
@@ -573,41 +638,9 @@ unsetcmd(int argc, char **argv)
  * Unset the specified variable.
  */
 
-int
-unsetvar(const char *s)
+void unsetvar(const char *s)
 {
-	struct var **vpp;
-	struct var *vp;
-	int retval;
-
-	vpp = findvar(hashvar(s), s);
-	vp = *vpp;
-	retval = 2;
-	if (vp) {
-		int flags = vp->flags;
-
-		retval = 1;
-		if (flags & VREADONLY)
-			goto out;
-		if (flags & VUNSET)
-			goto ok;
-		if ((flags & VSTRFIXED) == 0) {
-			INTOFF;
-			if ((flags & (VTEXTFIXED|VSTACK)) == 0)
-				ckfree(vp->text);
-			*vpp = vp->next;
-			ckfree(vp);
-			INTON;
-		} else {
-			setvar(s, 0, 0);
-			vp->flags &= ~VEXPORT;
-		}
-ok:
-		retval = 0;
-	}
-
-out:
-	return retval;
+	setvar(s, 0, 0);
 }
 
 

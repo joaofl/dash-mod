@@ -42,6 +42,7 @@
  * This file implements the input routines used by the parser.
  */
 
+#include "eval.h"
 #include "shell.h"
 #include "redir.h"
 #include "syntax.h"
@@ -53,7 +54,6 @@
 #include "alias.h"
 #include "parser.h"
 #include "main.h"
-#include "var.h"
 #ifndef SMALL
 #include "myhistedit.h"
 #endif
@@ -408,7 +408,8 @@ setinputfile(const char *fname, int flags)
 	if ((fd = open(fname, O_RDONLY)) < 0) {
 		if (flags & INPUT_NOFILE_OK)
 			goto out;
-		sh_error("Can't open %s", fname);
+		exitstatus = 127;
+		exerror(EXERROR, "Can't open %s", fname);
 	}
 	if (fd < 10)
 		fd = savefd(fd, fd);
@@ -528,13 +529,4 @@ closescript(void)
 		close(parsefile->fd);
 		parsefile->fd = 0;
 	}
-}
-
-
-int lineno_inc(void)
-{
-	int lineno = plinno++;
-
-	setvarint("LINENO", lineno, 0);
-	return lineno;
 }

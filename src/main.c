@@ -113,8 +113,6 @@ main(int argc, char **argv)
 		reset();
 
 		e = exception;
-		if (e == EXERROR)
-			exitstatus = 2;
 
 		s = state;
 		if (e == EXEXIT || s == 0 || iflag == 0 || shlvl)
@@ -173,7 +171,7 @@ state2:
 state3:
 	state = 4;
 	if (minusc)
-		evalstring(minusc, 0);
+		evalstring(minusc, sflag ? 0 : EV_EXIT);
 
 	if (sflag || minusc == NULL) {
 state4:	/* XXX ??? - why isn't this before the "if" statement */
@@ -204,6 +202,7 @@ cmdloop(int top)
 	union node *n;
 	struct stackmark smark;
 	int inter;
+	int status = 0;
 	int numeof = 0;
 
 	TRACE(("cmdloop(%d) called\n", top));
@@ -237,6 +236,7 @@ cmdloop(int top)
 			job_warning = (job_warning == 2) ? 1 : 0;
 			numeof = 0;
 			evaltree(n, 0);
+			status = exitstatus;
 		}
 		popstackmark(&smark);
 
@@ -247,7 +247,7 @@ cmdloop(int top)
 		}
 	}
 
-	return 0;
+	return status;
 }
 
 
@@ -327,9 +327,8 @@ dotcmd(int argc, char **argv)
 		fullname = find_dot_file(argv[1]);
 		setinputfile(fullname, INPUT_PUSH_FILE);
 		commandname = fullname;
-		cmdloop(0);
+		status = cmdloop(0);
 		popfile();
-		status = exitstatus;
 	}
 	return status;
 }
