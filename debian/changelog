@@ -1,3 +1,30 @@
+dash (0.5.7-1) unstable; urgency=low
+
+  * new upstream release.
+    * optimize dash -c "script" to notice the last command and
+      exec it without forking (thx Jilles Tjoelker; closes:
+      #436466).  This change is inspired by a similar trick in
+      ksh, bash, and zsh and can be useful in commands passed to
+      system(), popen(), and Makefiles, where "exec" is usually
+      not explicitly used.
+    * remove spurious space in descriptions of PS1, PS2, PS4 (thx
+      Kalle Olavi Niemitalo; closes: #624715).
+    * test builtin: use faccessat if available (closes: #539909,
+      #556521) so ACLs and other corner cases can be handled
+      correctly.
+  * debian/diff/:
+    - remove patches applied upstream (i.e. all except 0045, 0046).
+    - 0045-SHELL-print-n-upon-EOF-...diff: rename to 0001-*.
+    - 0046-PARSER-Remove-backslash-...diff: rename to 0002-*.
+    - 0003-VAR-Disable-LINENO-support.diff: new; remove LINENO
+      support (closes: #582952, reopens: #540685).
+  * debian/po/sk.po: [INTL:sk] Slovak debconf templates (thx
+    Slavko; closes: #611556).
+  * debian/po/nl.po: [INTL:nl] Dutch debconf templates (thx
+    Jeroen Schot; closes: #624172).
+
+ -- Jonathan Nieder <jrnieder@gmail.com>  Wed, 17 Aug 2011 00:30:30 -0500
+
 dash (0.5.6.1-1~exp2) experimental; urgency=low
 
   * debian/diff/:

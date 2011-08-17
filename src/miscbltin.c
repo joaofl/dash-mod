@@ -103,6 +103,7 @@ readcmd_handle_line(char *s, char **ap)
 
 			return;
 		}
+
 		/* remaining fields present, but no variables left. */
 		if (!ap[1] && sl->next) {
 			size_t offset;
@@ -162,9 +163,12 @@ readcmd(int argc, char **argv)
 	}
 	if (*(ap = argptr) == NULL)
 		sh_error("arg count");
+
 	status = 0;
 	STARTSTACKSTR(p);
+
 	goto start;
+
 	for (;;) {
 		switch (read(0, &c, 1)) {
 		case 1:
@@ -202,7 +206,10 @@ resetbs:
 start:
 			startloc = p - (char *)stackblock();
 			newloc = startloc - 1;
+		}
 	}
+out:
+	recordregion(startloc, p - (char *)stackblock(), 0);
 	STACKSTRNUL(p);
 	readcmd_handle_line(p + 1, ap);
 	return status;

@@ -1,4 +1,4 @@
-From 5ee250459f64daba3139b29604ac12873c6fbefc Mon Sep 17 00:00:00 2001
+From 1ed728ca0ea91cac348e1baf070399df5d575115 Mon Sep 17 00:00:00 2001
 From: Jilles Tjoelker <jilles@stack.nl>
 Date: Sun, 21 Nov 2010 14:42:22 +0100
 Subject: [PARSER] Remove backslash before } in double-quotes in variable
@@ -19,10 +19,10 @@ Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
  1 files changed, 3 insertions(+), 0 deletions(-)
 
 diff --git a/src/parser.c b/src/parser.c
-index 528d005..49528a5 100644
+index 6de27629..4fa8c6d4 100644
 --- a/src/parser.c
 +++ b/src/parser.c
-@@ -925,6 +925,9 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
+@@ -926,6 +926,9 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
  						c != '$' && (
  							c != '"' ||
  							eofmark != NULL
@@ -33,5 +33,5 @@ index 528d005..49528a5 100644
  					) {
  						USTPUTC('\\', out);
 -- 
-1.7.4.1
+1.7.6
 
