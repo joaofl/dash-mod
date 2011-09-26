@@ -36,16 +36,7 @@ configure-stamp: patch-stamp
 	  exec ../configure --host='$(DEB_HOST_GNU_TYPE)')
 	touch configure-stamp
 
-PREINST_OBJECTS = debian/dash.preinst.o debian/dash.preinst-lib.o
-
-$(PREINST_OBJECTS): %.o: %.c debian/dash.preinst.h
-	$(CC) -c -o $@ $(CFLAGS) $<
-
-debian/dash.preinst: $(PREINST_OBJECTS)
-	$(CC) -o debian/dash.preinst $(CFLAGS) $(PREINST_OBJECTS)
-	$(STRIP) -R .comment -R .note debian/dash.preinst
-
-build: deb-checkdir build-stamp debian/dash.preinst
+build: deb-checkdir build-stamp
 build-stamp: configure-stamp
 	-$(CC) -v
 	(cd build-tmp && exec $(MAKE) CFLAGS='$(CFLAGS)') || \
@@ -58,7 +49,6 @@ po-templates-stamp: deb-checkdir
 	touch po-templates-stamp
 
 clean: deb-checkdir deb-checkuid
-	rm -f debian/dash.preinst debian/*.o
 	rm -rf build-tmp
 	test ! -e patch-stamp || \
 	  for i in `ls -1r debian/diff/*.diff || :`; do patch -p1 -R <$$i; done
@@ -66,7 +56,7 @@ clean: deb-checkdir deb-checkuid
 	rm -rf '$(DIR)' '$(DIRA)'
 	rm -f debian/files debian/substvars debian/dash.templates changelog
 
-install: install-indep install-arch debian/dash.preinst
+install: install-indep install-arch
 install-indep: deb-checkdir deb-checkuid
 	rm -rf '$(DIRA)'
 	install -d -m0755 '$(DIRA)'/bin
@@ -98,8 +88,7 @@ binary-indep: install-indep ash.deb
 binary-arch: install-arch po-templates dash.deb
 	# dash
 	rm -f debian/substvars
-	test '$(CC)' != 'gcc' || \
-	  dpkg-shlibdeps '$(DIR)'/bin/dash debian/dash.preinst
+	test '$(CC)' != 'gcc' || dpkg-shlibdeps '$(DIR)'/bin/dash
 	dpkg-gencontrol -isp -pdash -P'$(DIR)'
 	dpkg -b '$(DIR)' ..
 

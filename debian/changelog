@@ -1,24 +1,17 @@
-dash (0.5.7-2~exp1) experimental; urgency=low
+dash (0.5.7-2) unstable; urgency=high
 
-  * debian/diff/0003-VAR-Disable-LINENO-support.diff: remove
-    (closes: #540685, reopens: #582952).
-  * debian/dash.preinst:
-    - rewrite in C (closes: #604873).
-    - if dash's copy of /bin/sh is not already diverted, divert it
-      on behalf of bash.  This ensures extracting a new version of
-      dash does not overwrite /bin/sh and handling of that symlink
-      is left to postinst.  Likewise for .../man/man1/sh.1.gz.
-    - if /bin/sh is not executable (for example because it is a
-      symlink to a nonexistent file), replace it with a symlink to
-      dash.  Likewise for /usr/share/man/man1/sh.1.gz.
-  * debian/dash.postinst:
-    - remove workaround for dpkg bug #160848 ("dpkg-divert --remove"
-      silently enabling --rename).  The dash package already depends
-      on dpkg 1.15.0 or later, which has the fix.
-    - respect local diversions.
-    - clarify.
+  * debian/diff/:
+    - 0004-BUILTIN-Fix-test-x-as-root...diff: new; teach "test -x"
+      as root not to return true for nonexecutable files on
+      platforms where faccessat() does return true in this case,
+      such as glibc-bsd in squeeze (thx Christoph Egger, closes:
+      #640334).
+    - 0005-SHELL-Disable-sh-c-...diff: back out the optimization
+      that makes dash -c "script" avoid a fork().  It caused
+      several packages to fail to build from source (thx Stéphane
+      Glondu, closes: #642922).
 
- -- Jonathan Nieder <jrnieder@gmail.com>  Wed, 17 Aug 2011 14:01:02 -0500
+ -- Jonathan Nieder <jrnieder@gmail.com>  Mon, 26 Sep 2011 16:39:38 -0500
 
 dash (0.5.7-1) unstable; urgency=low
 
