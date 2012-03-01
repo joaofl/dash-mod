@@ -1,35 +1,34 @@
-# Slovak translations for dash package
-# Slovenské preklady pre balík dash.
-# Copyright (C) 2011 THE dash'S COPYRIGHT HOLDER
+# Translation of dash debconf templates to Indonesian
 # This file is distributed under the same license as the dash package.
-# Automatically generated, 2011.
-# Slavko <linux@slavino.sk>, 2011.
+# Mahyuddin Susanto <udienz@ubuntu.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dash 0.5.5.1-7.4\n"
+"Project-Id-Version: dash 0.5.7-2\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2009-07-27 12:43+0000\n"
-"PO-Revision-Date: 2011-01-30 18:26+0100\n"
-"Last-Translator: Slavko <linux@slavino.sk>\n"
-"Language-Team: Slovak <nomail>\n"
-"Language: sk\n"
+"PO-Revision-Date: 2012-01-24 11:46+0700\n"
+"Last-Translator: Mahyuddin Susanto <udienz@ubuntu.com>\n"
+"Language-Team: Debian Indonesia Translator <debian-l10n-indonesian@lists."
+"debian.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Poedit-Language: Indonesian\n"
+"X-Poedit-Country: INDONESIA\n"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "Use dash as the default system shell (/bin/sh)?"
-msgstr "Použiť dash ako východzí systémový shell (/bin/sh)?"
+msgstr "Gunakan dash sebagai sistem shell bawaan (/bin/sh)?"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
-msgstr "Systémový shell je východzí príkazový interpret shellových skriptov."
+msgstr "Sistem shell adalah perintah intepreter bawaan untuk skrip shell"
 
 #. Type: boolean
 #. Description
@@ -38,5 +37,5 @@ msgid ""
 "Using dash as the system shell will improve the system's overall "
 "performance. It does not alter the shell presented to interactive users."
 msgstr ""
-"Použitie dash ako systémového shellu celkovo zlepší výkon systému. Toto "
-"nastavenie nijako neovplyvní interaktívny shell jednotlivých používateľov."
+"Menggunakan dash sebagai sistem shell akan meningkatkan performa keseluruhan "
+"sistem. Ini tidak mengubah shell yang disajikan ke pengguna interaktif"

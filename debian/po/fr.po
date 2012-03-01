@@ -23,14 +23,15 @@ msgstr ""
 #: ../dash.templates.in:1001
 msgid "Use dash as the default system shell (/bin/sh)?"
 msgstr ""
-"Utiliser Dash comme interpréteur de ligne de commande par défaut (/bin/sh)?"
+"Utiliser Dash comme interpréteur de ligne de commande par défaut pour le "
+"système (/bin/sh)?"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
 msgstr ""
-"Le shell système est l'intérpréteur de commandes utilisé par le système."
+"Le shell système est l'interpréteur de commandes utilisé par le système."
 
 #. Type: boolean
 #. Description
@@ -40,5 +41,5 @@ msgid ""
 "performance. It does not alter the shell presented to interactive users."
 msgstr ""
 "Utiliser Dash comme interpréteur de ligne de commande du système améliorera "
-"les performances globales. Cela ne change pas l'intérpréteur utilisé "
+"les performances globales. Cela ne change pas l'interpréteur utilisé "
 "interactivement par les utilisateurs."

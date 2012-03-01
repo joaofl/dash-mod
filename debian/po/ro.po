@@ -1,18 +1,19 @@
 # translation of ro.po to Romanian
-# Romanian translations for PACKAGE package
-# Traducerea în limba română pentru pachetul PACKAGE.
-# Copyright (C) 2008 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Romanian translations for dash package
+# Traducerea în limba română pentru pachetul dash.
+# Copyright (C) 2008
+# This file is distributed under the same license as the dash package.
 #
 # Eddy Petrisor <eddy.petrisor@gmail.com>, 2008.
 # Eddy Petrișor <eddy.petrisor@gmail.com>, 2008.
+# Andrei Popescu <andreimpopescu@gmail.com, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2009-07-27 12:43+0000\n"
-"PO-Revision-Date: 2008-06-28 21:24+0300\n"
-"Last-Translator: Eddy Petrișor <eddy.petrisor@gmail.com>\n"
+"PO-Revision-Date: 2012-02-20 11:03+0200\n"
+"Last-Translator: Andrei POPESCU <andreimpopescu@gmail.com>\n"
 "Language-Team: Romanian <debian-l10n-romanian@lists.debian.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -26,13 +27,15 @@ msgstr ""
 #. Description
 #: ../dash.templates.in:1001
 msgid "Use dash as the default system shell (/bin/sh)?"
-msgstr ""
+msgstr "Se folosește dash ca shell implicit pentru sistem (/bin/sh)?"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
 msgstr ""
+"Un shell de sistem este interpretorul de comenzi implicit pentru scripturi "
+"shell."
 
 #. Type: boolean
 #. Description
@@ -41,6 +44,9 @@ msgid ""
 "Using dash as the system shell will improve the system's overall "
 "performance. It does not alter the shell presented to interactive users."
 msgstr ""
+"Folosind dash ca shell pentru sistem va îmbunătăți performanța generală a "
+"sistemului. Această schimbare nu va afecta ce shell este folosit pentru "
+"utilizatorii interactivi."
 
 #~ msgid "Install dash as /bin/sh?"
 #~ msgstr "Se instalează dash ca /bin/sh?"

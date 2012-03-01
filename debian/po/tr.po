@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Mert Dirik <mertdirik@gmail.com>, 2008.
+# Mert Dirik <mertdirik@gmail.com>, 2008, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: $paket $surum\n"
+"Project-Id-Version: dash\n"
 "Report-Msgid-Bugs-To: dash@packages.debian.org\n"
 "POT-Creation-Date: 2009-07-27 12:43+0000\n"
-"PO-Revision-Date: 2008-06-17 01:15+0200\n"
+"PO-Revision-Date: 2012-02-20 22:57+0200\n"
 "Last-Translator: Mert Dirik <mertdirik@gmail.com>\n"
 "Language-Team: Debian L10n Turkish <debian-l10n-turkish@lists.debian.org>\n"
 "Language: \n"
@@ -21,13 +21,15 @@ msgstr ""
 #. Description
 #: ../dash.templates.in:1001
 msgid "Use dash as the default system shell (/bin/sh)?"
-msgstr ""
+msgstr "'dash' öntanımlı sistem kabuğu (/bin/sh) olarak kullanılsın mı?"
 
 #. Type: boolean
 #. Description
 #: ../dash.templates.in:1001
 msgid "The system shell is the default command interpreter for shell scripts."
 msgstr ""
+"Sistem kabuğu, kabuk betiklerinin kullandığı öntanımlı komut "
+"yorumlayıcısıdır."
 
 #. Type: boolean
 #. Description
@@ -36,6 +38,8 @@ msgid ""
 "Using dash as the system shell will improve the system's overall "
 "performance. It does not alter the shell presented to interactive users."
 msgstr ""
+"dash'i sistem kabuğu olarak kullanmak sistemin başarımını artırır. "
+"Etkileşimli kullanıcıların kabukları bu değişiklikten etkilenmez."
 
 #~ msgid "Install dash as /bin/sh?"
 #~ msgstr "dash /bin/sh olarak kurulsun mu?"

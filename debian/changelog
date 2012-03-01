@@ -1,3 +1,19 @@
+dash (0.5.7-3) unstable; urgency=low
+
+  [ Christian Perrier ]
+  * Non-maintainer upload.
+  * Fix pending l10n issues. Debconf translations:
+  * French (Julien Patriarca).  Closes: #638821
+  * Indonesian (Mahyuddin Susanto).  Closes: #657111
+  * Polish (Michał Kułach).  Closes: #658180
+  * Romanian (Andrei POPESCU).  Closes: #660615
+  * Turkish (Mert Dirik).  Closes: #661513
+
+  [ Gerrit Pape ]
+  * debian/control: Standards-Version: 3.9.3.0.
+
+ -- Gerrit Pape <pape@smarden.org>  Thu, 01 Mar 2012 00:09:45 +0000
+
 dash (0.5.7-2) unstable; urgency=high
 
   * debian/diff/:
