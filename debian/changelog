@@ -1,3 +1,10 @@
+dash (0.5.7-3+nmu1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Enable build-hardening flags (closes: #662721).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Wed, 25 Dec 2013 13:46:03 -0500
+
 dash (0.5.7-3) unstable; urgency=low
 
   [ Christian Perrier ]
