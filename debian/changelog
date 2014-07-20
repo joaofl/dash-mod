@@ -1,3 +1,9 @@
+dash (0.5.7-4.1) unreleased; urgency=low
+
+  * Pass SA_RESTART to sigaction.
+
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 20 Jul 2014 22:00:04 +0000
+
 dash (0.5.7-4) unstable; urgency=low
 
   * Thx Michael Gilbert for NMU.
