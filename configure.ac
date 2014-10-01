@@ -1,4 +1,4 @@
-AC_INIT(dash, 0.5.7)
+AC_INIT(dash, 0.5.8)
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_SRCDIR([src/main.c])
 
@@ -85,7 +85,7 @@ AC_CHECK_DECL([PRIdMAX],,
 ])
 
 dnl Checks for library functions.
-AC_CHECK_FUNCS(bsearch faccessat getpwnam getrlimit imaxdiv isalpha killpg \
+AC_CHECK_FUNCS(bsearch faccessat getpwnam getrlimit isalpha killpg \
 	       mempcpy \
 	       sigsetmask stpcpy strchrnul strsignal strtod strtoimax \
 	       strtoumax sysconf)
@@ -130,6 +130,11 @@ if test "$use_libedit" != "yes"; then
 	AC_DEFINE([SMALL], 1, [Define if you build with -DSMALL])
 else
 	export LIBS="$LIBS -ledit"
+fi
+AC_ARG_ENABLE(lineno, AS_HELP_STRING(--disable-lineno, \
+				     [Disable LINENO support]))
+if test "$enable_lineno" != "no"; then
+	AC_DEFINE([WITH_LINENO], 1, [Define if you build with -DWITH_LINENO])
 fi
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT

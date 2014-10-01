@@ -1,3 +1,75 @@
+2014-09-26  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Small optimisation of command -pv change.
+	* Set command -p path to /usr/sbin:/usr/bin:/sbin:/bin.
+	* Change "characters" for printf precision to "bytes".
+	* Release 0.5.8.
+
+2014-09-26  Jonathan Nieder <jrnieder@gmail.com>
+
+	* Clarify "trap '' signals" syntax in manual page.
+
+2014-09-26  Adam Buchbinder <adam.buchbinder@gmail.com>
+
+	* Clarify that 0 and EXIT are both acceptable for exit traps.
+
+2014-09-26  Harald van Dijk <harald@gigawatt.nl>
+
+	* command: allow combining -p with -v.
+	* getjob: Fix off-by-one error for multiple of four job numbers
+
+2013-08-23  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Propagate EXP_QPAT in subevalvar.
+	* Initialise OPTIND after importing environment.
+	* Fixed argument parsing crash in test.
+
+2013-03-12  Peter Rosin <peda@lysator.liu.se>
+
+	* Add newline when tracing in poplocalvars.
+
+2013-01-10  Jérémie Courrèges-Anglas <jca+dash@wxcvbn.org>
+
+	* Markup fixes in manual for mandoc 1.12.1.
+
+2012-12-03  Harald van Dijk <harald@gigawatt.nl>
+
+	* Use PRIdMAX instead of %j in printf.
+
+2012-07-20  Kimo Rosenbaum <kimor79@yahoo.com>
+
+	* Fix typo for wait in manual.
+
+2012-06-09  Christoph Mathys <eraserix@gmail.com>
+
+	* Add support for ulimit -r.
+
+2012-03-11  Jim Meyering  <meyering@redhat.com>
+
+	* Avoid overflow for very long variable name.
+	$ perl -le 'print "v"x(2**31+1) ."=1"' | dash
+
+2012-02-25  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Sanitise environment variable names on entry.
+
+2011-08-17  David S. Miller <davem@davemloft.net>
+
+	* Allow building without LINEO support.
+	* Add top-level autogen.sh.
+
+2011-07-26  Harald van Dijk <harald@gigawatt.nl>
+
+	* Avoid imaxdiv when only one of the results is wanted.
+
+2010-07-09  maximilian attems <max@stro.at>
+
+	* Fix klibc DEBUG compilation.
+
+2011-07-09  Herbert Xu <herbert@gondor.apana.org.au>
+
+	* Merge SKIPFUNC/SKIPFILE and only clear SKIPFUNC when leaving dotcmd.
+
 2011-07-08  Herbert Xu <herbert@gondor.apana.org.au>
 
 	* Release 0.5.7.

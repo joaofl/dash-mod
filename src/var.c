@@ -101,7 +101,9 @@ struct var varinit[] = {
 	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS2=> ",	0 },
 	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS4=+ ",	0 },
 	{ 0,	VSTRFIXED|VTEXTFIXED,		"OPTIND=1",	getoptsreset },
+#ifdef WITH_LINENO
 	{ 0,	VSTRFIXED|VTEXTFIXED,		linenovar,	0 },
+#endif
 #ifndef SMALL
 	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"TERM\0",	0 },
 	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"HISTSIZE\0",	sethistsize },
@@ -134,10 +136,13 @@ INIT {
 
 	initvar();
 	for (envp = environ ; *envp ; envp++) {
-		if (strchr(*envp, '=')) {
+		p = endofname(*envp);
+		if (p != *envp && *p == '=') {
 			setvareq(*envp, VEXPORT|VTEXTFIXED);
 		}
 	}
+
+	setvarint("OPTIND", 1, 0);
 
 	fmtstr(ppid + 5, sizeof(ppid) - 5, "%ld", (long) getppid());
 	setvareq(ppid, VTEXTFIXED);
@@ -335,9 +340,11 @@ lookupvar(const char *name)
 	struct var *v;
 
 	if ((v = *findvar(hashvar(name), name)) && !(v->flags & VUNSET)) {
+#ifdef WITH_LINENO
 		if (v == &vlineno && v->text == linenovar) {
 			fmtstr(linenovar+7, sizeof(linenovar)-7, "%d", lineno);
 		}
+#endif
 		return strchrnul(v->text, '=') + 1;
 	}
 	return NULL;
@@ -542,7 +549,7 @@ poplocalvars(int keep)
 	while ((lvp = next) != NULL) {
 		next = lvp->next;
 		vp = lvp->vp;
-		TRACE(("poplocalvar %s", vp ? vp->text : "-"));
+		TRACE(("poplocalvar %s\n", vp ? vp->text : "-"));
 		if (keep) {
 			int bits = VSTRFIXED;
 
