@@ -43,7 +43,7 @@ configure-stamp: patch-stamp
 	touch configure
 	(cd build-tmp && CC='$(CC)' \
 	  CFLAGS='$(CFLAGS)' CPPFLAGS='$(CPPFLAGS)' LDFLAGS='$(LDFLAGS)' \
-	  exec ../configure --host='$(DEB_HOST_GNU_TYPE)')
+	  exec ../configure --enable-fnmatch --host='$(DEB_HOST_GNU_TYPE)')
 	touch configure-stamp
 
 build: deb-checkdir build-stamp

@@ -1,7 +1,8 @@
-From 1ed728ca0ea91cac348e1baf070399df5d575115 Mon Sep 17 00:00:00 2001
+From e2df6dcefedb2cc6b1d0559154a871587ed2748d Mon Sep 17 00:00:00 2001
 From: Jilles Tjoelker <jilles@stack.nl>
 Date: Sun, 21 Nov 2010 14:42:22 +0100
-Subject: [PARSER] Remove backslash before } in double-quotes in variable
+Subject: [PATCH 2/6] [PARSER] Remove backslash before } in double-quotes in
+ variable
 
 The backslash prevents the closing brace from terminating the
 substitution, therefore it should be removed.
@@ -15,11 +16,11 @@ should print } three times, without backslashes.
 
 Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
 ---
- src/parser.c |    3 +++
+ src/parser.c | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/src/parser.c b/src/parser.c
-index 6de2762..4fa8c6d 100644
+index 572cbcd..33bb77d 100644
 --- a/src/parser.c
 +++ b/src/parser.c
 @@ -926,6 +926,9 @@ readtoken1(int firstc, char const *syntax, char *eofmark, int striptabs)
@@ -33,5 +34,5 @@ index 6de2762..4fa8c6d 100644
  					) {
  						USTPUTC('\\', out);
 -- 
-1.7.10.4
+2.1.0
 

@@ -259,7 +259,7 @@ setsignal(int signo)
 		act.sa_handler = SIG_DFL;
 	}
 	*t = action;
-	act.sa_flags = SA_RESTART;
+	act.sa_flags = 0;
 	sigfillset(&act.sa_mask);
 	sigaction(signo, &act, 0);
 }

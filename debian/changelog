@@ -1,8 +1,14 @@
-dash (0.5.7-4.1) unreleased; urgency=low
+dash (0.5.8-1) experimental; urgency=medium
 
-  * Pass SA_RESTART to sigaction.
+  * new upstream release (closes: #598238).
+    * 0003-VAR-Disable-LINENO-support.diff: remove; upstream now has
+      configure --disable-lineno option.
+  * debian/rules: pass --enable-fnmatch option to configure
+    (closes: #763407).
+  * debian/po/sr.po: new; [INTL:sr] Serbian cyrillic translation of
+    debconf template (thx Zlatan Todoric, closes: #635069).
 
- -- Samuel Thibault <sthibault@debian.org>  Sun, 20 Jul 2014 22:00:04 +0000
+ -- Gerrit Pape <pape@smarden.org>  Wed, 01 Oct 2014 08:53:14 +0000
 
 dash (0.5.7-4) unstable; urgency=low
 
