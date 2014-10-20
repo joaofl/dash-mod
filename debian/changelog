@@ -1,3 +1,10 @@
+dash (0.5.8-2) experimental; urgency=medium
+
+  * debian/rules: pass --disable-lineno option to configure (thx Sven
+    Joachim, closes: #766048).
+
+ -- Gerrit Pape <pape@smarden.org>  Mon, 20 Oct 2014 17:46:03 +0000
+
 dash (0.5.8-1) experimental; urgency=medium
 
   * new upstream release (closes: #598238).
