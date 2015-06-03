@@ -1,3 +1,13 @@
+dash (0.5.8-2.6) UNRELEASED; urgency=medium
+
+  [ Marc Deslauriers ]
+  * Drop privileges when euid != uid as a security measure
+    (Closes: #734869, LP: #1215660)
+    - debian/diff/9001-Add-privmode-Part-1.diff
+    - debian/diff/9002-Add-privmode-Part-2.diff
+
+ -- Andrew Shadura <andrewsh@debian.org>  Fri, 05 Jan 2018 17:44:39 +0100
+
 dash (0.5.8-2.5) unstable; urgency=low
 
   * Non-maintainer upload.
@@ -83,6 +93,7 @@ dash (0.5.7-3+nmu1) unstable; urgency=medium
 
  -- Michael Gilbert <mgilbert@debian.org>  Wed, 25 Dec 2013 13:46:03 -0500
 
+
 dash (0.5.7-3) unstable; urgency=low
 
   [ Christian Perrier ]
@@ -98,6 +109,7 @@ dash (0.5.7-3) unstable; urgency=low
   * debian/control: Standards-Version: 3.9.3.0.
 
  -- Gerrit Pape <pape@smarden.org>  Thu, 01 Mar 2012 00:09:45 +0000
+
 
 dash (0.5.7-2) unstable; urgency=high
 
@@ -186,6 +198,7 @@ dash (0.5.6.1-1~exp1) experimental; urgency=low
 
  -- Jonathan Nieder <jrnieder@gmail.com>  Sun, 06 Mar 2011 21:11:25 -0600
 
+
 dash (0.5.5.1-7.4) unstable; urgency=low
 
   * Non-maintainer upload.
@@ -206,6 +219,7 @@ dash (0.5.5.1-7.3) unstable; urgency=medium
     Jonathan Nieder.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 17 Nov 2010 21:41:30 +0000
+
 
 dash (0.5.5.1-7.2) unstable; urgency=low
 
@@ -229,6 +243,7 @@ dash (0.5.5.1-7.1) unstable; urgency=low
     - Finnish (Esko Arajärvi).  Closes: #600518
 
  -- Christian Perrier <bubulle@debian.org>  Mon, 18 Oct 2010 09:39:14 +0200
+
 
 dash (0.5.5.1-7) unstable; urgency=low
 
@@ -326,6 +341,7 @@ dash (0.5.5.1-4) unstable; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Mon, 10 May 2010 23:12:45 +0000
 
+
 dash (0.5.5.1-3) unstable; urgency=low
 
   * Thanks Luk Claes for NUMs (closes: #538682).
@@ -387,6 +403,7 @@ dash (0.5.5.1-2.1) unstable; urgency=high
 
  -- Luk Claes <luk@debian.org>  Wed, 22 Jul 2009 18:50:45 +0000
 
+
 dash (0.5.5.1-2) unstable; urgency=low
 
   * debian/diff/0001--SHELL-execute-EXIT-trap-if-the-shell-...diff;
@@ -413,6 +430,7 @@ dash (0.5.5.1-1) unstable; urgency=low
     (closes: #476422).
 
  -- Gerrit Pape <pape@smarden.org>  Wed, 11 Feb 2009 01:55:05 +0000
+
 
 dash (0.5.4-12) unstable; urgency=low
 
@@ -482,6 +500,7 @@ dash (0.5.4-10) unstable; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Sun, 06 Jul 2008 15:59:18 +0000
 
+
 dash (0.5.4-9) unstable; urgency=low
 
   * debian/diff/0046-Fix-bitwise-AND-and-OR-operator-parsing.diff: new:
@@ -496,6 +515,7 @@ dash (0.5.4-9) unstable; urgency=low
     Helge Kreutzmann, closes: #469755).
 
  -- Gerrit Pape <pape@smarden.org>  Thu, 17 Apr 2008 20:34:15 +0000
+
 
 dash (0.5.4-8) unstable; urgency=low
 
@@ -518,6 +538,7 @@ dash (0.5.4-7) unstable; urgency=low
     (thx Neil Williams, closes: #450512).
 
  -- Gerrit Pape <pape@smarden.org>  Wed, 13 Feb 2008 19:19:53 +0000
+
 
 dash (0.5.4-6) unstable; urgency=low
 
@@ -550,6 +571,7 @@ dash (0.5.4-5) unstable; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Thu, 27 Dec 2007 12:23:12 +0000
 
+
 dash (0.5.4-4) unstable; urgency=low
 
   * debian/diff/0038-EVAL-Fix-unaligned-trap-on-sparc.diff: new; fix
@@ -564,6 +586,7 @@ dash (0.5.4-4) unstable; urgency=low
     Kenshi Muto, closes: #446573).
 
  -- Gerrit Pape <pape@smarden.org>  Fri, 21 Dec 2007 09:21:34 +0000
+
 
 dash (0.5.4-3) unstable; urgency=low
 
@@ -592,6 +615,7 @@ dash (0.5.4-3) unstable; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Mon, 10 Dec 2007 13:18:14 +0000
 
+
 dash (0.5.4-2) unstable; urgency=low
 
   * debian/diff/0001-SHELL-Restore-foreground-process-group-on-exit.diff:
@@ -608,6 +632,7 @@ dash (0.5.4-2) unstable; urgency=low
     dash.1: clarify syntax of the for command (closes: #387441).
 
  -- Gerrit Pape <pape@smarden.org>  Tue, 25 Sep 2007 07:39:37 +0000
+
 
 dash (0.5.4-1) unstable; urgency=low
 
@@ -628,6 +653,7 @@ dash (0.5.3-9) unstable; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Tue, 26 Jun 2007 13:38:39 +0000
 
+
 dash (0.5.3-8) unstable; urgency=low
 
   * debian/diff/0009..0017-*.diff: new; from upstream master branch.
@@ -639,6 +665,7 @@ dash (0.5.3-8) unstable; urgency=low
     (thx Luca Monducci; closes: #418174).
 
  -- Gerrit Pape <pape@smarden.org>  Mon, 04 Jun 2007 18:46:04 +0000
+
 
 dash (0.5.3-7) unstable; urgency=medium
 
@@ -663,6 +690,7 @@ dash (0.5.3-6) unstable; urgency=medium
     translation (thx Andre Luis Lopes; closes: #403831).
 
  -- Gerrit Pape <pape@smarden.org>  Sun, 31 Dec 2006 12:24:03 +0000
+
 
 dash (0.5.3-5) unstable; urgency=low
 
@@ -694,6 +722,7 @@ dash (0.5.3-4) unstable; urgency=low
 
  -- Gerrit Pape <pape@smarden.org>  Mon, 23 Oct 2006 20:38:54 +0000
 
+
 dash (0.5.3-3) unstable; urgency=low
 
   * debian/rules: target configure, configure-udeb: add --host option to
@@ -715,6 +744,7 @@ dash (0.5.3-2) unstable; urgency=low
     reverse-apply in target clean:.
 
  -- Gerrit Pape <pape@smarden.org>  Tue, 17 Jan 2006 05:37:48 +0000
+
 
 dash (0.5.3-1) unstable; urgency=low
 
@@ -1336,7 +1366,7 @@ ash (0.3.8-14) unstable; urgency=low
 
   * Divert sh.1.gz to sh.distrib.1.gz (closes: #102251).
   * Added HETIO support for ^D and ^U (Aaron Lehmann, closes: #102215).
-  * Added Spaniash translation of debconf templates (Carlos Valdivia Yag e,
+  * Added Spaniash translation of debconf templates (Carlos Valdivia Yag\00e,
     closes: #103040).
   * Added versioned build-time dependency on groff.
 
