@@ -35,7 +35,7 @@ deb-checkuid:
 	    debian/$*/usr/share/doc/$*/changelog'
 	@test -s debian/$*/usr/share/doc/$*/changelog || \
 	  sh -cx 'rm -f debian/$*/usr/share/doc/$*/changelog'
-	@gzip -9 debian/$*/usr/share/doc/$*/changelog*
+	@gzip -9n debian/$*/usr/share/doc/$*/changelog*
 %.deb-docs-docs: %.deb-docs-base
 	@for i in `cat debian/$*.docs 2>/dev/null || :`; do \
 	  if test -d $$i; then \
@@ -57,7 +57,7 @@ deb-checkuid:
 	@if test -r debian/$*.NEWS.Debian; then \
 	  sh -cx 'install -m0644 debian/$*.NEWS.Debian \
 	    debian/$*/usr/share/doc/$*/NEWS.Debian && \
-	      gzip -9 debian/$*/usr/share/doc/$*/NEWS.Debian'; \
+	      gzip -9n debian/$*/usr/share/doc/$*/NEWS.Debian'; \
 	fi
 %.deb-docs-examples: %.deb-docs-docs
 	@rm -rf debian/$*/usr/share/doc/$*/examples
@@ -90,7 +90,8 @@ deb-checkuid:
 	: debian/$*/DEBIAN/md5sums
 	@rm -f debian/$*/DEBIAN/md5sums
 	@cd debian/$* && find * -path 'DEBIAN' -prune -o \
-	  -type f -exec md5sum {} >>DEBIAN/md5sums \;
+	  -type f -print0 | LC_ALL=C sort -z | \
+	    xargs -0r md5sum >>DEBIAN/md5sums
 %.deb-DEBIAN: %.deb-checkdir %.deb-DEBIAN-base %.deb-DEBIAN-scripts \
 	  %.deb-DEBIAN-md5sums
 	: debian/$*/DEBIAN/ ok

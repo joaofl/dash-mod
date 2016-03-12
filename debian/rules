@@ -11,6 +11,8 @@ LDFLAGS =$(shell DEB_BUILD_MAINT_OPTIONS=$(DEB_BUILD_MAINT_OPTIONS) \
 CPPFLAGS =$(shell DEB_BUILD_MAINT_OPTIONS=$(DEB_BUILD_MAINT_OPTIONS) \
   dpkg-buildflags --get CPPFLAGS)
 
+BUILD_DATE := $(shell dpkg-parsechangelog | sed -n -e 's/^Date: //p')
+
 DEB_HOST_GNU_TYPE =$(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE =$(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 ifneq ($(DEB_HOST_GNU_TYPE),$(DEB_BUILD_GNU_TYPE))
@@ -86,7 +88,7 @@ install-arch: deb-checkdir deb-checkuid build-stamp
 	ln -s dash '$(DIR)'/bin/sh
 	install -d -m0755 '$(DIR)'/usr/share/man/man1/
 	install -m0644 src/dash.1 '$(DIR)'/usr/share/man/man1/dash.1
-	gzip -9 '$(DIR)'/usr/share/man/man1/dash.1
+	gzip -9n '$(DIR)'/usr/share/man/man1/dash.1
 	ln -s dash.1.gz '$(DIR)'/usr/share/man/man1/sh.1.gz
 	install -d -m0755 '$(DIR)'/usr/share/menu
 	install -m0644 debian/dash.menu '$(DIR)'/usr/share/menu/dash
@@ -96,12 +98,16 @@ install-arch: deb-checkdir deb-checkuid build-stamp
 binary: binary-indep binary-arch
 binary-indep: install-indep ash.deb
 	dpkg-gencontrol -isp -pash -P'$(DIRA)'
+	find '$(DIRA)' -depth -newermt '$(BUILD_DATE)' -print0 | \
+		xargs -0r touch --no-dereference --date='$(BUILD_DATE)'
 	dpkg -b '$(DIRA)' ..
 binary-arch: install-arch po-templates dash.deb
 	# dash
 	rm -f debian/substvars
 	test '$(CC)' != 'gcc' || dpkg-shlibdeps '$(DIR)'/bin/dash
 	dpkg-gencontrol -isp -pdash -P'$(DIR)'
+	find '$(DIR)' -depth -newermt '$(BUILD_DATE)' -print0 | \
+		xargs -0r touch --no-dereference --date='$(BUILD_DATE)'
 	dpkg -b '$(DIR)' ..
 
 .PHONY: configure build po-templates clean patch install install-indep \

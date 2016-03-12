@@ -1,3 +1,11 @@
+dash (0.5.8-2.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Apply Jérémy Bobbio's patches to make dash reproducible.
+    (Closes: #774425)
+
+ -- Niels Thykier <niels@thykier.net>  Sat, 12 Mar 2016 09:05:01 +0000
+
 dash (0.5.8-2.1) unstable; urgency=low
 
   * Non-maintainer upload.
