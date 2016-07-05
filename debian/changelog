@@ -1,3 +1,12 @@
+dash (0.5.8-2.3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix FTBFS by adding build-arch and build-indep targets to debian/rules.
+    Thanks to Sven Joachim <svenjoac@gmx.de> for the initial patch.
+    Closes: #829666
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 05 Jul 2016 21:59:04 +0000
+
 dash (0.5.8-2.2) unstable; urgency=medium
 
   * Non-maintainer upload.

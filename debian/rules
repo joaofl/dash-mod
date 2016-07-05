@@ -50,7 +50,9 @@ configure-stamp: patch-stamp
 	    --host='$(DEB_HOST_GNU_TYPE)')
 	touch configure-stamp
 
-build: deb-checkdir build-stamp
+build: build-arch build-indep
+build-arch: deb-checkdir build-stamp
+build-indep:
 build-stamp: configure-stamp
 	-$(CC) -v
 	(cd build-tmp && exec $(MAKE) CFLAGS='$(CFLAGS)' CPPFLAGS='$(CPPFLAGS)' LDFLAGS='$(LDFLAGS)') || \
@@ -110,7 +112,7 @@ binary-arch: install-arch po-templates dash.deb
 		xargs -0r touch --no-dereference --date='$(BUILD_DATE)'
 	dpkg -b '$(DIR)' ..
 
-.PHONY: configure build po-templates clean patch install install-indep \
+.PHONY: configure build build-arch build-indep po-templates clean patch install install-indep \
 	  install-arch binary binary-indep binary-arch
 
 include debian/implicit
