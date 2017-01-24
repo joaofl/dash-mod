@@ -1,3 +1,12 @@
+dash (0.5.8-2.4) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Don't execute binary files as scripts. (Closes: #816313)
+  * printf '\e' (Closes: #816295)
+  * Fix bad permissions on dash.md5sums (Closes: #832173)
+
+ -- Adam Borowski <kilobyte@angband.pl>  Tue, 24 Jan 2017 06:16:56 +0100
+
 dash (0.5.8-2.3) unstable; urgency=medium
 
   * Non-maintainer upload.
