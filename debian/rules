@@ -46,7 +46,7 @@ configure-stamp: patch-stamp
 	touch configure
 	(cd build-tmp && CC='$(CC)' \
 	  CFLAGS='$(CFLAGS)' CPPFLAGS='$(CPPFLAGS)' LDFLAGS='$(LDFLAGS)' \
-	  exec ../configure --enable-fnmatch --disable-lineno \
+	  ../configure --enable-fnmatch --disable-lineno \
 	    --host='$(DEB_HOST_GNU_TYPE)')
 	touch configure-stamp
 

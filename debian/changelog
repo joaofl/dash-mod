@@ -1,3 +1,16 @@
+dash (0.5.8-2.5) unstable; urgency=low
+
+  * Non-maintainer upload.
+
+  [ Reiner Herrmann ]
+  * Improve build reproducibility: set LC_ALL instead of LC_COLLATE to C.
+
+  [ HW42 ]
+  * Improve build reproducibility: avoid exec call which embeds different paths
+    between different system shells. (Closes: #825643)
+
+ -- Ximin Luo <infinity0@debian.org>  Wed, 28 Jun 2017 18:26:52 +0200
+
 dash (0.5.8-2.4) unstable; urgency=medium
 
   * Non-maintainer upload.
