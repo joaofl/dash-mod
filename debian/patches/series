@@ -1,0 +1,11 @@
+0001-SHELL-print-n-upon-EOF-CTRL-D-when-run-interactively.diff
+0002-PARSER-Remove-backslash-before-in-double-quotes-in-va.diff
+0003-BUILTIN-Fix-test-x-as-root-on-platforms-with-old-fash.diff
+0004-SHELL-Disable-sh-c-command-sh-c-exec-command-optimiza.diff
+0005-JOBS-address-format-security-build-error.diff
+0006-EVAL-Report-I-O-error-on-stdout.diff
+0007-Don-t-execute-binary-files-if-execve-returned-ENOEXE.diff
+0008-Support-e-in-echo-and-printf-builtins.diff
+0009-Set-LC_ALL-instead-of-LC_COLLATE-to-C.diff
+9001-Add-privmode-Part-1.diff
+9002-Add-privmode-Part-2.diff

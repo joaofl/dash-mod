@@ -32,15 +32,8 @@ endif
 DIR =$(shell pwd)/debian/dash
 DIRA =$(shell pwd)/debian/ash
 
-patch: deb-checkdir patch-stamp
-patch-stamp:
-	for i in `ls -1 debian/diff/*.diff || :`; do \
-	  patch -p1 <$$i || exit 1; \
-	done
-	touch patch-stamp
-
 configure: deb-checkdir configure-stamp
-configure-stamp: patch-stamp
+configure-stamp:
 	mkdir -p build-tmp
 	touch configure
 	(cd build-tmp && CC='$(CC)' \
@@ -75,9 +68,7 @@ po-templates-stamp: deb-checkdir
 clean: deb-checkdir deb-checkuid
 	rm -f debian/dash.preinst debian/*.o
 	rm -rf build-tmp
-	test ! -e patch-stamp || \
-	  for i in `ls -1r debian/diff/*.diff || :`; do patch -p1 -R <$$i; done
-	rm -f configure-stamp patch-stamp build-stamp po-templates-stamp
+	rm -f configure-stamp build-stamp po-templates-stamp
 	rm -rf '$(DIR)' '$(DIRA)'
 	rm -f debian/files debian/substvars debian/dash.templates changelog
 
@@ -122,7 +113,7 @@ binary-arch: install-arch po-templates dash.deb
 		xargs -0r touch --no-dereference --date='$(BUILD_DATE)'
 	dpkg -b '$(DIR)' ..
 
-.PHONY: configure build build-arch build-indep po-templates clean patch install install-indep \
+.PHONY: configure build build-arch build-indep po-templates clean install install-indep \
 	  install-arch binary binary-indep binary-arch
 
 include debian/implicit
