@@ -1,0 +1,15 @@
+From: Andrew Shadura <andrewsh@debian.org>
+Subject: Don't use tempfile, as it currently runs tempnam(), which is insecure
+and fails under pseudo(1).
+
+--- a/src/mkbuiltins
++++ b/src/mkbuiltins
+@@ -35,7 +35,7 @@
+ #
+ #	@(#)mkbuiltins	8.2 (Berkeley) 5/4/95
+ 
+-tempfile=tempfile
++tempfile=mktemp
+ if ! type tempfile > /dev/null 2>&1 && ! type mktemp > /dev/null 2>&1; then
+ 	_my_tempfile()
+ 	{

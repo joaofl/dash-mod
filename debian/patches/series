@@ -7,5 +7,6 @@
 0007-Don-t-execute-binary-files-if-execve-returned-ENOEXE.diff
 0008-Support-e-in-echo-and-printf-builtins.diff
 0009-Set-LC_ALL-instead-of-LC_COLLATE-to-C.diff
+0010-Hardcode-mktemp.diff
 9001-Add-privmode-Part-1.diff
 9002-Add-privmode-Part-2.diff
