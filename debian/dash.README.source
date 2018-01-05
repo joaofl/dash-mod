@@ -7,7 +7,7 @@ should be preferred:
 
  # apt-get install git  # if not yet done
 
- $ git clone http://smarden.org/git/dash.git/
+ $ git clone https://salsa.debian.org/debian/dash.git
  $ cd dash
 
 After cloning the repository, you have checked out the debian-sid
