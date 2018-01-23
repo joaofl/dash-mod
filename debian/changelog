@@ -1,9 +1,10 @@
-dash (0.5.8-2.7) UNRELEASED; urgency=medium
+dash (0.5.8-2.7) unstable; urgency=medium
 
+  [ James Cowgill ]
   * Non-maintainer upload.
   * Move dash from /usr/bin to /bin. (Closes: #888180)
 
- -- James Cowgill <jcowgill@debian.org>  Tue, 23 Jan 2018 20:41:35 +0000
+ -- Andrew Shadura <andrewsh@debian.org>  Tue, 23 Jan 2018 22:51:37 +0100
 
 dash (0.5.8-2.6) unstable; urgency=medium
 
