@@ -1,5 +1,5 @@
 Description: Implement privmode, part 1
-Author: Tavis Ormandy <taviso@google.com>
+From: Tavis Ormandy <taviso@google.com>
 Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
 
 --- a/src/dash.1

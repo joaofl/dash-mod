@@ -1,5 +1,5 @@
 Description: Implement privmode, part 2
-Author: Harald van Dijk <harald@gigawatt.nl>
+From: Harald van Dijk <harald@gigawatt.nl>
 Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
 
 diff -Naurp dash-0.5.7.ori/src/dash.1 dash-0.5.7/src/dash.1
