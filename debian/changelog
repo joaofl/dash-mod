@@ -1,4 +1,6 @@
-dash (0.5.8-2.6) UNRELEASED; urgency=medium
+dash (0.5.8-2.6) unstable; urgency=medium
+
+  * Non-maintainer upload.
 
   [ Marc Deslauriers ]
   * Drop privileges when euid != uid as a security measure
@@ -23,7 +25,14 @@ dash (0.5.8-2.6) UNRELEASED; urgency=medium
     - respect local diversions.
     - clarify.
 
- -- Andrew Shadura <andrewsh@debian.org>  Fri, 05 Jan 2018 17:44:39 +0100
+  [ Andrew Shadura ]
+  * Refresh patches to apply cleanly.
+  * Convert the package to 3.0 (quilt) format.
+  * Use debhelper 10 (and debhelper at all!).
+  * Move the git repository to Salsa.
+  * Add gbp.conf and use DEP-14 branch naming.
+
+ -- Andrew Shadura <andrewsh@debian.org>  Tue, 23 Jan 2018 15:13:35 +0100
 
 dash (0.5.8-2.5) unstable; urgency=low
 
