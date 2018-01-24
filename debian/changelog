@@ -1,5 +1,14 @@
+dash (0.5.8-2.9) unstable; urgency=medium
+
+  [ Sven Joachim ]
+  * Non-maintainer upload.
+  * Re-add the symlink for the sh manpage (Fully closes: #888235)
+
+ -- Andrew Shadura <andrewsh@debian.org>  Wed, 24 Jan 2018 08:19:41 +0100
+
 dash (0.5.8-2.8) unstable; urgency=medium
 
+  * Non-maintainer upload.
   * Ship a /bin/sh symlink (Closes: #888235).
   * Don't quote dh arguments needlessly.
   * Drop old irrelevant postinst/postrm bits, use dh-generated ones instead.
