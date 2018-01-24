@@ -33,7 +33,7 @@ DIR =$(shell pwd)/debian/dash
 DIRA =$(shell pwd)/debian/ash
 
 %:
-	dh "$@"
+	dh $@
 
 override_dh_auto_configure:
 	dh_auto_configure -- --enable-fnmatch --disable-lineno
