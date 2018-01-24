@@ -1,8 +1,10 @@
-dash (0.5.8-2.8) UNRELEASED; urgency=medium
+dash (0.5.8-2.8) unstable; urgency=medium
 
   * Ship a /bin/sh symlink (Closes: #888235).
+  * Don't quote dh arguments needlessly.
+  * Drop old irrelevant postinst/postrm bits, use dh-generated ones instead.
 
- -- Andrew Shadura <andrewsh@debian.org>  Wed, 24 Jan 2018 07:09:34 +0100
+ -- Andrew Shadura <andrewsh@debian.org>  Wed, 24 Jan 2018 08:02:23 +0100
 
 dash (0.5.8-2.7) unstable; urgency=medium
 
