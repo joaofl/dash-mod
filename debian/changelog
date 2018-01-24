@@ -1,3 +1,13 @@
+dash (0.5.8-3) UNRELEASED; urgency=medium
+
+  [ Simon McVittie ]
+  * Add an autopkgtest to verify that /bin/sh remains usable
+
+  [ Andrew Shadura ]
+  * Add dash.preinst to clean
+
+ -- Andrew Shadura <andrewsh@debian.org>  Wed, 24 Jan 2018 13:24:47 +0100
+
 dash (0.5.8-2.9) unstable; urgency=medium
 
   [ Sven Joachim ]
