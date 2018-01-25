@@ -1,12 +1,15 @@
-dash (0.5.8-3) unstable; urgency=medium
+dash (0.5.8-2.10) unstable; urgency=medium
 
   [ Simon McVittie ]
-  * Add an autopkgtest to verify that /bin/sh remains usable.
+  * Add an autopkgtest to verify that /bin/sh remains usable
+    (Closes: #888259).
 
   [ Andrew Shadura ]
   * Add dash.preinst and friends to clean.
+  * Document where the sources are and how to work with them
+    in README.source.
 
- -- Andrew Shadura <andrewsh@debian.org>  Wed, 24 Jan 2018 13:25:30 +0100
+ -- Andrew Shadura <andrewsh@debian.org>  Thu, 25 Jan 2018 08:14:33 +0100
 
 dash (0.5.8-2.9) unstable; urgency=medium
 
