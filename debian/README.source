@@ -5,15 +5,15 @@ The dash Debian package sources are available through git, and
 through 'apt-get source dash'.  Getting the sources through git
 should be preferred:
 
- # apt-get install git  # if not yet done
+    # apt-get install git  # if not yet done
 
- $ git clone https://salsa.debian.org/debian/dash.git
- $ cd dash
+    $ git clone https://salsa.debian.org/debian/dash.git
+    $ cd dash
 
-After cloning the repository, you have checked out the debian-sid
+After cloning the repository, you have checked out the debian/master
 branch, ready to be used by dpkg-buildpackage, e.g.
 
- $ dpkg-buildpackage -i -rfakeroot -uc -us
+    $ dpkg-buildpackage -i -uc -us
 
 If you want to make changes in the ./debian/ subdirectory, this is the
 correct branch to work on.  After making changes, document them in
@@ -22,63 +22,64 @@ commit -a', or similar.  If you think the changes should be incorporated
 into the standard Debian package, create the patch[es] through 'git
 format-patch', and send them to the Debian Bug Tracking System, e.g.
 
- $ vi debian/rules
- $ debchange -pi
- $ git commit -a
- $ git format-patch HEAD^
+    $ vi debian/rules
+    $ debchange -pi
+    $ git commit -a
+    $ git format-patch HEAD^
 
+This package uses 3.0 (quilt) format, which means patches to the upstream
+sources are stored in debian/patches, and are automatically applied by
+dpkg-source and dpkg-buildpackage.
 
-If you want to make changes to the upstream dash sources, first checkout
-the release+patches branch
+If you want to make changes to the upstream dash sources, be aware that
+debian/master branch doesn't have patches applied to the upstream sources.
+Should you prefer working with git to manage patches rather than quilt,
+you need to fetch a branch with patches applied from dgit.
 
- $ git checkout -b release+patches origin/release+patches
+    $ dgit fetch
 
-The release+patches branch holds patches on top of the current release
-version that is packaged for Debian/unstable. The current release
-version is available in the release branch.  If you are interested, you
-can checkout this branch too
+The dgit/sid branch holds patches on top of the current release version
+that is packaged for Debian unstable. For each release, there are
+two tags: debian/* for patches-unappliedn, archive/debian/* for
+patches-applied.
 
- $ git checkout -b release origin/release
-
-When releasing a new Debian package based on a new upstream release, the
-release branch will be fastforwarded, and the release+patches branch is
-rewound and rebased onto the new HEAD of the release branch.  This is
-done by, e.g.
-
- $ git checkout release
- $ git merge v0.5.5
- $ git checkout release+patches
- $ git rebase release
-
-You generally don't need to do that, but beware that the release+patches
-branch is rewound occasionally.
-
-After checking out the release+patches branch, make the desired changes
+After checking out the dgit/sid branch, make the desired changes
 to the upstream sources, and commit them.  To integrate the changes into
-the Debian package, extract these changes, and change to the debian-sid
-branch (Note: the file extension for the patches is '.diff', use 'git
-config --add format.suffix .diff' to make that the default)
+the Debian package, extract these changes, and change to the debian/master
+branch.
 
- $ git format-patch release..release+patches
- $ git checkout debian-sid
+    $ git format-patch dgit/dgit/sid..dgit/sid
+    $ git checkout debian/master
 
-Now move the extracted patches into the debian/diff/ directory, add a
-meaningful message to debian/changelog, and commit the changes to the
-debian-sid branch
+Now move the extracted patches into the debian/patches/ directory, add the
+patch to the debian/patches/series, add a meaningful message to
+debian/changelog, and commit the changes to the debian/master branch
 
- $ mv ????-*.diff debian/diff/
- $ git add debian/diff
- $ debchange -pi
- $ git add debian/changelog
- $ git commit
+    $ mv *.patch debian/patches/
+    $ git add debian/patches
+    $ debchange -pi
+    $ git add debian/changelog
+    $ git commit
 
 Again, if you think the changes should be incorporated into the standard
-Debian package, create the patch[es] from the debian-sid branch through
+Debian package, create the patch[es] from the debian/master branch through
 'git format-patch', send them to the Debian Bug Tracking System.
 
-There's a mailing list to coordinate work on the dash packages, if
-you're interested in helping please subscribe to the
-<debian-package-dash> mailing list by sending an email to
-<debian-package-dash-subscribe@list.smarden.org>.
+As an addition to sending patches to the Debian Bug Tracking System, it is
+also possible to put your changes in a Git branch on Salsa and issue a pull
+request, mentioning that in your bug report.
 
- -- Gerrit Pape <pape@smarden.org>  Fri, 04 Jun 2010 00:22:12 +0000
+Uploading the package
+---------------------
+
+Uploads are currently handled by dgit. After you have prepared your changes, run:
+
+    dgit --gbp build-source
+
+This will build .dsc and _source.changes in the directory above. When done, run:
+
+    dgit --gbp push
+
+It will verify the source package, refresh the dgit branch, sign the source package,
+upload it to the Debian archive, create signed tags for the newly uploaded release,
+and push the dgit branch with tags to the dgit server.
