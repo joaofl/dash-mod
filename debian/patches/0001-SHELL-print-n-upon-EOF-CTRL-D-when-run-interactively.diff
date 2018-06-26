@@ -16,7 +16,7 @@ diff --git a/src/main.c b/src/main.c
 index f79ad7d..efd7da8 100644
 --- a/src/main.c
 +++ b/src/main.c
-@@ -227,8 +227,15 @@ cmdloop(int top)
+@@ -219,8 +219,15 @@ cmdloop(int top)
  			if (!top || numeof >= 50)
  				break;
  			if (!stoppedjobs()) {

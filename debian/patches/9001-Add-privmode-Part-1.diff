@@ -50,7 +50,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  The shell reads input in terms of lines from a file and breaks it up into
 --- a/src/main.c
 +++ b/src/main.c
-@@ -97,11 +97,16 @@
+@@ -93,11 +93,16 @@
  	struct jmploc jmploc;
  	struct stackmark smark;
  	int login;
@@ -67,7 +67,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  #if PROFILE
  	monitor(4, etext, profile_buf, sizeof profile_buf, 50);
  #endif
-@@ -148,6 +153,18 @@
+@@ -144,6 +149,18 @@
  	init();
  	setstackmark(&smark);
  	login = procargs(argc, argv);
@@ -123,7 +123,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  extern char optlist[NOPTS];
 --- a/src/var.c
 +++ b/src/var.c
-@@ -84,6 +84,9 @@
+@@ -85,6 +85,9 @@
  int lineno;
  char linenovar[sizeof("LINENO=")+sizeof(int)*CHAR_BIT/3+1] = "LINENO=";
  
@@ -133,7 +133,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  /* Some macros in var.h depend on the order, add new variables to the end. */
  struct var varinit[] = {
  #if ATTY
-@@ -97,7 +100,7 @@
+@@ -98,7 +101,7 @@
  	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"MAIL\0",	changemail },
  	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"MAILPATH\0",	changemail },
  	{ 0,	VSTRFIXED|VTEXTFIXED,		defpathvar,	changepath },
@@ -141,8 +141,8 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
 +	{ 0,	VSTRFIXED|VTEXTFIXED,		defps1,	0 },
  	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS2=> ",	0 },
  	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS4=+ ",	0 },
- 	{ 0,	VSTRFIXED|VTEXTFIXED,		"OPTIND=1",	getoptsreset },
-@@ -180,11 +183,25 @@
+ 	{ 0,	VSTRFIXED|VTEXTFIXED,		defoptindvar,	getoptsreset },
+@@ -181,11 +184,25 @@
  		vp->next = *vpp;
  		*vpp = vp;
  	} while (++vp < end);

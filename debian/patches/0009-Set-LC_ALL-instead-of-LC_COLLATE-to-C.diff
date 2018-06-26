@@ -1,3 +1,4 @@
+Applied-Upstream: 0.5.9, fe393c0
 From: Ximin Luo <infinity0@debian.org>
 Date: Wed, 28 Jun 2017 18:26:52 +0200
 Subject: Improve build reproducibility: set LC_ALL instead of LC_COLLATE to C.

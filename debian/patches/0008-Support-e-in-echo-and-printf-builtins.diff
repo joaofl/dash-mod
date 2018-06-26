@@ -13,7 +13,7 @@ diff --git a/src/bltin/printf.c b/src/bltin/printf.c
 index a626cee..c34bf66 100644
 --- a/src/bltin/printf.c
 +++ b/src/bltin/printf.c
-@@ -300,6 +300,7 @@ conv_escape(char *str, int *conv_ch)
+@@ -340,6 +340,7 @@ conv_escape(char *str, int *conv_ch)
  	case '\\':	value = '\\';	break;	/* backslash */
  	case 'a':	value = '\a';	break;	/* alert */
  	case 'b':	value = '\b';	break;	/* backspace */
@@ -25,7 +25,7 @@ diff --git a/src/dash.1 b/src/dash.1
 index 8b8026d..c6f83a5 100644
 --- a/src/dash.1
 +++ b/src/dash.1
-@@ -1199,6 +1199,8 @@ Subsequent output is suppressed.  This is normally used at the end of the
+@@ -1201,6 +1201,8 @@ Subsequent output is suppressed.  This is normally used at the end of the
  last argument to suppress the trailing newline that
  .Ic echo
  would otherwise output.
@@ -34,7 +34,7 @@ index 8b8026d..c6f83a5 100644
  .It Li \ef
  Output a form feed.
  .It Li \en
-@@ -1573,6 +1575,8 @@ The characters and their meanings are as follows:
+@@ -1570,6 +1572,8 @@ The characters and their meanings are as follows:
  Write a \*[Lt]bell\*[Gt] character.
  .It Cm \eb
  Write a \*[Lt]backspace\*[Gt] character.

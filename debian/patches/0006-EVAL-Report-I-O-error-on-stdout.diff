@@ -15,7 +15,7 @@ diff --git a/src/eval.c b/src/eval.c
 index c7358a6..3c47b59 100644
 --- a/src/eval.c
 +++ b/src/eval.c
-@@ -909,6 +909,8 @@ evalbltin(const struct builtincmd *cmd, int argc, char **argv, int flags)
+@@ -928,6 +928,8 @@ evalbltin(const struct builtincmd *cmd, int argc, char **argv, int flags)
  	else
  		status = (*cmd->builtin)(argc, argv);
  	flushall();
