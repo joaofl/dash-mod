@@ -385,7 +385,7 @@ is one of the redirection operators mentioned previously.
 Following is a list of the possible redirections.
 The
 .Bq n
-is an optional number, as in
+is an optional number between 0 and 9, as in
 .Sq 3
 (not
 .Sq Bq 3 ) ,
@@ -402,11 +402,13 @@ Append standard output (or n) to file.
 .It [n] Ns \*[Lt] file
 Redirect standard input (or n) from file.
 .It [n1] Ns \*[Lt]& Ns n2
-Duplicate standard input (or n1) from file descriptor n2.
+Copy file descriptor n2 as stdout (or fd n1).
+fd n2.
 .It [n] Ns \*[Lt]&-
 Close standard input (or n).
 .It [n1] Ns \*[Gt]& Ns n2
-Duplicate standard output (or n1) to n2.
+Copy file descriptor n2 as stdin (or fd n1).
+fd n2.
 .It [n] Ns \*[Gt]&-
 Close standard output (or n).
 .It [n] Ns \*[Lt]\*[Gt] file
@@ -596,7 +598,7 @@ semicolons, or ampersands, and optionally terminated by one of these three
 characters.
 The commands in a list are executed in the order they are written.
 If command is followed by an ampersand, the shell starts the
-command and immediately proceed onto the next command; otherwise it waits
+command and immediately proceeds onto the next command; otherwise it waits
 for the command to terminate before proceeding to the next one.
 .Ss Short-Circuit List Operators
 .Dq &&
@@ -604,11 +606,11 @@ and
 .Dq ||
 are AND-OR list operators.
 .Dq &&
-executes the first command, and then executes the second command iff the
-exit status of the first command is zero.
+executes the first command, and then executes the second command if and only
+if the exit status of the first command is zero.
 .Dq ||
-is similar, but executes the second command iff the exit status of the first
-command is nonzero.
+is similar, but executes the second command if and only if the exit status
+of the first command is nonzero.
 .Dq &&
 and
 .Dq ||
@@ -1400,14 +1402,9 @@ By specifying a colon as the first character of
 .Va optstring
 all errors will be ignored.
 .Pp
-A nonzero value is returned when the last option is reached.
-If there are no remaining arguments,
+After the last option
 .Ic getopts
-will set
-.Va var
-to the special option,
-.Dq -- ,
-otherwise, it will set
+will return a non-zero value and set
 .Va var
 to
 .Dq \&? .
@@ -2117,7 +2114,7 @@ printed; for commands and tracked aliases the complete pathname of the
 command is printed.
 .It ulimit Xo
 .Op Fl H \*(Ba Fl S
-.Op Fl a \*(Ba Fl tfdscmlpn Op Ar value
+.Op Fl a \*(Ba Fl tfdscmlpnv Op Ar value
 .Xc
 Inquire about or set the hard or soft limits on processes or set new
 limits.
@@ -2167,6 +2164,9 @@ show or set the limit on the number of processes this user can
 have at one time
 .It Fl n
 show or set the limit on the number files a process can have open at once
+.It Fl v
+show or set the limit on the total virtual memory that can be
+in use by a process (in kilobytes)
 .It Fl r
 show or set the limit on the real-time scheduling priority of a process
 .El
@@ -2226,13 +2226,12 @@ This mode uses commands, described below,
 similar to a subset of those described in the vi man page.
 The command
 .Ql set -o vi
-enables vi-mode editing and place sh into vi insert mode.
+enables vi-mode editing and places sh into vi insert mode.
 With vi-mode
 enabled, sh can be switched between insert mode and command mode.
-The editor is not described in full here, but will be in a later document.
-It's similar to vi: typing
+It is similar to vi: typing
 .Aq ESC
-will throw you into command VI command mode.
+enters vi command mode.
 Hitting
 .Aq return
 while in command mode will pass the line to the shell.
