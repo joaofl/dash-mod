@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/dash
 set -e
 
 # $1: dfile, $2: link target, $3: distrib

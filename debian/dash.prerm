@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/dash
 #
 # pre-removal script for the Debian GNU/Linux ash package
 #
