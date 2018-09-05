@@ -1,3 +1,19 @@
+dash (0.5.10.2-1) unstable; urgency=medium
+
+  * New upstream version 0.5.10.2.
+    Closes: #332954, #379227, #503840, #571952,
+            #550756, #700232, #794965, #837789,
+            #878697, #888226.
+  * Refresh patches.
+  * Use #!/bin/dash for prerm and postinst scripts (Closes: #907133).
+  * Fix the ash.1 manpage link.
+  * Add Multi-Arch: foreign (Closes: #710277).
+  * Don’t leak fd in the fix for binary execution (Closes: #816313).
+  * Avoid crash when redirecting to file descriptor in expredir
+    (Closes: #861354).
+
+ -- Andrej Shadura <andrewsh@debian.org>  Tue, 04 Sep 2018 19:17:01 +0200
+
 dash (0.5.8-2.10) unstable; urgency=medium
 
   [ Simon McVittie ]
