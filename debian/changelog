@@ -328,7 +328,7 @@ dash (0.5.5.1-7.1) unstable; urgency=low
 dash (0.5.5.1-7) unstable; urgency=low
 
   [ Raphael Geissert ]
-  * Re-add code to allow taking over bash's diversion (Closes: #82554).
+  * Re-add code to allow taking over bash's diversion (Closes: #582554).
 
   [ Gerrit Pape ]
   * debian/dash.README.source: new; document how to use the Debian
