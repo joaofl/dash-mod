@@ -25,16 +25,7 @@ endif
 override_dh_auto_configure:
 	dh_auto_configure -- --enable-fnmatch --disable-lineno
 
-PREINST_OBJECTS = debian/dash.preinst.o debian/dash.preinst-lib.o
-
-$(PREINST_OBJECTS): %.o: %.c debian/dash.preinst.h
-	$(CC) -c -o $@ $(CFLAGS) $<
-
-debian/dash.preinst: $(PREINST_OBJECTS)
-	$(CC) -o debian/dash.preinst $(CFLAGS) $(PREINST_OBJECTS)
-	$(STRIP) -R .comment -R .note debian/dash.preinst
-
-override_dh_auto_build: debian/dash.preinst po-templates
+override_dh_auto_build: po-templates
 	dh_auto_build
 
 po-templates:

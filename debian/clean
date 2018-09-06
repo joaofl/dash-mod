@@ -1,4 +1,1 @@
 debian/dash.templates
-debian/dash.preinst
-debian/dash.preinst-lib.o
-debian/dash.preinst.o
