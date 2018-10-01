@@ -1,6 +1,7 @@
 dash (0.5.10.2-2) UNRELEASED; urgency=medium
 
   * d/changelog: Remove trailing whitespaces
+  * d/control: Add Vcs-* field
 
  -- Ondřej Nový <onovy@debian.org>  Mon, 01 Oct 2018 10:37:55 +0200
 
