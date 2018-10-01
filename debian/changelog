@@ -1,3 +1,9 @@
+dash (0.5.10.2-2) UNRELEASED; urgency=medium
+
+  * d/changelog: Remove trailing whitespaces
+
+ -- Ondřej Nový <onovy@debian.org>  Mon, 01 Oct 2018 10:37:55 +0200
+
 dash (0.5.10.2-1) unstable; urgency=medium
 
   * New upstream version 0.5.10.2.
@@ -451,7 +457,7 @@ dash (0.5.5.1-3) unstable; urgency=low
 dash (0.5.5.1-2.3) unstable; urgency=low
 
   * Non-maintainer upload.
-  * Update the debconf templates according to the feedback on 
+  * Update the debconf templates according to the feedback on
     debian-l10n-english.
   * Install the NEWS file in the right location (Closes: #538809).
 
@@ -1570,7 +1576,7 @@ ash (0.3.7-15) unstable; urgency=low
   * Build different ashes in different subdirectories.
 
  -- Herbert Xu <herbert@debian.org>  Thu,  8 Mar 2001 21:32:28 +1100
- 
+
 ash (0.3.7-14) unstable; urgency=low
 
   * Removed predependency from udeb (closes: #81995).
