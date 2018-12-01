@@ -18,7 +18,7 @@ static void copy(const char *file, const char *dest)
 
 	if (exists(file))
 		run(cmd);
-	else if (unlink(dest))
+	else if (unlink(dest) && errno != ENOENT)
 		die_errno("cannot remove %s", dest);
 }
 
