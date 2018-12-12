@@ -15,7 +15,10 @@ Multi-Arch: foreign
 Essential: yes
 Priority: required
 Pre-Depends: ${shlibs:Depends}
-Depends: debianutils (>= 2.15), dpkg (>= 1.15.0)
+Depends:
+ debianutils (>= 2.15),
+ dpkg (>= 1.15.0),
+ ${misc:Depends},
 Description: POSIX-compliant shell
  The Debian Almquist Shell (dash) is a POSIX-compliant shell derived
  from ash.
@@ -27,6 +30,8 @@ Description: POSIX-compliant shell
 Package: ash
 Architecture: all
 Pre-Depends: dash
+Depends:
+ ${misc:Depends},
 Description: compatibility package for dash
  This package allows upgrading ash to its replacement,
  dash. It includes the /bin/ash symlink.
