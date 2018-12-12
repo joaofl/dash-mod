@@ -1,22 +1,37 @@
-From 8e1751b198cf0872519319724eae00e399c2db83 Mon Sep 17 00:00:00 2001
+Applied-Upstream: 0.5.10.2+, 413c6dc
+From 413c6dcc3ca3891825ae8239251140882d7c6c6c Mon Sep 17 00:00:00 2001
 From: Gerrit Pape <pape@smarden.org>
-Date: Wed, 11 Feb 2009 01:38:49 +0000
-Subject: [PATCH 1/6] [SHELL] print \n upon EOF (CTRL-D) when run interactively
+Date: Fri, 7 Sep 2018 10:34:14 +0200
+Subject: [PATCH] main: Print \n upon EOF (CTRL-D) when run interactively
 
-Suggested by jidanni through
- http://bugs.debian.org/476422
+Exiting dash via a ^D instead of with "exit" causes dash to forget to
+print a newline.
+
+    sh-3.1$ sh
+    sh-3.1$ ^D
+    sh-3.1$ dash
+    $ sh-3.1$
+
+It is more neat and tidy to send a newline similarly to what bash does,
+so it doesn't make the next prompt of the parent shell look ugly.
+
+Suggested by jidanni.
 
 Signed-off-by: Gerrit Pape <pape@smarden.org>
 Signed-off-by: Jonathan Nieder <jrnieder@gmail.com>
+[reworded the patch description]
+Signed-off-by: Andrej Shadura <andrew.shadura@collabora.co.uk>
+Bug-Debian: http://bugs.debian.org/476422
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 ---
  src/main.c | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/src/main.c b/src/main.c
-index f79ad7d..efd7da8 100644
+index e8e4256..6d53e00 100644
 --- a/src/main.c
 +++ b/src/main.c
-@@ -219,8 +219,15 @@ cmdloop(int top)
+@@ -221,8 +221,15 @@ cmdloop(int top)
  			if (!top || numeof >= 50)
  				break;
  			if (!stoppedjobs()) {
@@ -34,5 +49,5 @@ index f79ad7d..efd7da8 100644
  			}
  			numeof++;
 -- 
-2.1.0
+2.19.1
 
