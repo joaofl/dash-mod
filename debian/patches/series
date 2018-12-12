@@ -6,5 +6,6 @@
 0008-Support-e-in-echo-and-printf-builtins.diff
 0010-Hardcode-mktemp.diff
 0011-Avoid-crash-when-redirecting-to-file-descriptor-in-e.diff
+0012-enable-large-file-support-when-available.patch
 9001-Add-privmode-Part-1.diff
 9002-Add-privmode-Part-2.diff
