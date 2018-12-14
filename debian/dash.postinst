@@ -45,7 +45,7 @@ claim_binsh() {
 	fi
 
 	dpkg-divert --package bash --remove $dfile
-	dpkg-divert --package dash --divert $distrib --add $dfile
+	dpkg-divert --package dash --no-rename --divert $distrib --add $dfile
 	# remove the old equivalent of $distrib, if it existed.
 	if [ -n "$truename" ]; then
 	       rm -f "$truename"
@@ -66,7 +66,7 @@ unclaim_binsh() {
 	# Donate the diversion and sh symlink to the bash package.
 	ltarget=$(echo $ltarget | sed s/dash/bash/)
 	dpkg-divert --package dash --remove $dfile
-	dpkg-divert --package bash --divert $distrib --add $dfile
+	dpkg-divert --package bash --no-rename --divert $distrib --add $dfile
 	if [ -n "$truename" ]; then
 		rm -f "$truename"
 	fi
@@ -85,7 +85,7 @@ initial_binsh_setup() {
 
 	if [ "$diverter" = ash ]; then
 		dpkg-divert --package ash --remove $dfile
-		dpkg-divert --package dash --divert $distrib --add $dfile
+		dpkg-divert --package dash --no-rename --divert $distrib --add $dfile
 
 		if [ "$truename" != "$distrib" ] && [ -e "$truename" ]; then
 			mv "$truename" "$distrib"
