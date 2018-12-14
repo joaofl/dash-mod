@@ -42,7 +42,7 @@ index 6185db4..546ee1b 100644
  		status = (*cmd->builtin)(argc, argv);
  	flushall();
 +	if (outerr(out1))
-+		warnx("%s: I/O error", commandname);
++		sh_warnx("%s: I/O error", commandname);
  	status |= outerr(out1);
  	exitstatus = status;
  cmddone:
