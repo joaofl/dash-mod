@@ -1,3 +1,24 @@
+dash (0.5.10.2-3) unstable; urgency=medium
+
+  [ You-Sheng Yang ]
+  * Enable GitLab CI at Salsa.
+  * debian/control: update Standard-Version to 4.2.1.
+  * lintian: fix debhelper-but-no-misc-depends.
+  * lintian: clean up debian/rules.
+
+  [ Sven Joachim ]
+  * Remove dash.preinst (Closes: #907132, #890073).
+
+  [ Andrej Shadura ]
+  * Use an explicit --no-rename of dpkg 1.19.1 (Closes: #890073, #916608).
+  * Use sh_warnx, not warnx which is defined only in bltin.h.
+  * Add #DEBHELPER# token to the prerm, ash.postrm, drop dash.postrm.
+  * Add overrides for unusual-control-interpreter in prerm.
+  * Delete no longer necessary ash.postinst (0.4.3 is no longer in the
+    archive).
+
+ -- Andrej Shadura <andrewsh@debian.org>  Wed, 19 Dec 2018 11:28:12 +0100
+
 dash (0.5.10.2-2) unstable; urgency=medium
 
   [ Ondřej Nový ]
