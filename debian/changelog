@@ -1,3 +1,12 @@
+dash (0.5.10.2-4) unstable; urgency=medium
+
+  * Move Gerrit to Uploaders since he’s going to be away for some time
+    (Closes: #907085).
+  * Add missing --no-rename in more places.
+  * Handle the case when no package has diverted /bin/sh (Closes: #916900).
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 20 Dec 2018 08:42:13 +0100
+
 dash (0.5.10.2-3) unstable; urgency=medium
 
   [ You-Sheng Yang ]
