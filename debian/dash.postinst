@@ -35,7 +35,7 @@ claim_binsh() {
 		return
 	fi
 
-	if [ "$diverter" != bash ]; then
+	if [ -n "$diverter" ] && [ "$diverter" != bash ]; then
 		# Let dpkg-divert error out; we are not taking
 		# over the diversion, unless we added it
 		# ourselves on behalf of bash.
