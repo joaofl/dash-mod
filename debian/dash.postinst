@@ -39,12 +39,12 @@ claim_binsh() {
 		# Let dpkg-divert error out; we are not taking
 		# over the diversion, unless we added it
 		# ourselves on behalf of bash.
-		dpkg-divert --package dash --remove $dfile
+		dpkg-divert --package dash --no-rename --remove $dfile
 		echo "This should never be reached"
 		exit 1
 	fi
 
-	dpkg-divert --package bash --remove $dfile
+	dpkg-divert --package bash --no-rename --remove $dfile
 	dpkg-divert --package dash --no-rename --divert $distrib --add $dfile
 	# remove the old equivalent of $distrib, if it existed.
 	if [ -n "$truename" ]; then
@@ -65,7 +65,7 @@ unclaim_binsh() {
 
 	# Donate the diversion and sh symlink to the bash package.
 	ltarget=$(echo $ltarget | sed s/dash/bash/)
-	dpkg-divert --package dash --remove $dfile
+	dpkg-divert --package dash --no-rename --remove $dfile
 	dpkg-divert --package bash --no-rename --divert $distrib --add $dfile
 	if [ -n "$truename" ]; then
 		rm -f "$truename"
@@ -84,7 +84,7 @@ initial_binsh_setup() {
 	fi
 
 	if [ "$diverter" = ash ]; then
-		dpkg-divert --package ash --remove $dfile
+		dpkg-divert --package ash --no-rename --remove $dfile
 		dpkg-divert --package dash --no-rename --divert $distrib --add $dfile
 
 		if [ "$truename" != "$distrib" ] && [ -e "$truename" ]; then
