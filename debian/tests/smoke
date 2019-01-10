@@ -10,7 +10,6 @@ use Test::More;
 my $srcdir = getcwd;
 
 ok(-x '/bin/sh', '/bin/sh must be executable');
-ok(-x '/bin/sh.distrib', '/bin/sh.distrib should be executable');
 ok(-x '/bin/dash', '/bin/dash must be executable');
 ok(-x '/bin/bash', '/bin/bash must be executable');
 diag(qx(ls -l /bin/sh));
@@ -21,9 +20,6 @@ diag(qx(ls -l /bin/bash));
 like(qx(dpkg -L dash),
      qr{^/bin/sh$}m,
      'dash must contain a /bin/sh symlink, for debootstrap');
-
-like(realpath('/bin/sh.distrib'), qr{^(?:/usr)?/bin/[bd]ash},
-     '/bin/sh.distrib must be an Essential shell, for debootstrap');
 
 is(qx(echo hello), "hello\n");
 
