@@ -1,3 +1,10 @@
+dash (0.5.10.2-5) unstable; urgency=medium
+
+  * Fix lintian overrides.
+  * No longer check /bin/sh.distrib (Closes: #917313).
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 17 Jan 2019 20:08:32 +0100
+
 dash (0.5.10.2-4) unstable; urgency=medium
 
   * Move Gerrit to Uploaders since he’s going to be away for some time
