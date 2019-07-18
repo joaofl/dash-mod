@@ -10,5 +10,6 @@
 0012-enable-large-file-support-when-available.patch
 0013-enable-hardening-for-helpers.patch
 0014-shell-Don-t-include-config.h-for-native-helpers.patch
+0015-system-Disable-glibc-warning-on-sigsetmask.patch
 9001-Add-privmode-Part-1.diff
 9002-Add-privmode-Part-2.diff
