@@ -1,3 +1,20 @@
+dash (0.5.10.2-6) unstable; urgency=medium
+
+  * Apply patch from Chris Lamb:
+    - dash: Fix stack overflow from infinite recursion in script
+      (Closes: #579815)
+  * Apply upstream patches:
+    - shell: Don't include config.h for native helpers
+    - system: Disable glibc warning on sigsetmask
+  * Apply patches proposed upstream:
+    - options: Do not set commandname in procargs
+    - histedit: Fix infinite loop when using 'fc -s'
+      (Closes: #928072)
+  * Update the CI pipeline (thanks to Iñaki Malerba).
+  * Enable hardening for helpers.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 18 Jul 2019 15:15:27 -0300
+
 dash (0.5.10.2-5) unstable; urgency=medium
 
   * Fix lintian overrides.
