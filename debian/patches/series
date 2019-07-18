@@ -8,5 +8,6 @@
 0010-Hardcode-mktemp.diff
 0011-Avoid-crash-when-redirecting-to-file-descriptor-in-e.diff
 0012-enable-large-file-support-when-available.patch
+0013-enable-hardening-for-helpers.patch
 9001-Add-privmode-Part-1.diff
 9002-Add-privmode-Part-2.diff
