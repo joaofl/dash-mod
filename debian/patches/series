@@ -12,5 +12,6 @@
 0014-shell-Don-t-include-config.h-for-native-helpers.patch
 0015-system-Disable-glibc-warning-on-sigsetmask.patch
 0016-options-Do-not-set-commandname-in-procargs.patch
+0017-histedit-Fix-infinite-loop-when-using-fc--s.patch
 9001-Add-privmode-Part-1.diff
 9002-Add-privmode-Part-2.diff
