@@ -127,6 +127,12 @@ Files: install-sh
 Copyright: 1994, X Consortium
 License: Expat
 
+Files:
+ depcomp
+ missing
+Copyright: 1999, 2000, 2003—2012, Free Software Foundation, Inc.
+License: GPL-2+ or BSD-3-clause
+
 Files: src/*
 Copyright: 1997-2005, 2007, Herbert Xu <herbert@gondor.apana.org.au>.
  1989, 1991, 1993, 1995, The Regents of the University of California.
