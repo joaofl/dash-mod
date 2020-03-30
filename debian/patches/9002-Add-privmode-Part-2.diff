@@ -24,7 +24,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  #include "var.h"
  #include "show.h"
 @@ -93,8 +94,6 @@
- 	struct jmploc jmploc;
+ 	volatile int state;
  	struct stackmark smark;
  	int login;
 -	uid_t uid;
@@ -32,7 +32,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  
  #ifdef __GLIBC__
  	dash_errno = __errno_location();
-@@ -150,17 +149,6 @@
+@@ -152,17 +151,6 @@
  	setstackmark(&smark);
  	login = procargs(argc, argv);
  
@@ -52,7 +52,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  		read_profile("/etc/profile");
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -21,7 +21,7 @@
+@@ -20,7 +20,7 @@
  dash_CFILES = \
  	alias.c arith_yacc.c arith_yylex.c cd.c error.c eval.c exec.c expand.c \
  	histedit.c input.c jobs.c mail.c main.c memalloc.c miscbltin.c \
@@ -61,43 +61,6 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  	bltin/printf.c system.c bltin/test.c bltin/times.c var.c
  dash_SOURCES = \
  	$(dash_CFILES) \
---- a/src/Makefile.in
-+++ b/src/Makefile.in
-@@ -69,7 +69,7 @@
- 	histedit.$(OBJEXT) input.$(OBJEXT) jobs.$(OBJEXT) \
- 	mail.$(OBJEXT) main.$(OBJEXT) memalloc.$(OBJEXT) \
- 	miscbltin.$(OBJEXT) mystring.$(OBJEXT) options.$(OBJEXT) \
--	parser.$(OBJEXT) redir.$(OBJEXT) show.$(OBJEXT) trap.$(OBJEXT) \
-+	parser.$(OBJEXT) priv.$(OBJEXT) redir.$(OBJEXT) show.$(OBJEXT) trap.$(OBJEXT) \
- 	output.$(OBJEXT) bltin/printf.$(OBJEXT) system.$(OBJEXT) \
- 	bltin/test.$(OBJEXT) bltin/times.$(OBJEXT) var.$(OBJEXT)
- am_dash_OBJECTS = $(am__objects_1)
-@@ -231,7 +231,7 @@
- dash_CFILES = \
- 	alias.c arith_yacc.c arith_yylex.c cd.c error.c eval.c exec.c expand.c \
- 	histedit.c input.c jobs.c mail.c main.c memalloc.c miscbltin.c \
--	mystring.c options.c parser.c redir.c show.c trap.c output.c \
-+	mystring.c options.c parser.c priv.c redir.c show.c trap.c output.c \
- 	bltin/printf.c system.c bltin/test.c bltin/times.c var.c
- 
- dash_SOURCES = \
-@@ -239,7 +239,7 @@
- 	alias.h arith_yacc.h bltin/bltin.h cd.h error.h eval.h exec.h \
- 	expand.h \
- 	init.h input.h jobs.h machdep.h mail.h main.h memalloc.h miscbltin.h \
--	myhistedit.h mystring.h options.h output.h parser.h redir.h shell.h \
-+	myhistedit.h mystring.h options.h output.h parser.h priv.h redir.h shell.h \
- 	show.h system.h trap.h var.h
- 
- dash_LDADD = builtins.o init.o nodes.o signames.o syntax.o
-@@ -374,6 +374,7 @@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/output.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/priv.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/redir.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/show.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/system.Po@am__quote@
 --- a/src/options.c
 +++ b/src/options.c
 @@ -45,6 +45,7 @@
@@ -117,7 +80,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  	"nolog",
  	"debug",
  };
-@@ -184,6 +185,7 @@
+@@ -183,6 +184,7 @@
  #ifdef DEBUG
  	opentrace();
  #endif
@@ -166,7 +129,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
 +void setprivileged(int on);
 --- a/src/var.c
 +++ b/src/var.c
-@@ -195,9 +195,6 @@
+@@ -188,9 +188,6 @@
  void
  choose_ps1(void)
  {
