@@ -1,13 +1,14 @@
-AC_INIT(dash, 0.5.10.2)
+AC_INIT([dash],[0.5.10.2])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_CONFIG_SRCDIR([src/main.c])
 
 AC_CONFIG_HEADERS(config.h)
 
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
+
 dnl Checks for programs.
 AC_PROG_CC
-AC_GNU_SOURCE
-AC_PROG_YACC
+AC_USE_SYSTEM_EXTENSIONS
 
 AC_MSG_CHECKING([for build system compiler])
 if test "$cross_compiling" = yes; then

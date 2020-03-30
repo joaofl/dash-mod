@@ -53,6 +53,7 @@
 #include <termios.h>
 #undef CEOF			/* syntax.h redefines this */
 #endif
+#include "exec.h"
 #include "eval.h"
 #include "redir.h"
 #include "show.h"
@@ -96,8 +97,9 @@ static int ttyfd = -1;
 
 /* current job */
 static struct job *curjob;
-/* number of presumed living untracked jobs */
-static int jobless;
+
+/* Set if we are in the vforked child */
+int vforked;
 
 STATIC void set_curjob(struct job *, unsigned);
 STATIC int jobno(const struct job *);
@@ -407,12 +409,11 @@ out:
 #endif
 
 STATIC int
-sprint_status(char *s, int status, int sigonly)
+sprint_status(char *os, int status, int sigonly)
 {
-	int col;
+	char *s = os;
 	int st;
 
-	col = 0;
 	st = WEXITSTATUS(status);
 	if (!WIFEXITED(status)) {
 #if JOBS
@@ -428,21 +429,21 @@ sprint_status(char *s, int status, int sigonly)
 				goto out;
 #endif
 		}
-		col = fmtstr(s, 32, strsignal(st));
+		s = stpncpy(s, strsignal(st), 32);
 #ifdef WCOREDUMP
 		if (WCOREDUMP(status)) {
-			col += fmtstr(s + col, 16, " (core dumped)");
+			s = stpcpy(s, " (core dumped)");
 		}
 #endif
 	} else if (!sigonly) {
 		if (st)
-			col = fmtstr(s, 16, "Done(%d)", st);
+			s += fmtstr(s, 16, "Done(%d)", st);
 		else
-			col = fmtstr(s, 16, "Done");
+			s = stpcpy(s, "Done");
 	}
 
 out:
-	return col;
+	return s - os;
 }
 
 static void
@@ -556,8 +557,7 @@ showjobs(struct output *out, int mode)
 	TRACE(("showjobs(%x) called\n", mode));
 
 	/* If not even one one job changed, there is nothing to do */
-	while (dowait(DOWAIT_NORMAL, NULL) > 0)
-		continue;
+	dowait(DOWAIT_NORMAL, NULL);
 
 	for (jp = curjob; jp; jp = jp->prev_job) {
 		if (!(mode & SHOW_CHANGED) || jp->changed)
@@ -614,7 +614,7 @@ waitcmd(int argc, char **argv)
 				jp->waited = 1;
 				jp = jp->prev_job;
 			}
-			if (dowait(DOWAIT_WAITCMD, 0) <= 0)
+			if (!dowait(DOWAIT_WAITCMD, 0))
 				goto sigout;
 		}
 	}
@@ -636,9 +636,8 @@ start:
 		} else
 			job = getjob(*argv, 0);
 		/* loop until process terminated or stopped */
-		while (job->state == JOBRUNNING)
-			if (dowait(DOWAIT_WAITCMD, 0) <= 0)
-				goto sigout;
+		if (!dowait(DOWAIT_WAITCMD, job))
+			goto sigout;
 		job->waited = 1;
 		retval = getstatus(job);
 repeat:
@@ -845,20 +844,29 @@ growjobtab(void)
  * Called with interrupts off.
  */
 
-STATIC inline void
-forkchild(struct job *jp, union node *n, int mode)
+static void forkchild(struct job *jp, union node *n, int mode)
 {
+	int lvforked;
 	int oldlvl;
 
 	TRACE(("Child shell %d\n", getpid()));
-	oldlvl = shlvl;
-	shlvl++;
 
-	closescript();
-	clear_traps();
+	oldlvl = shlvl;
+	lvforked = vforked;
+
+	if (!lvforked) {
+		shlvl++;
+
+		closescript();
+		clear_traps();
+
 #if JOBS
-	/* do job control only in root shell */
-	jobctl = 0;
+		/* do job control only in root shell */
+		jobctl = 0;
+#endif
+	}
+
+#if JOBS
 	if (mode != FORK_NOJOB && jp->jobctl && !oldlvl) {
 		pid_t pgrp;
 
@@ -884,24 +892,33 @@ forkchild(struct job *jp, union node *n, int mode)
 		}
 	}
 	if (!oldlvl && iflag) {
-		setsignal(SIGINT);
-		setsignal(SIGQUIT);
+		if (mode != FORK_BG) {
+			setsignal(SIGINT);
+			setsignal(SIGQUIT);
+		}
 		setsignal(SIGTERM);
 	}
+
+	if (lvforked)
+		return;
+
 	for (jp = curjob; jp; jp = jp->prev_job)
 		freejob(jp);
-	jobless = 0;
 }
 
-STATIC inline void
-forkparent(struct job *jp, union node *n, int mode, pid_t pid)
+static void forkparent(struct job *jp, union node *n, int mode, pid_t pid)
 {
-	TRACE(("In parent shell:  child = %d\n", pid));
-	if (!jp) {
-		while (jobless && dowait(DOWAIT_NORMAL, 0) > 0);
-		jobless++;
-		return;
+	if (pid < 0) {
+		TRACE(("Fork failed, errno=%d", errno));
+		if (jp)
+			freejob(jp);
+		sh_error("Cannot fork");
+		/* NOTREACHED */
 	}
+
+	TRACE(("In parent shell:  child = %d\n", pid));
+	if (!jp)
+		return;
 #if JOBS
 	if (mode != FORK_NOJOB && jp->jobctl) {
 		int pgrp;
@@ -935,17 +952,38 @@ forkshell(struct job *jp, union node *n, int mode)
 
 	TRACE(("forkshell(%%%d, %p, %d) called\n", jobno(jp), n, mode));
 	pid = fork();
-	if (pid < 0) {
-		TRACE(("Fork failed, errno=%d", errno));
-		if (jp)
-			freejob(jp);
-		sh_error("Cannot fork");
-	}
 	if (pid == 0)
 		forkchild(jp, n, mode);
 	else
 		forkparent(jp, n, mode, pid);
+
 	return pid;
+}
+
+struct job *vforkexec(union node *n, char **argv, const char *path, int idx)
+{
+	struct job *jp;
+	int pid;
+
+	jp = makejob(n, 1);
+
+	sigblockall(NULL);
+	vforked++;
+
+	pid = vfork();
+
+	if (!pid) {
+		forkchild(jp, n, FORK_FG);
+		sigclearmask();
+		shellexec(argv, path, idx);
+		/* NOTREACHED */
+	}
+
+	vforked = 0;
+	sigclearmask();
+	forkparent(jp, n, FORK_FG, pid);
+
+	return jp;
 }
 
 /*
@@ -975,17 +1013,10 @@ waitforjob(struct job *jp)
 	int st;
 
 	TRACE(("waitforjob(%%%d) called\n", jp ? jobno(jp) : 0));
-	if (!jp) {
-		int pid = gotsigchld;
-
-		while (pid > 0)
-			pid = dowait(DOWAIT_NORMAL, NULL);
-
+	dowait(jp ? DOWAIT_BLOCK : DOWAIT_NORMAL, jp);
+	if (!jp)
 		return exitstatus;
-	}
 
-	while (jp->state == JOBRUNNING)
-		dowait(DOWAIT_BLOCK, jp);
 	st = getstatus(jp);
 #if JOBS
 	if (jp->jobctl) {
@@ -1013,8 +1044,7 @@ waitforjob(struct job *jp)
  * Wait for a process to terminate.
  */
 
-STATIC int
-dowait(int block, struct job *job)
+static int waitone(int block, struct job *job)
 {
 	int pid;
 	int status;
@@ -1057,8 +1087,6 @@ dowait(int block, struct job *job)
 		if (thisjob)
 			goto gotjob;
 	}
-	if (!JOBS || !WIFSTOPPED(status))
-		jobless--;
 	goto out;
 
 gotjob:
@@ -1093,50 +1121,39 @@ out:
 	return pid;
 }
 
+static int dowait(int block, struct job *jp)
+{
+	int pid = block == DOWAIT_NORMAL ? gotsigchld : 1;
 
+	while (jp ? jp->state == JOBRUNNING : pid > 0) {
+		if (!jp)
+			gotsigchld = 0;
+		pid = waitone(block, jp);
+	}
+
+	return pid;
+}
 
 /*
- * Do a wait system call.  If job control is compiled in, we accept
- * stopped processes.  If block is zero, we return a value of zero
- * rather than blocking.
+ * Do a wait system call.  If block is zero, we return -1 rather than
+ * blocking.  If block is DOWAIT_WAITCMD, we return 0 when a signal
+ * other than SIGCHLD interrupted the wait.
  *
- * System V doesn't have a non-blocking wait system call.  It does
- * have a SIGCLD signal that is sent to a process when one of it's
- * children dies.  The obvious way to use SIGCLD would be to install
- * a handler for SIGCLD which simply bumped a counter when a SIGCLD
- * was received, and have waitproc bump another counter when it got
- * the status of a process.  Waitproc would then know that a wait
- * system call would not block if the two counters were different.
- * This approach doesn't work because if a process has children that
- * have not been waited for, System V will send it a SIGCLD when it
- * installs a signal handler for SIGCLD.  What this means is that when
- * a child exits, the shell will be sent SIGCLD signals continuously
- * until is runs out of stack space, unless it does a wait call before
- * restoring the signal handler.  The code below takes advantage of
- * this (mis)feature by installing a signal handler for SIGCLD and
- * then checking to see whether it was called.  If there are any
- * children to be waited for, it will be.
+ * We use sigsuspend in conjunction with a non-blocking wait3 in
+ * order to ensure that waitcmd exits promptly upon the reception
+ * of a signal.
  *
- * If neither SYSV nor BSD is defined, we don't implement nonblocking
- * waits at all.  In this case, the user will not be informed when
- * a background process until the next time she runs a real program
- * (as opposed to running a builtin command or just typing return),
- * and the jobs command may give out of date information.
+ * For code paths other than waitcmd we either use a blocking wait3
+ * or a non-blocking wait3.  For the latter case the caller of dowait
+ * must ensure that it is called over and over again until all dead
+ * children have been reaped.  Otherwise zombies may linger.
  */
-
-#ifdef SYSV
-STATIC int gotsigchild;
-
-STATIC int onsigchild() {
-	gotsigchild = 1;
-}
-#endif
 
 
 STATIC int
 waitproc(int block, int *status)
 {
-	sigset_t mask, oldmask;
+	sigset_t oldmask;
 	int flags = block == DOWAIT_BLOCK ? 0 : WNOHANG;
 	int err;
 
@@ -1146,20 +1163,18 @@ waitproc(int block, int *status)
 #endif
 
 	do {
-		gotsigchld = 0;
 		err = wait3(status, flags, NULL);
-		if (err || !block)
+		if (err || (err = -!block))
 			break;
 
-		block = 0;
-
-		sigfillset(&mask);
-		sigprocmask(SIG_SETMASK, &mask, &oldmask);
+		sigblockall(&oldmask);
 
 		while (!gotsigchld && !pending_sig)
 			sigsuspend(&oldmask);
 
 		sigclearmask();
+
+		err = 0;
 	} while (gotsigchld);
 
 	return err;
@@ -1406,7 +1421,8 @@ cmdputs(const char *s)
 				str = "${";
 			goto dostr;
 		case CTLENDVAR:
-			str = "\"}" + !(quoted & 1);
+			str = "\"}";
+			str += !(quoted & 1);
 			quoted >>= 1;
 			subtype = 0;
 			goto dostr;

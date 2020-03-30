@@ -125,8 +125,7 @@ STATIC void synerror(const char *) __attribute__((__noreturn__));
 STATIC void setprompt(int);
 
 
-static inline int
-isassignment(const char *p)
+int isassignment(const char *p)
 {
 	const char *q = endofname(p);
 	if (p == q)
@@ -167,7 +166,7 @@ list(int nlflag)
 
 	n1 = NULL;
 	for (;;) {
-		switch (peektoken()) {
+		switch (readtoken()) {
 		case TNL:
 			if (!(nlflag & 1))
 				break;
@@ -178,9 +177,12 @@ list(int nlflag)
 			if (!n1 && (nlflag & 1))
 				n1 = NEOF;
 			parseheredoc();
+			tokpushback++;
+			lasttoken = TEOF;
 			return n1;
 		}
 
+		tokpushback++;
 		checkkwd = CHKNL | CHKKWD | CHKALIAS;
 		if (nlflag == 2 && tokendlist[peektoken()])
 			return n1;
@@ -1266,7 +1268,7 @@ varname:
 			do {
 				STPUTC(c, out);
 				c = pgetc_eatbnl();
-			} while (is_digit(c));
+			} while (!subtype && is_digit(c));
 		} else if (c != '}') {
 			int cc = c;
 
@@ -1368,6 +1370,7 @@ parsebackq: {
 	union node *n;
 	char *str;
 	size_t savelen;
+	struct heredoc *saveheredoclist;
 	int uninitialized_var(saveprompt);
 
 	str = NULL;
@@ -1432,6 +1435,9 @@ done:
 	*nlpp = (struct nodelist *)stalloc(sizeof (struct nodelist));
 	(*nlpp)->next = NULL;
 
+	saveheredoclist = heredoclist;
+	heredoclist = NULL;
+
 	if (oldstyle) {
 		saveprompt = doprompt;
 		doprompt = 0;
@@ -1444,20 +1450,19 @@ done:
 	else {
 		if (readtoken() != TRP)
 			synexpect(TRP);
+		setinputstring(nullstr);
 	}
 
+	parseheredoc();
+	heredoclist = saveheredoclist;
+
 	(*nlpp)->n = n;
-        if (oldstyle) {
-		/*
-		 * Start reading from old file again, ignoring any pushed back
-		 * tokens left from the backquote parsing
-		 */
-                popfile();
+	/* Start reading from old file again. */
+	popfile();
+	/* Ignore any pushed back tokens left from the backquote parsing. */
+	if (oldstyle)
 		tokpushback = 0;
-	}
-	while (stackblocksize() <= savelen)
-		growstackblock();
-	STARTSTACKSTR(out);
+	out = growstackto(savelen + 1);
 	if (str) {
 		memcpy(out, str, savelen);
 		STADJUST(savelen, out);
