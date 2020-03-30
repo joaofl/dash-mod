@@ -1,3 +1,10 @@
+dash (0.5.10.2+git20200120+f30bd15-1) experimental; urgency=medium
+
+  * New upstream snapshot.
+  * Drop patches applied upstream.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Mon, 30 Mar 2020 11:54:18 +0200
+
 dash (0.5.10.2-7) unstable; urgency=medium
 
   * Provide machine-readable copyright file.
