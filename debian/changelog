@@ -1,3 +1,14 @@
+dash (0.5.10.2-7) unstable; urgency=medium
+
+  * Provide machine-readable copyright file.
+  * Use debhelper-compat instead of debian/compat.
+  * Use dh 12.
+  * Drop nostrip handling, it is build into dh_strip.
+  * Wrap and sort Build-Depends.
+  * Change the privmode long option name to privileged to match bash.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Mon, 30 Mar 2020 11:45:13 +0200
+
 dash (0.5.10.2-6) unstable; urgency=medium
 
   * Apply patch from Chris Lamb:
@@ -2068,4 +2079,3 @@ ash (0.3-1) unstable; urgency=low
   * Initial Release.
 
  -- Herbert Xu <herbert@debian.org>  Thu, 19 Jun 1997 19:29:16 +1000
-

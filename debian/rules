@@ -15,9 +15,6 @@ ifneq (,$(findstring diet,$(DEB_BUILD_OPTIONS)))
   CPPFLAGS =
   LDFLAGS =
 endif
-ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-  STRIP =: strip
-endif
 
 %:
 	dh $@

@@ -9,7 +9,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  Enable asynchronous notification of background job completion.
  (UNIMPLEMENTED for 4.4alpha)
 -.It Fl p Em nopriv
-+.It Fl p Em priv
++.It Fl p Em priviliged
  Do not attempt to reset effective uid if it does not match uid. This is not set
  by default to help avoid incorrect usage by setuid root programs via system(3) or
  popen(3).
@@ -76,7 +76,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  	"notify",
  	"nounset",
 -	"nopriv",
-+	"priv",
++	"privileged",
  	"nolog",
  	"debug",
  };
