@@ -67,10 +67,6 @@ MKINIT char basebuf[IBUFSIZ];	/* buffer for top level input file */
 struct parsefile *parsefile = &basepf;	/* current input file */
 int whichprompt;		/* 1 == PS1, 2 == PS2 */
 
-#ifndef SMALL
-EditLine *el;			/* cookie for editline package */
-#endif
-
 STATIC void pushfile(void);
 static int preadfd(void);
 static void setinputfd(int fd, int push);
@@ -78,6 +74,7 @@ static int preadbuffer(void);
 
 #ifdef mkinit
 INCLUDE <stdio.h>
+INCLUDE <unistd.h>
 INCLUDE "input.h"
 INCLUDE "error.h"
 
@@ -90,6 +87,14 @@ RESET {
 	/* clear input buffer */
 	basepf.lleft = basepf.nleft = 0;
 	popallfiles();
+}
+
+FORKRESET {
+	popallfiles();
+	if (parsefile->fd > 0) {
+		close(parsefile->fd);
+		parsefile->fd = 0;
+	}
 }
 #endif
 
@@ -388,7 +393,7 @@ setinputfile(const char *fname, int flags)
 	int fd;
 
 	INTOFF;
-	if ((fd = open(fname, O_RDONLY)) < 0) {
+	if ((fd = open64(fname, O_RDONLY)) < 0) {
 		if (flags & INPUT_NOFILE_OK)
 			goto out;
 		exitstatus = 127;
@@ -494,21 +499,4 @@ void
 popallfiles(void)
 {
 	unwindfiles(&basepf);
-}
-
-
-
-/*
- * Close the file(s) that the shell is reading commands from.  Called
- * after a fork is done.
- */
-
-void
-closescript(void)
-{
-	popallfiles();
-	if (parsefile->fd > 0) {
-		close(parsefile->fd);
-		parsefile->fd = 0;
-	}
 }

@@ -115,7 +115,6 @@ STATIC union node *simplecmd(void);
 STATIC union node *makename(void);
 STATIC void parsefname(void);
 STATIC void parseheredoc(void);
-STATIC int peektoken(void);
 STATIC int readtoken(void);
 STATIC int xxreadtoken(void);
 STATIC int pgetc_eatbnl();
@@ -125,8 +124,7 @@ STATIC void synerror(const char *) __attribute__((__noreturn__));
 STATIC void setprompt(int);
 
 
-static inline int
-isassignment(const char *p)
+int isassignment(const char *p)
 {
 	const char *q = endofname(p);
 	if (p == q)
@@ -162,27 +160,31 @@ parsecmd(int interact)
 STATIC union node *
 list(int nlflag)
 {
+	int chknl = nlflag & 1 ? 0 : CHKNL;
 	union node *n1, *n2, *n3;
 	int tok;
 
 	n1 = NULL;
 	for (;;) {
-		switch (peektoken()) {
+		checkkwd = chknl | CHKKWD | CHKALIAS;
+		tok = readtoken();
+		switch (tok) {
 		case TNL:
-			if (!(nlflag & 1))
-				break;
 			parseheredoc();
 			return n1;
 
 		case TEOF:
-			if (!n1 && (nlflag & 1))
+			if (!n1 && !chknl)
 				n1 = NEOF;
+out_eof:
 			parseheredoc();
+			tokpushback++;
+			lasttoken = TEOF;
 			return n1;
 		}
 
-		checkkwd = CHKNL | CHKKWD | CHKALIAS;
-		if (nlflag == 2 && tokendlist[peektoken()])
+		tokpushback++;
+		if (nlflag == 2 && tokendlist[tok])
 			return n1;
 		nlflag |= 2;
 
@@ -212,15 +214,16 @@ list(int nlflag)
 			n1 = n3;
 		}
 		switch (tok) {
-		case TNL:
 		case TEOF:
+			goto out_eof;
+		case TNL:
 			tokpushback++;
 			/* fall through */
 		case TBACKGND:
 		case TSEMI:
 			break;
 		default:
-			if ((nlflag & 1))
+			if (!chknl)
 				synexpect(-1);
 			tokpushback++;
 			return n1;
@@ -684,16 +687,6 @@ parseheredoc(void)
 }
 
 STATIC int
-peektoken(void)
-{
-	int t;
-
-	t = readtoken();
-	tokpushback++;
-	return (t);
-}
-
-STATIC int
 readtoken(void)
 {
 	int t;
@@ -711,9 +704,13 @@ top:
 	if (kwd & CHKNL) {
 		while (t == TNL) {
 			parseheredoc();
+			checkkwd = 0;
 			t = xxreadtoken();
 		}
 	}
+
+	kwd |= checkkwd;
+	checkkwd = 0;
 
 	if (t != TWORD || quoteflag) {
 		goto out;
@@ -732,7 +729,7 @@ top:
 		}
 	}
 
-	if (checkkwd & CHKALIAS) {
+	if (kwd & CHKALIAS) {
 		struct alias *ap;
 		if ((ap = lookupalias(wordtext, 1)) != NULL) {
 			if (*ap->val) {
@@ -742,7 +739,6 @@ top:
 		}
 	}
 out:
-	checkkwd = 0;
 #ifdef DEBUG
 	if (!alreadyseen)
 	    TRACE(("token %s %s\n", tokname[t], t == TWORD ? wordtext : ""));
@@ -1266,7 +1262,7 @@ varname:
 			do {
 				STPUTC(c, out);
 				c = pgetc_eatbnl();
-			} while (is_digit(c));
+			} while (!subtype && is_digit(c));
 		} else if (c != '}') {
 			int cc = c;
 
@@ -1368,6 +1364,7 @@ parsebackq: {
 	union node *n;
 	char *str;
 	size_t savelen;
+	struct heredoc *saveheredoclist;
 	int uninitialized_var(saveprompt);
 
 	str = NULL;
@@ -1396,7 +1393,7 @@ parsebackq: {
 				goto done;
 
 			case '\\':
-                                pc = pgetc_eatbnl();
+                                pc = pgetc();
                                 if (pc != '\\' && pc != '`' && pc != '$'
                                     && (!synstack->dblquote || pc != '"'))
                                         STPUTC('\\', pout);
@@ -1432,6 +1429,9 @@ done:
 	*nlpp = (struct nodelist *)stalloc(sizeof (struct nodelist));
 	(*nlpp)->next = NULL;
 
+	saveheredoclist = heredoclist;
+	heredoclist = NULL;
+
 	if (oldstyle) {
 		saveprompt = doprompt;
 		doprompt = 0;
@@ -1444,20 +1444,19 @@ done:
 	else {
 		if (readtoken() != TRP)
 			synexpect(TRP);
+		setinputstring(nullstr);
 	}
 
+	parseheredoc();
+	heredoclist = saveheredoclist;
+
 	(*nlpp)->n = n;
-        if (oldstyle) {
-		/*
-		 * Start reading from old file again, ignoring any pushed back
-		 * tokens left from the backquote parsing
-		 */
-                popfile();
+	/* Start reading from old file again. */
+	popfile();
+	/* Ignore any pushed back tokens left from the backquote parsing. */
+	if (oldstyle)
 		tokpushback = 0;
-	}
-	while (stackblocksize() <= savelen)
-		growstackblock();
-	STARTSTACKSTR(out);
+	out = growstackto(savelen + 1);
 	if (str) {
 		memcpy(out, str, savelen);
 		STADJUST(savelen, out);
@@ -1566,20 +1565,31 @@ setprompt(int which)
 const char *
 expandstr(const char *ps)
 {
-	union node n;
+	struct parsefile *file_stop;
+	struct jmploc *volatile savehandler;
+	struct heredoc *saveheredoclist;
+	const char *result;
 	int saveprompt;
+	struct jmploc jmploc;
+	union node n;
+	int err;
+
+	file_stop = parsefile;
 
 	/* XXX Fix (char *) cast. */
 	setinputstring((char *)ps);
 
+	saveheredoclist = heredoclist;
+	heredoclist = NULL;
 	saveprompt = doprompt;
 	doprompt = 0;
+	result = ps;
+	savehandler = handler;
+	if (unlikely(err = setjmp(jmploc.loc)))
+		goto out;
+	handler = &jmploc;
 
 	readtoken1(pgetc_eatbnl(), DQSYNTAX, FAKEEOFMARK, 0);
-
-	doprompt = saveprompt;
-
-	popfile();
 
 	n.narg.type = NARG;
 	n.narg.next = NULL;
@@ -1587,7 +1597,18 @@ expandstr(const char *ps)
 	n.narg.backquote = backquotelist;
 
 	expandarg(&n, NULL, EXP_QUOTED);
-	return stackblock();
+	result = stackblock();
+
+out:
+	handler = savehandler;
+	if (err && exception != EXERROR)
+		longjmp(handler->loc, 1);
+
+	doprompt = saveprompt;
+	unwindfiles(file_stop);
+	heredoclist = saveheredoclist;
+
+	return result;
 }
 
 /*

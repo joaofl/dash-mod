@@ -181,6 +181,9 @@
 #undef _POSIX_SOURCE
 
 /* 64-bit operations are the same as 32-bit */
+#undef dirent64
+
+/* 64-bit operations are the same as 32-bit */
 #undef fstat64
 
 /* 64-bit operations are the same as 32-bit */
@@ -188,6 +191,9 @@
 
 /* 64-bit operations are the same as 32-bit */
 #undef open64
+
+/* 64-bit operations are the same as 32-bit */
+#undef readdir64
 
 /* klibc has bsd_signal instead of signal */
 #undef signal
