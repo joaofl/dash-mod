@@ -1,4 +1,4 @@
-dash (0.5.11+git20200708+dd9ef66) experimental; urgency=medium
+dash (0.5.11+git20200708+dd9ef66-1) experimental; urgency=medium
 
   * New upstream snapshot
     (Closes: #541544, #541642, #692611, #930805).
