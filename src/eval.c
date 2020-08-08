@@ -41,6 +41,7 @@
  * Evaluate a command.
  */
 
+#include "init.h"
 #include "main.h"
 #include "shell.h"
 #include "nodes.h"
@@ -76,6 +77,9 @@ char *commandname;
 int exitstatus;			/* exit status of last command */
 int back_exitstatus;		/* exit status of backquoted command */
 int savestatus = -1;		/* exit status of last command outside traps */
+
+/* Prevent PS4 nesting. */
+MKINIT int inps4;
 
 
 #if !defined(__alpha__) || (defined(__GNUC__) && __GNUC__ >= 3)
@@ -122,6 +126,7 @@ EXITRESET {
 	}
 	evalskip = 0;
 	loopnest = 0;
+	inps4 = 0;
 }
 #endif
 
@@ -207,6 +212,9 @@ evaltree(union node *n, int flags)
 	int status = 0;
 
 	setstackmark(&smark);
+
+	if (nflag)
+		goto out;
 
 	if (n == NULL) {
 		TRACE(("evaltree(NULL) called\n"));
@@ -483,17 +491,18 @@ evalsubshell(union node *n, int flags)
 		lineno -= funcline - 1;
 
 	expredir(n->nredir.redirect);
-	if (!backgnd && flags & EV_EXIT && !have_traps())
-		goto nofork;
 	INTOFF;
+	if (!backgnd && flags & EV_EXIT && !have_traps()) {
+		forkreset();
+		goto nofork;
+	}
 	jp = makejob(n, 1);
 	if (forkshell(jp, n, backgnd) == 0) {
-		INTON;
 		flags |= EV_EXIT;
 		if (backgnd)
 			flags &=~ EV_TESTED;
 nofork:
-		reset_handler();
+		INTON;
 		redirect(n->nredir.redirect, 0);
 		evaltreenr(n->nredir.n, flags);
 		/* never returns */
@@ -576,7 +585,6 @@ evalpipe(union node *n, int flags)
 			}
 		}
 		if (forkshell(jp, lp->n, n->npipe.backgnd) == 0) {
-			reset_handler();
 			INTON;
 			if (pip[1] >= 0) {
 				close(pip[0]);
@@ -633,7 +641,6 @@ evalbackcmd(union node *n, struct backcmd *result)
 		sh_error("Pipe call failed");
 	jp = makejob(n, 1);
 	if (forkshell(jp, n, FORK_NOJOB) == 0) {
-		reset_handler();
 		FORCEINTON;
 		close(pip[0]);
 		if (pip[1] != 1) {
@@ -855,12 +862,14 @@ bail:
 	}
 
 	/* Print the command if xflag is set. */
-	if (xflag) {
+	if (xflag && !inps4) {
 		struct output *out;
 		int sep;
 
 		out = &preverrout;
+		inps4 = 1;
 		outstr(expandstr(ps4val()), out);
+		inps4 = 0;
 		sep = 0;
 		sep = eprintlist(out, varlist.list, sep);
 		eprintlist(out, osp, sep);

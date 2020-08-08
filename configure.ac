@@ -1,4 +1,4 @@
-AC_INIT([dash],[0.5.10.2])
+AC_INIT([dash],[0.5.11])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_CONFIG_SRCDIR([src/main.c])
 
@@ -37,9 +37,10 @@ if test "$enable_static" = "yes"; then
 	export LDFLAGS="-static -Wl,--fatal-warnings"
 fi
 
-AC_ARG_ENABLE(fnmatch, AS_HELP_STRING(--enable-fnmatch, \
-				      [Use fnmatch(3) from libc]))
-AC_ARG_ENABLE(glob, AS_HELP_STRING(--enable-glob, [Use glob(3) from libc]))
+AC_ARG_ENABLE(fnmatch, AS_HELP_STRING(--disable-fnmatch, \
+				      [Do not use fnmatch(3) from libc]))
+AC_ARG_ENABLE(glob, AS_HELP_STRING(--disable-glob, \
+				   [Do not use glob(3) from libc]))
 
 dnl Checks for libraries.
 
@@ -122,12 +123,12 @@ if test "$enable_test_workaround" = "yes"; then
 		[Define if your faccessat tells root all files are executable])
 fi
 
-if test "$enable_fnmatch" = yes; then
+if test "$enable_fnmatch" != no; then
 	use_fnmatch=
 	AC_CHECK_FUNCS(fnmatch, use_fnmatch=yes)
 fi
 
-if test "$use_fnmatch" = yes && test "$enable_glob" = yes; then
+if test "$use_fnmatch" = yes && test "$enable_glob" != no; then
 	AC_CHECK_FUNCS(glob)
 fi
 
@@ -144,8 +145,20 @@ AC_CHECK_FUNC(stat64,, [
 	AC_DEFINE(fstat64, fstat, [64-bit operations are the same as 32-bit])
 	AC_DEFINE(lstat64, lstat, [64-bit operations are the same as 32-bit])
 	AC_DEFINE(stat64, stat, [64-bit operations are the same as 32-bit])
+	AC_DEFINE(readdir64, readdir,
+		  [64-bit operations are the same as 32-bit])
+	AC_DEFINE(dirent64, dirent,
+		  [64-bit operations are the same as 32-bit])
 ])
 
+AC_CHECK_FUNC(glob64,, [
+	AC_DEFINE(glob64_t, glob_t, [64-bit operations are the same as 32-bit])
+	AC_DEFINE(glob64, glob, [64-bit operations are the same as 32-bit])
+	AC_DEFINE(globfree64, globfree,
+		  [64-bit operations are the same as 32-bit])
+])
+
+dnl OS X apparently has stat64 but not open64.
 AC_CHECK_FUNC(open64,, [
 	AC_DEFINE(open64, open, [64-bit operations are the same as 32-bit])
 ])
