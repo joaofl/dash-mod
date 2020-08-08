@@ -1,7 +1,19 @@
-Description: Implement privmode, part 1
 From: Tavis Ormandy <taviso@google.com>
-Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
+Date: Thu, 22 Aug 2013 10:59:36 -0700
+Subject: Implement privmode, part 1
 
+Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
+---
+ src/dash.1    | 16 ++++++++++------
+ src/main.c    | 17 +++++++++++++++++
+ src/options.c |  2 ++
+ src/options.h |  7 ++++---
+ src/var.c     | 29 +++++++++++++++++++++++------
+ src/var.h     |  1 +
+ 6 files changed, 57 insertions(+), 15 deletions(-)
+
+diff --git a/src/dash.1 b/src/dash.1
+index b286f79..6c62245 100644
 --- a/src/dash.1
 +++ b/src/dash.1
 @@ -41,8 +41,8 @@
@@ -37,7 +49,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  .Ek
  .Bk -words
  .Op Fl o Ar option_name
-@@ -257,6 +257,10 @@
+@@ -257,6 +257,10 @@ if it has been set).
  .It Fl b Em notify
  Enable asynchronous notification of background job completion.
  (UNIMPLEMENTED for 4.4alpha)
@@ -48,10 +60,12 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  .El
  .Ss Lexical Structure
  The shell reads input in terms of lines from a file and breaks it up into
+diff --git a/src/main.c b/src/main.c
+index 12dfc6e..83f0514 100644
 --- a/src/main.c
 +++ b/src/main.c
-@@ -93,11 +93,16 @@
- 	struct jmploc jmploc;
+@@ -93,11 +93,16 @@ main(int argc, char **argv)
+ 	volatile int state;
  	struct stackmark smark;
  	int login;
 +	uid_t uid;
@@ -67,7 +81,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  #if PROFILE
  	monitor(4, etext, profile_buf, sizeof profile_buf, 50);
  #endif
-@@ -144,6 +149,18 @@
+@@ -146,6 +151,18 @@ main(int argc, char **argv)
  	init();
  	setstackmark(&smark);
  	login = procargs(argc, argv);
@@ -86,9 +100,11 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  	if (login) {
  		state = 1;
  		read_profile("/etc/profile");
+diff --git a/src/options.c b/src/options.c
+index a46c23b..48502bb 100644
 --- a/src/options.c
 +++ b/src/options.c
-@@ -79,6 +79,7 @@
+@@ -79,6 +79,7 @@ static const char *const optnames[NOPTS] = {
  	"allexport",
  	"notify",
  	"nounset",
@@ -96,7 +112,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  	"nolog",
  	"debug",
  };
-@@ -99,6 +100,7 @@
+@@ -99,6 +100,7 @@ const char optletters[NOPTS] = {
  	'a',
  	'b',
  	'u',
@@ -104,9 +120,11 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  	0,
  	0,
  };
+diff --git a/src/options.h b/src/options.h
+index 975fe33..9e90947 100644
 --- a/src/options.h
 +++ b/src/options.h
-@@ -59,10 +59,11 @@
+@@ -59,10 +59,11 @@ struct shparam {
  #define	aflag optlist[12]
  #define	bflag optlist[13]
  #define	uflag optlist[14]
@@ -121,9 +139,11 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  
  extern const char optletters[NOPTS];
  extern char optlist[NOPTS];
+diff --git a/src/var.c b/src/var.c
+index 0d7e1db..35334bc 100644
 --- a/src/var.c
 +++ b/src/var.c
-@@ -85,6 +85,9 @@
+@@ -81,6 +81,9 @@ MKINIT char defoptindvar[] = "OPTIND=1";
  int lineno;
  char linenovar[sizeof("LINENO=")+sizeof(int)*CHAR_BIT/3+1] = "LINENO=";
  
@@ -133,7 +153,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  /* Some macros in var.h depend on the order, add new variables to the end. */
  struct var varinit[] = {
  #if ATTY
-@@ -98,7 +101,7 @@
+@@ -90,7 +93,7 @@ struct var varinit[] = {
  	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"MAIL\0",	changemail },
  	{ 0,	VSTRFIXED|VTEXTFIXED|VUNSET,	"MAILPATH\0",	changemail },
  	{ 0,	VSTRFIXED|VTEXTFIXED,		defpathvar,	changepath },
@@ -142,7 +162,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS2=> ",	0 },
  	{ 0,	VSTRFIXED|VTEXTFIXED,		"PS4=+ ",	0 },
  	{ 0,	VSTRFIXED|VTEXTFIXED,		defoptindvar,	getoptsreset },
-@@ -181,11 +184,25 @@
+@@ -174,11 +177,25 @@ initvar(void)
  		vp->next = *vpp;
  		*vpp = vp;
  	} while (++vp < end);
@@ -173,9 +193,11 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  }
  
  /*
+diff --git a/src/var.h b/src/var.h
+index cd0477f..6642b22 100644
 --- a/src/var.h
 +++ b/src/var.h
-@@ -139,6 +139,7 @@
+@@ -135,6 +135,7 @@ extern char linenovar[];
  #define mpathset()	((vmpath.flags & VUNSET) == 0)
  
  void initvar(void);
