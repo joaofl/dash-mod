@@ -1,4 +1,3 @@
-#!/bin/sh -
 # Copyright (c) 1991, 1993
 #	The Regents of the University of California.  All rights reserved.
 # Copyright (c) 1997-2005
@@ -31,67 +30,42 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 #
-#	@(#)mktokens	8.1 (Berkeley) 5/31/93
+#	@(#)dirs	8.2 (Berkeley) 5/4/95
 
-# The following is a list of tokens.  The second column is nonzero if the
-# token marks the end of a list.  The third column is the name to print in
-# error messages.
+# pushd, popd, and dirs --- written by Chris Bertin
+# Pixel Computer Inc. ...!wjh12!pixel!pixutl!chris
+# as modified by Patrick Elam of GTRI and Kenneth Almquist at UW
 
-: "${TMPDIR:=/tmp}"
+pushd () {
+	SAVE=`pwd`
+	if [ "$1" = "" ] 
+	then	if [ "$DSTACK" = "" ]
+		then	echo "pushd: directory stack empty."
+			return 1
+		fi
+		set $DSTACK
+		cd $1 || return
+		shift 1
+		DSTACK="$*"
+	else	cd $1 > /dev/null || return
+	fi
+	DSTACK="$SAVE $DSTACK"
+	dirs
+}
 
-cat > "${TMPDIR}"/ka$$ <<\!
-TEOF	1	end of file
-TNL	0	newline
-TSEMI	0	";"
-TBACKGND 0	"&"
-TAND	0	"&&"
-TOR	0	"||"
-TPIPE	0	"|"
-TLP	0	"("
-TRP	1	")"
-TENDCASE 1	";;"
-TENDBQUOTE 1	"`"
-TREDIR	0	redirection
-TWORD	0	word
-TNOT	0	"!"
-TCASE	0	"case"
-TDO	1	"do"
-TDONE	1	"done"
-TELIF	1	"elif"
-TELSE	1	"else"
-TESAC	1	"esac"
-TFI	1	"fi"
-TFOR	0	"for"
-TIF	0	"if"
-TIN	0	"in"
-TTHEN	1	"then"
-TUNTIL	0	"until"
-TWHILE	0	"while"
-TBEGIN	0	"{"
-TEND	1	"}"
-!
-nl=`wc -l "${TMPDIR}"/ka$$`
-exec > token.h
-awk '{print "#define " $1 " " NR-1}' "${TMPDIR}"/ka$$
+popd () {
+	if [ "$DSTACK" = "" ] 
+	then	echo "popd: directory stack empty."
+		return 1
+	fi
+	set $DSTACK
+	cd $1
+	shift
+	DSTACK=$*
+	dirs
+}
 
-exec > token_vars.h
-
-echo '
-/* Array indicating which tokens mark the end of a list */
-static const char tokendlist[] = {'
-awk '{print "\t" $2 ","}' "${TMPDIR}"/ka$$
-echo '};
-
-static const char *const tokname[] = {'
-sed -e 's/"/\\"/g' \
-    -e 's/[^	 ]*[	 ][	 ]*[^	 ]*[	 ][	 ]*\(.*\)/	"\1",/' \
-    "${TMPDIR}"/ka$$
-echo '};
-'
-sed 's/"//g' "${TMPDIR}"/ka$$ | awk '
-/TNOT/{print "#define KWDOFFSET " NR-1; print ""; 
-      print "static const char *const parsekwd[] = {"}
-/TNOT/,/neverfound/{if (last) print "	\"" last "\","; last = $3}
-END{print "	\"" last "\"\n};"}'
-
-rm "${TMPDIR}"/ka$$
+dirs () {
+	echo "`pwd` $DSTACK"
+	return 0
+}

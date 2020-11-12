@@ -1,10 +1,38 @@
-Description: Implement privmode, part 2
 From: Harald van Dijk <harald@gigawatt.nl>
-Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
+Date: Thu, 22 Aug 2013 21:59:36 +0200
+Subject: Implement privmode, part 2
 
+Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
+---
+ src/Makefile.am |  2 +-
+ src/dash.1      |  2 +-
+ src/main.c      | 14 +-------------
+ src/options.c   |  4 +++-
+ src/priv.c      | 27 +++++++++++++++++++++++++++
+ src/priv.h      |  6 ++++++
+ src/var.c       |  3 ---
+ 7 files changed, 39 insertions(+), 19 deletions(-)
+ create mode 100644 src/priv.c
+ create mode 100644 src/priv.h
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 2c437bb..50d5a5b 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -20,7 +20,7 @@ bin_PROGRAMS = dash
+ dash_CFILES = \
+ 	alias.c arith_yacc.c arith_yylex.c cd.c error.c eval.c exec.c expand.c \
+ 	histedit.c input.c jobs.c mail.c main.c memalloc.c miscbltin.c \
+-	mystring.c options.c parser.c redir.c show.c trap.c output.c \
++	mystring.c options.c parser.c priv.c redir.c show.c trap.c output.c \
+ 	bltin/printf.c system.c bltin/test.c bltin/times.c var.c
+ dash_SOURCES = \
+ 	$(dash_CFILES) \
+diff --git a/src/dash.1 b/src/dash.1
+index 6c62245..d1b960a 100644
 --- a/src/dash.1
 +++ b/src/dash.1
-@@ -257,7 +257,7 @@
+@@ -257,7 +257,7 @@ if it has been set).
  .It Fl b Em notify
  Enable asynchronous notification of background job completion.
  (UNIMPLEMENTED for 4.4alpha)
@@ -13,6 +41,8 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  Do not attempt to reset effective uid if it does not match uid. This is not set
  by default to help avoid incorrect usage by setuid root programs via system(3) or
  popen(3).
+diff --git a/src/main.c b/src/main.c
+index 83f0514..a9ac77d 100644
 --- a/src/main.c
 +++ b/src/main.c
 @@ -50,6 +50,7 @@
@@ -23,8 +53,8 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  #include "trap.h"
  #include "var.h"
  #include "show.h"
-@@ -93,8 +94,6 @@
- 	struct jmploc jmploc;
+@@ -93,8 +94,6 @@ main(int argc, char **argv)
+ 	volatile int state;
  	struct stackmark smark;
  	int login;
 -	uid_t uid;
@@ -32,7 +62,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  
  #ifdef __GLIBC__
  	dash_errno = __errno_location();
-@@ -150,17 +149,6 @@
+@@ -152,17 +151,6 @@ main(int argc, char **argv)
  	setstackmark(&smark);
  	login = procargs(argc, argv);
  
@@ -50,54 +80,8 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  	if (login) {
  		state = 1;
  		read_profile("/etc/profile");
---- a/src/Makefile.am
-+++ b/src/Makefile.am
-@@ -21,7 +21,7 @@
- dash_CFILES = \
- 	alias.c arith_yacc.c arith_yylex.c cd.c error.c eval.c exec.c expand.c \
- 	histedit.c input.c jobs.c mail.c main.c memalloc.c miscbltin.c \
--	mystring.c options.c parser.c redir.c show.c trap.c output.c \
-+	mystring.c options.c parser.c priv.c redir.c show.c trap.c output.c \
- 	bltin/printf.c system.c bltin/test.c bltin/times.c var.c
- dash_SOURCES = \
- 	$(dash_CFILES) \
---- a/src/Makefile.in
-+++ b/src/Makefile.in
-@@ -69,7 +69,7 @@
- 	histedit.$(OBJEXT) input.$(OBJEXT) jobs.$(OBJEXT) \
- 	mail.$(OBJEXT) main.$(OBJEXT) memalloc.$(OBJEXT) \
- 	miscbltin.$(OBJEXT) mystring.$(OBJEXT) options.$(OBJEXT) \
--	parser.$(OBJEXT) redir.$(OBJEXT) show.$(OBJEXT) trap.$(OBJEXT) \
-+	parser.$(OBJEXT) priv.$(OBJEXT) redir.$(OBJEXT) show.$(OBJEXT) trap.$(OBJEXT) \
- 	output.$(OBJEXT) bltin/printf.$(OBJEXT) system.$(OBJEXT) \
- 	bltin/test.$(OBJEXT) bltin/times.$(OBJEXT) var.$(OBJEXT)
- am_dash_OBJECTS = $(am__objects_1)
-@@ -231,7 +231,7 @@
- dash_CFILES = \
- 	alias.c arith_yacc.c arith_yylex.c cd.c error.c eval.c exec.c expand.c \
- 	histedit.c input.c jobs.c mail.c main.c memalloc.c miscbltin.c \
--	mystring.c options.c parser.c redir.c show.c trap.c output.c \
-+	mystring.c options.c parser.c priv.c redir.c show.c trap.c output.c \
- 	bltin/printf.c system.c bltin/test.c bltin/times.c var.c
- 
- dash_SOURCES = \
-@@ -239,7 +239,7 @@
- 	alias.h arith_yacc.h bltin/bltin.h cd.h error.h eval.h exec.h \
- 	expand.h \
- 	init.h input.h jobs.h machdep.h mail.h main.h memalloc.h miscbltin.h \
--	myhistedit.h mystring.h options.h output.h parser.h redir.h shell.h \
-+	myhistedit.h mystring.h options.h output.h parser.h priv.h redir.h shell.h \
- 	show.h system.h trap.h var.h
- 
- dash_LDADD = builtins.o init.o nodes.o signames.o syntax.o
-@@ -374,6 +374,7 @@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/output.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parser.Po@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/priv.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/redir.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/show.Po@am__quote@
- @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/system.Po@am__quote@
+diff --git a/src/options.c b/src/options.c
+index 48502bb..edc66e3 100644
 --- a/src/options.c
 +++ b/src/options.c
 @@ -45,6 +45,7 @@
@@ -108,7 +92,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  #include "trap.h"
  #include "var.h"
  #include "memalloc.h"
-@@ -79,7 +80,7 @@
+@@ -79,7 +80,7 @@ static const char *const optnames[NOPTS] = {
  	"allexport",
  	"notify",
  	"nounset",
@@ -117,7 +101,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  	"nolog",
  	"debug",
  };
-@@ -184,6 +185,7 @@
+@@ -183,6 +184,7 @@ optschanged(void)
  #ifdef DEBUG
  	opentrace();
  #endif
@@ -125,6 +109,9 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
  	setinteractive(iflag);
  #ifndef SMALL
  	histedit();
+diff --git a/src/priv.c b/src/priv.c
+new file mode 100644
+index 0000000..26346c0
 --- /dev/null
 +++ b/src/priv.c
 @@ -0,0 +1,27 @@
@@ -155,6 +142,9 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
 +		choose_ps1();
 +	}
 +}
+diff --git a/src/priv.h b/src/priv.h
+new file mode 100644
+index 0000000..31b380b
 --- /dev/null
 +++ b/src/priv.h
 @@ -0,0 +1,6 @@
@@ -164,9 +154,11 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10972
 +extern gid_t gid;
 +
 +void setprivileged(int on);
+diff --git a/src/var.c b/src/var.c
+index 35334bc..c7e7d2e 100644
 --- a/src/var.c
 +++ b/src/var.c
-@@ -195,9 +195,6 @@
+@@ -188,9 +188,6 @@ initvar(void)
  void
  choose_ps1(void)
  {

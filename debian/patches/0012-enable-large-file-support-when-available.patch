@@ -1,25 +1,21 @@
-From f0471fb96dfe5e8768a72984a76a3c585d4d477b Mon Sep 17 00:00:00 2001
 From: You-Sheng Yang <vicamo@gmail.com>
 Date: Wed, 12 Dec 2018 14:02:40 +0800
-Subject: [PATCH] enable large file support when available
+Subject: enable large file support when available
 
 ---
  configure.ac | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/configure.ac b/configure.ac
-index 4829288..205b2eb 100644
+index 5dab5aa..a242d6d 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -9,6 +9,8 @@ AC_PROG_CC
- AC_GNU_SOURCE
- AC_PROG_YACC
+@@ -10,6 +10,8 @@ dnl Checks for programs.
+ AC_PROG_CC
+ AC_USE_SYSTEM_EXTENSIONS
  
 +AC_SYS_LARGEFILE
 +
  AC_MSG_CHECKING([for build system compiler])
  if test "$cross_compiling" = yes; then
  	CC_FOR_BUILD=${CC_FOR_BUILD-cc}
--- 
-2.20.0.rc2
-

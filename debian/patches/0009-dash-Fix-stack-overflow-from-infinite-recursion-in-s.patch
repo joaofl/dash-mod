@@ -1,9 +1,6 @@
-From 0be10b8088154b582f5e34392356c9fba5a914d2 Mon Sep 17 00:00:00 2001
 From: Chris Lamb <lamby@debian.org>
-To: dash@vger.kernel.org
-Cc: Chris Lamb <lamby@debian.org>
 Date: Thu, 15 Feb 2018 20:28:25 +0000
-Subject: [PATCH] dash: Fix stack overflow from infinite recursion in script
+Subject: dash: Fix stack overflow from infinite recursion in script
 
 Bug-Debian: https://bugs.debian.org/579815
 Signed-off-by: Chris Lamb <lamby@debian.org>
@@ -14,10 +11,10 @@ Signed-off-by: Andrej Shadura <andrew.shadura@collabora.co.uk>
  2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/src/eval.c b/src/eval.c
-index 1aad31a..ee36c39 100644
+index 6ee2e1a..92c2b3a 100644
 --- a/src/eval.c
 +++ b/src/eval.c
-@@ -69,6 +69,7 @@ int evalskip;			/* set if we are skipping commands */
+@@ -70,6 +70,7 @@ int evalskip;			/* set if we are skipping commands */
  STATIC int skipcount;		/* number of levels to skip */
  MKINIT int loopnest;		/* current loop nesting level */
  static int funcline;		/* starting line number of current function, or 0 if not in a function */
@@ -25,7 +22,7 @@ index 1aad31a..ee36c39 100644
  
  
  char *commandname;
-@@ -903,7 +904,12 @@ raise:
+@@ -907,7 +908,12 @@ raise:
  		break;
  
  	case CMDFUNCTION:
@@ -52,6 +49,3 @@ index 63e7d86..38dffbd 100644
  int evalstring(char *, int);
  union node;	/* BLETCH for ansi C */
  int evaltree(union node *, int);
--- 
-2.20.1
-
