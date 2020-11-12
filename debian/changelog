@@ -1,3 +1,9 @@
+dash (0.5.11+git20200708+dd9ef66-2) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 12 Nov 2020 08:58:00 +0100
+
 dash (0.5.11+git20200708+dd9ef66-1) experimental; urgency=medium
 
   * New upstream snapshot
