@@ -132,8 +132,10 @@ if [ $debconf ]; then
 	db_get dash/sh
 	if [ "$RET" = true ]; then
 		claim_binsh /bin/sh dash
-		claim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
-			/usr/share/man/man1/sh.distrib.1.gz
+		if [ -d /usr/share/man/man1/ ]; then
+			claim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
+				/usr/share/man/man1/sh.distrib.1.gz
+		fi
 	else
 		unclaim_binsh /bin/sh dash
 		unclaim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
