@@ -1,3 +1,9 @@
+dash (0.5.11+git20200708+dd9ef66-5) unstable; urgency=medium
+
+  * Actually set PATH_MAX for Hurd.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 10 Dec 2020 14:23:19 +0100
+
 dash (0.5.11+git20200708+dd9ef66-4) unstable; urgency=medium
 
   * Define PATH_MAX=4096 on Hurd.
