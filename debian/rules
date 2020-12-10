@@ -9,6 +9,10 @@ DEB_BUILD_MAINT_OPTIONS =hardening=+all
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
+ifeq ($(DEB_HOST_ARCH_OS),hurd)
+DEB_CPPFLAGS_MAINT_APPEND = -DPATH_MAX=4096
+endif
+
 ifneq (,$(findstring diet,$(DEB_BUILD_OPTIONS)))
   CC =diet -v -Os gcc
   CFLAGS =-nostdinc -Wall
