@@ -1,3 +1,15 @@
+dash (0.5.11+git20200708+dd9ef66-3) unstable; urgency=medium
+
+  [ Johannes 'josch' Schauer ]
+  * Don’t rely on /usr/share/man/man1/ existing (Closes: #974825).
+
+  [ Andrej Shadura ]
+  * Disable libc glob support (Closes: #974900, #976685).
+  * Apply upstream patch:
+    - jobs: Only block in waitcmd on first run (Closes: #974705, #975010).
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 10 Dec 2020 10:07:56 +0100
+
 dash (0.5.11+git20200708+dd9ef66-2) unstable; urgency=medium
 
   * Upload to unstable.
