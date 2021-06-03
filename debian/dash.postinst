@@ -81,44 +81,6 @@ unclaim_binsh() {
 	replace_with_link $dfile $ltarget $distrib
 }
 
-initial_binsh_setup() {
-	dfile=$1 ltarget=$2 distrib=${3:-$dfile.distrib} ashfile=$4
-	diverter=$(dpkg-divert --listpackage $dfile)
-	truename=$(dpkg-divert --truename $dfile)
-
-	if [ -z "$diverter" ]; then
-		# good.
-		return
-	fi
-
-	if [ "$diverter" = ash ]; then
-		dpkg-divert --package ash --no-rename --remove $dfile
-		dpkg-divert --package dash --no-rename --divert $distrib --add $dfile
-
-		if [ "$truename" != "$distrib" ] && [ -e "$truename" ]; then
-			mv "$truename" "$distrib"
-		fi
-		replace_with_link $dfile $ltarget
-		return
-	fi
-
-	if
-		[ -h $dfile ] &&
-		[ -f $dfile ] &&
-		[ -f $ashfile ] &&
-		cmp $dfile $ashfile
-	then
-		replace_with_link $dfile $ltarget
-	fi
-}
-
-if [ "$1" = configure ] && [ -z "$2" ]; then
-	initial_binsh_setup /bin/sh dash '' /bin/ash
-	initial_binsh_setup /usr/share/man/man1/sh.1.gz dash.1.gz \
-		/usr/share/man/man1/sh.distrib.1.gz \
-		/usr/share/man/man1/ash.1.gz
-fi
-
 claim_binsh /bin/sh dash
 if [ -d "$DPKG_ROOT/usr/share/man/man1/" ]; then
     claim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
