@@ -1,3 +1,10 @@
+dash (0.5.11+git20210120+802ebd4-2) unstable; urgency=medium
+
+  [ Johannes Schauer Marin Rodrigues ]
+  * Support DPKG_ROOT.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Sat, 23 Oct 2021 11:44:50 +0200
+
 dash (0.5.11+git20210120+802ebd4-1) unstable; urgency=medium
 
   * New upstream snapshot.
