@@ -1,3 +1,9 @@
+dash (0.5.11+git20210903+057cd650a4ed-1) unstable; urgency=medium
+
+  * New upstream snapshot.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Fri, 29 Oct 2021 09:21:09 +0200
+
 dash (0.5.11+git20210120+802ebd4-2) unstable; urgency=medium
 
   [ Johannes Schauer Marin Rodrigues ]
