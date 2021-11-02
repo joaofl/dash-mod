@@ -25,7 +25,10 @@ endif
 	dh $@
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-fnmatch --disable-lineno --disable-glob
+	dh_auto_configure -- \
+		--enable-fnmatch \
+		--disable-lineno \
+		--disable-glob
 
 override_dh_auto_build: po-templates
 	dh_auto_build
