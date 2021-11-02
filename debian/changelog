@@ -1,3 +1,10 @@
+dash (0.5.11+git20210903+057cd650a4ed-2) unstable; urgency=medium
+
+  * Re-enable LINENO support (Closes: #842242)/
+  * Enable libedit (Closes: #524839, #561663).
+
+ -- Andrej Shadura <andrewsh@debian.org>  Tue, 02 Nov 2021 12:58:31 +0100
+
 dash (0.5.11+git20210903+057cd650a4ed-1) unstable; urgency=medium
 
   * New upstream snapshot.
