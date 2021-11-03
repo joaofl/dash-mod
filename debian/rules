@@ -27,7 +27,6 @@ endif
 override_dh_auto_configure:
 	dh_auto_configure -- \
 		--enable-fnmatch \
-		--with-libedit \
 		--disable-glob
 
 override_dh_auto_build: po-templates

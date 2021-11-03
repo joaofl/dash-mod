@@ -6,7 +6,6 @@ Uploaders: Gerrit Pape <pape@smarden.org>
 Build-Depends:
  debhelper-compat (= 12),
  dpkg-dev (>= 1.16.1),
- libedit-dev,
  po-debconf
 Standards-Version: 4.2.1
 Homepage: http://gondor.apana.org.au/~herbert/dash/
