@@ -30,11 +30,4 @@ override_dh_auto_configure:
 		--disable-lineno \
 		--disable-glob
 
-override_dh_auto_build: po-templates
-	dh_auto_build
-
-po-templates:
-	po2debconf debian/dash.templates.in >debian/dash.templates
-
-.PHONY: po-templates  \
-	  override_dh_auto_configure override_dh_auto_build
+.PHONY: override_dh_auto_configure

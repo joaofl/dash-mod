@@ -104,12 +104,6 @@ initial_binsh_setup() {
 	fi
 }
 
-debconf=
-if [ -f /usr/share/debconf/confmodule ]; then
-	. /usr/share/debconf/confmodule
-	debconf=yes
-fi
-
 if [ "$1" = configure ] && [ -z "$2" ]; then
 	initial_binsh_setup /bin/sh dash '' /bin/ash
 	initial_binsh_setup /usr/share/man/man1/sh.1.gz dash.1.gz \
@@ -117,19 +111,10 @@ if [ "$1" = configure ] && [ -z "$2" ]; then
 		/usr/share/man/man1/ash.1.gz
 fi
 
-if [ $debconf ]; then
-	db_get dash/sh
-	if [ "$RET" = true ]; then
-		claim_binsh /bin/sh dash
-		if [ -d "$DPKG_ROOT/usr/share/man/man1/" ]; then
-			claim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
-				/usr/share/man/man1/sh.distrib.1.gz
-		fi
-	else
-		unclaim_binsh /bin/sh dash
-		unclaim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
-			/usr/share/man/man1/sh.distrib.1.gz
-	fi
+claim_binsh /bin/sh dash
+if [ -d "$DPKG_ROOT/usr/share/man/man1/" ]; then
+    claim_binsh /usr/share/man/man1/sh.1.gz dash.1.gz \
+        /usr/share/man/man1/sh.distrib.1.gz
 fi
 
 #DEBHELPER#
