@@ -7,7 +7,7 @@ Files: *
 Copyright:
  1989-1994 The Regents of the University of California.  All rights reserved.
  1997 Christos Zoulas.  All rights reserved.
- 1997-2018 Herbert Xu <herbert@gondor.apana.org.au>.  All rights reserved.
+ 1997-2021 Herbert Xu <herbert@gondor.apana.org.au>.  All rights reserved.
 Comment:
  This code is derived from software contributed to Berkeley by Kenneth Almquist.
 License: BSD-3-Clause
@@ -23,6 +23,29 @@ License: FSFULLR
 Files: configure
 Copyright: 1992-1996, 1998-2012, Free Software Foundation, Inc.
 License: FSFUL
+
+Files: install-sh
+Copyright: 1994, X Consortium
+License: Expat
+
+Files:
+ depcomp
+ missing
+Copyright: 1999, 2000, 2003—2012, Free Software Foundation, Inc.
+License: GPL-2+ or BSD-3-clause
+
+Files: src/bltin/test.c
+Copyright: Erik Baalbergen, Eric Gisin, Arnold Robbins, J.T. Conklin
+License: public-domain
+
+Files: src/Makefile.in
+Copyright: 1994-2011, Free Software
+License: FSFULLR
+
+Files: src/mksignames.c
+Copyright: 1992, 1996, 1997, 1999, 2000, 2002-2012, Free Software Foundation, Inc.
+Comment: This file is not directly linked with dash.  However, its output is.
+License: GPL-2+
 
 Files: debian/*
 Copyright:
@@ -40,34 +63,6 @@ Copyright:
  2017, Ximin Luo <infinity0@debian.org>
  2018, 2019, Andrej Shadura <andrewsh@debian.org>
 License: BSD-3-clause
-
-Files: install-sh
-Copyright: 1994, X Consortium
-License: Expat
-
-Files:
- depcomp
- missing
-Copyright: 1999, 2000, 2003—2012, Free Software Foundation, Inc.
-License: GPL-2+ or BSD-3-clause
-
-Files: src/bltin/test.c
-Copyright: Erik Baalbergen, Eric Gisin, Arnold Robbins, J.T. Conklin
-License: public-domain
-
-Files: src/*
-Copyright: 1997-2005, 2007, Herbert Xu <herbert@gondor.apana.org.au>.
- 1989, 1991, 1993, 1995, The Regents of the University of California.
-License: BSD-3-clause
-
-Files: src/Makefile.in
-Copyright: 1994-2011, Free Software
-License: FSFULLR
-
-Files: src/mksignames.c
-Copyright: 1992, 1996, 1997, 1999, 2000, 2002-2012, Free Software Foundation, Inc.
-Comment: This file is not directly linked with dash.  However, its output is.
-License: GPL-2+
 
 License: BSD-3-clause
  Redistribution and use in source and binary forms, with or without
