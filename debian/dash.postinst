@@ -104,14 +104,6 @@ initial_binsh_setup() {
 	fi
 }
 
-add_shell() {
-	if ! type add-shell > /dev/null 2>&1; then
-		return
-	fi
-
-	add-shell /bin/dash
-}
-
 debconf=
 if [ -f /usr/share/debconf/confmodule ]; then
 	. /usr/share/debconf/confmodule
@@ -123,9 +115,6 @@ if [ "$1" = configure ] && [ -z "$2" ]; then
 	initial_binsh_setup /usr/share/man/man1/sh.1.gz dash.1.gz \
 		/usr/share/man/man1/sh.distrib.1.gz \
 		/usr/share/man/man1/ash.1.gz
-	add_shell
-elif [ "$1" = configure ] && dpkg --compare-versions "$2" lt 0.4.18; then
-	add_shell
 fi
 
 if [ $debconf ]; then
