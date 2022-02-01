@@ -18,6 +18,14 @@ replace_with_link() {
 	fi
 	ln -sf "$ltarget" "$temp"
 	mv -f "$temp" "$dfile"
+	# If the postinst is executed while SOURCE_DATE_EPOCH is set, then this
+	# is not a regular installation but the postinst is called as part of
+	# building a reproducible chroot tarball or image. Since man-db stores
+	# symlink modification times in its index.db we need to set a
+	# reproducible mtime.
+	if [ -n "${SOURCE_DATE_EPOCH+x}" ]; then
+		touch --no-dereference --date="@$SOURCE_DATE_EPOCH" "$dfile"
+	fi
 }
 
 claim_binsh() {
