@@ -17,15 +17,15 @@ replace_with_link() {
 		cp -dp "$dfile" "$distrib"
 	fi
 	ln -sf "$ltarget" "$temp"
-	mv -f "$temp" "$dfile"
-	# If the postinst is executed while SOURCE_DATE_EPOCH is set, then this
-	# is not a regular installation but the postinst is called as part of
-	# building a reproducible chroot tarball or image. Since man-db stores
-	# symlink modification times in its index.db we need to set a
-	# reproducible mtime.
-	if [ -n "${SOURCE_DATE_EPOCH+x}" ]; then
-		touch --no-dereference --date="@$SOURCE_DATE_EPOCH" "$dfile"
+	# Since man-db stores symlink modification times in its index.db we
+	# need to set a reproducible mtime. We only do that for new symlinks
+	# (if dfile doesn't exist yet) to avoid changing to a lower mtime
+	# which breaks backup tools.
+	targetrealpath="$(dpkg-realpath "$temp")"
+	if [ -e "$targetrealpath" ] && [ ! -e "$dfile" ]; then
+		touch --no-dereference --reference="$targetrealpath" "$temp"
 	fi
+	mv -f "$temp" "$dfile"
 }
 
 claim_binsh() {
