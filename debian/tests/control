@@ -1,3 +1,7 @@
 Tests: smoke
 Depends: dash, perl
 Restrictions: allow-stderr
+
+Tests: mmdebstrap
+Depends: mmdebstrap, fakechroot, fakeroot
+Restrictions: allow-stderr

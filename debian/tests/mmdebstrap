@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Copyright 2022 Johannes Schauer Marin Rodrigues <josch@debian.org>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+set -eux
+
+VERSION="$(dpkg-parsechangelog -SVersion)"
+apt-cache show "dash=$VERSION" >/dev/null || exit 1
+
+DIST="$(dpkg-parsechangelog -SDistribution)"
+if [ "$DIST" = "UNRELEASED" ]; then
+    # take Distribution from the previous entry instead
+    DIST="$(dpkg-parsechangelog -o1 -c1 -SDistribution)" || DIST="unstable"
+    echo "WARN: Using Distribution: $DIST instead of UNRELEASED" >&2
+fi
+
+AUTOPKGTEST_LOCAL_ARCHIVE="$(apt-get indextargets --format "\$(REPO_URI)" "Created-By: Packages" | \
+    sed -nr '\,^(file|copy):((/+[^/[:blank:]]+)*/autopkgtest[.-].*[^/])/?$, {s//\2/p;q}')"
+
+[ -d "$AUTOPKGTEST_LOCAL_ARCHIVE" ]
+
+mmdebstrap --verbose --variant=essential \
+	--customize-hook='chroot "$1" dpkg-query --showformat "\${Status} \${Version}\n" --show dash | grep "^install ok installed '"$VERSION"'"' \
+	$DIST /dev/null \
+	http://deb.debian.org/debian \
+	"deb [trusted=yes] copy://$AUTOPKGTEST_LOCAL_ARCHIVE /"
