@@ -1,3 +1,13 @@
+dash (0.5.11+git20210903+057cd650a4ed-5) unstable; urgency=medium
+
+  [ Johannes Schauer Marin Rodrigues ]
+  * dpkg-realpath has a /bin/sh shebang and can thus not be used when /bin/sh is temporarily not available.
+  * debian/dash.postinst: restore DPKG_ROOT support.
+  * debian/dash.postinst: Move check if dfile exists further up.
+  * Closes: #1006771
+
+ -- Andrej Shadura <andrewsh@debian.org>  Fri, 04 Mar 2022 18:34:16 +0100
+
 dash (0.5.11+git20210903+057cd650a4ed-4) unstable; urgency=medium
 
   [ Andrej Shadura ]
