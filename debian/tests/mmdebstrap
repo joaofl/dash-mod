@@ -14,6 +14,8 @@
 
 set -eux
 
+# This test is to prevent bugs like https://bugs.debian.org/1006771
+
 VERSION="$(dpkg-parsechangelog -SVersion)"
 apt-cache show "dash=$VERSION" >/dev/null || exit 1
 
@@ -24,13 +26,19 @@ if [ "$DIST" = "UNRELEASED" ]; then
     echo "WARN: Using Distribution: $DIST instead of UNRELEASED" >&2
 fi
 
+# regex from src:dropbear/debian/tests/remote-unlocking by Guilhem Moulin
 AUTOPKGTEST_LOCAL_ARCHIVE="$(apt-get indextargets --format "\$(REPO_URI)" "Created-By: Packages" | \
     sed -nr '\,^(file|copy):((/+[^/[:blank:]]+)*/autopkgtest[.-].*[^/])/?$, {s//\2/p;q}')"
 
-[ -d "$AUTOPKGTEST_LOCAL_ARCHIVE" ]
+# If running on salsaci AUTOPKGTEST_LOCAL_ARCHIVE must be non-empty and an
+# existing directory. If running on debci, the variable will be empty.
+[ -z "$AUTOPKGTEST_LOCAL_ARCHIVE" ] || [ -d "$AUTOPKGTEST_LOCAL_ARCHIVE" ]
 
+# We cannot use debootstrap because debootstrap cannot install from multiple
+# mirrors. Since dash is Essential:yes it does not test the right thing if we
+# first install with dash from unstable and then upgrade to dash from salsaci.
 mmdebstrap --verbose --variant=essential \
 	--customize-hook='chroot "$1" dpkg-query --showformat "\${Status} \${Version}\n" --show dash | grep "^install ok installed '"$VERSION"'"' \
 	$DIST /dev/null \
 	http://deb.debian.org/debian \
-	"deb [trusted=yes] copy://$AUTOPKGTEST_LOCAL_ARCHIVE /"
+	${AUTOPKGTEST_LOCAL_ARCHIVE:+"deb [trusted=yes] copy://$AUTOPKGTEST_LOCAL_ARCHIVE /"}
