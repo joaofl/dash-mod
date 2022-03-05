@@ -1,3 +1,10 @@
+dash (0.5.11+git20210903+057cd650a4ed-7) unstable; urgency=medium
+
+  [ Johannes Schauer Marin Rodrigues ]
+  * debian/tests/mmdebstrap: fix running on debci and add more comments.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Sat, 05 Mar 2022 11:32:15 +0100
+
 dash (0.5.11+git20210903+057cd650a4ed-6) unstable; urgency=medium
 
   [ Johannes Schauer Marin Rodrigues ]
