@@ -1,6 +1,7 @@
 dash (0.5.11+git20210903+057cd650a4ed-8) UNRELEASED; urgency=medium
 
-  * Remove the remnants of the debconf shell question (Closes: #1007093).
+  * Remove the remnants of the debconf shell question
+    (Closes: #1007093, #1007241).
 
  -- Andrej Shadura <andrewsh@debian.org>  Fri, 11 Mar 2022 09:53:20 +0100
 
