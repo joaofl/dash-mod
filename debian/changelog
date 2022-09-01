@@ -1,3 +1,11 @@
+dash (0.5.11+git20210903+057cd650a4ed-9) unstable; urgency=medium
+
+  [ Johannes Schauer Marin Rodrigues ]
+  * debian/tests/mmdebstrap: create chroot with the same apt sources as
+    autopkgtest (Closes: #1016554).
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 01 Sep 2022 16:11:54 +0200
+
 dash (0.5.11+git20210903+057cd650a4ed-8) unstable; urgency=medium
 
   * Remove the remnants of the debconf shell question
