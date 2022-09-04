@@ -13,7 +13,6 @@ replace_with_link() {
 	# The cp / ln -s / mv dance avoids having to live without
 	# $dfile (think: /bin/sh) for even a moment, so applications
 	# running in parallel can continue without trouble.
-	# See dash.preinst for details.
 	if [ -n "$distrib" ] && [ -e "$DPKG_ROOT$dfile" ]; then
 		cp -dp "$DPKG_ROOT$dfile" "$distrib"
 	fi
