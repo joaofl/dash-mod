@@ -81,6 +81,7 @@
 #define DOWAIT_NONBLOCK 0
 #define DOWAIT_BLOCK 1
 #define DOWAIT_WAITCMD 2
+#define DOWAIT_WAITCMD_ALL 4
 
 /* array of jobs */
 static struct job *jobtab;
@@ -196,7 +197,7 @@ setjobctl(int on)
 		return;
 	if (on) {
 		int ofd;
-		ofd = fd = open64(_PATH_TTY, O_RDWR);
+		ofd = fd = sh_open(_PATH_TTY, O_RDWR, 1);
 		if (fd < 0) {
 			fd += 3;
 			while (!isatty(fd))
@@ -615,7 +616,7 @@ waitcmd(int argc, char **argv)
 				jp->waited = 1;
 				jp = jp->prev_job;
 			}
-			if (!dowait(DOWAIT_WAITCMD, 0))
+			if (!dowait(DOWAIT_WAITCMD_ALL, 0))
 				goto sigout;
 		}
 	}
@@ -887,15 +888,12 @@ static void forkchild(struct job *jp, union node *n, int mode)
 		ignoresig(SIGQUIT);
 		if (jp->nprocs == 0) {
 			close(0);
-			if (open64(_PATH_DEVNULL, O_RDONLY) != 0)
-				sh_error("Can't open %s", _PATH_DEVNULL);
+			sh_open(_PATH_DEVNULL, O_RDONLY, 0);
 		}
 	}
 	if (!oldlvl && iflag) {
-		if (mode != FORK_BG) {
-			setsignal(SIGINT);
-			setsignal(SIGQUIT);
-		}
+		setsignal(SIGINT);
+		setsignal(SIGQUIT);
 		setsignal(SIGTERM);
 	}
 
@@ -1139,6 +1137,7 @@ static int dowait(int block, struct job *jp)
 		pid = waitone(block, jp);
 		rpid &= !!pid;
 
+		block &= ~DOWAIT_WAITCMD_ALL;
 		if (!pid || (jp && jp->state != JOBRUNNING))
 			block = DOWAIT_NONBLOCK;
 	} while (pid >= 0);
@@ -1511,7 +1510,13 @@ showpipe(struct job *jp, struct output *out)
 STATIC void
 xtcsetpgrp(int fd, pid_t pgrp)
 {
-	if (tcsetpgrp(fd, pgrp))
+	int err;
+
+	sigblockall(NULL);
+	err = tcsetpgrp(fd, pgrp);
+	sigclearmask();
+
+	if (err)
 		sh_error("Cannot set tty process group (%s)", strerror(errno));
 }
 #endif

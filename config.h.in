@@ -187,6 +187,15 @@
 #undef fstat64
 
 /* 64-bit operations are the same as 32-bit */
+#undef glob64
+
+/* 64-bit operations are the same as 32-bit */
+#undef glob64_t
+
+/* 64-bit operations are the same as 32-bit */
+#undef globfree64
+
+/* 64-bit operations are the same as 32-bit */
 #undef lstat64
 
 /* 64-bit operations are the same as 32-bit */
