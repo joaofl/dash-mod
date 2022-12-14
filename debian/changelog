@@ -1,3 +1,10 @@
+dash (0.5.12-1) UNRELEASED; urgency=medium
+
+  * New upstream release (Closes: #1017531, #1024635, )
+  * Refresh patches.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Wed, 14 Dec 2022 18:31:56 +0100
+
 dash (0.5.11+git20210903+057cd650a4ed-9) unstable; urgency=medium
 
   [ Johannes Schauer Marin Rodrigues ]
