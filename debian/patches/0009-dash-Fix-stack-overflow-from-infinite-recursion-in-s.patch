@@ -11,10 +11,10 @@ Signed-off-by: Andrej Shadura <andrew.shadura@collabora.co.uk>
  2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/src/eval.c b/src/eval.c
-index 6ee2e1a..92c2b3a 100644
+index fa43b68..fc291ba 100644
 --- a/src/eval.c
 +++ b/src/eval.c
-@@ -70,6 +70,7 @@ int evalskip;			/* set if we are skipping commands */
+@@ -71,6 +71,7 @@ int evalskip;			/* set if we are skipping commands */
  STATIC int skipcount;		/* number of levels to skip */
  MKINIT int loopnest;		/* current loop nesting level */
  static int funcline;		/* starting line number of current function, or 0 if not in a function */
@@ -22,7 +22,7 @@ index 6ee2e1a..92c2b3a 100644
  
  
  char *commandname;
-@@ -907,7 +908,12 @@ raise:
+@@ -914,7 +915,12 @@ raise:
  		break;
  
  	case CMDFUNCTION:

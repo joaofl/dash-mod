@@ -29,7 +29,7 @@ index 2c437bb..50d5a5b 100644
  dash_SOURCES = \
  	$(dash_CFILES) \
 diff --git a/src/dash.1 b/src/dash.1
-index 6c62245..d1b960a 100644
+index 9c502fe..81f8359 100644
 --- a/src/dash.1
 +++ b/src/dash.1
 @@ -257,7 +257,7 @@ if it has been set).
@@ -42,7 +42,7 @@ index 6c62245..d1b960a 100644
  by default to help avoid incorrect usage by setuid root programs via system(3) or
  popen(3).
 diff --git a/src/main.c b/src/main.c
-index 83f0514..a9ac77d 100644
+index 07124c7..0001ea6 100644
 --- a/src/main.c
 +++ b/src/main.c
 @@ -50,6 +50,7 @@
@@ -81,7 +81,7 @@ index 83f0514..a9ac77d 100644
  		state = 1;
  		read_profile("/etc/profile");
 diff --git a/src/options.c b/src/options.c
-index 48502bb..edc66e3 100644
+index 48502bb..f37f30a 100644
 --- a/src/options.c
 +++ b/src/options.c
 @@ -45,6 +45,7 @@
@@ -155,7 +155,7 @@ index 0000000..31b380b
 +
 +void setprivileged(int on);
 diff --git a/src/var.c b/src/var.c
-index 35334bc..c7e7d2e 100644
+index 4de2122..5326a80 100644
 --- a/src/var.c
 +++ b/src/var.c
 @@ -188,9 +188,6 @@ initvar(void)

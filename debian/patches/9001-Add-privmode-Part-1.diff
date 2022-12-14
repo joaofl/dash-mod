@@ -13,7 +13,7 @@ Origin: http://article.gmane.org/gmane.comp.security.oss.general/10969
  6 files changed, 57 insertions(+), 15 deletions(-)
 
 diff --git a/src/dash.1 b/src/dash.1
-index b286f79..6c62245 100644
+index 169d5df..9c502fe 100644
 --- a/src/dash.1
 +++ b/src/dash.1
 @@ -41,8 +41,8 @@
@@ -61,7 +61,7 @@ index b286f79..6c62245 100644
  .Ss Lexical Structure
  The shell reads input in terms of lines from a file and breaks it up into
 diff --git a/src/main.c b/src/main.c
-index 12dfc6e..83f0514 100644
+index 70df726..07124c7 100644
 --- a/src/main.c
 +++ b/src/main.c
 @@ -93,11 +93,16 @@ main(int argc, char **argv)
@@ -140,7 +140,7 @@ index 975fe33..9e90947 100644
  extern const char optletters[NOPTS];
  extern char optlist[NOPTS];
 diff --git a/src/var.c b/src/var.c
-index 0d7e1db..35334bc 100644
+index ef9c2bd..4de2122 100644
 --- a/src/var.c
 +++ b/src/var.c
 @@ -81,6 +81,9 @@ MKINIT char defoptindvar[] = "OPTIND=1";
@@ -194,7 +194,7 @@ index 0d7e1db..35334bc 100644
  
  /*
 diff --git a/src/var.h b/src/var.h
-index cd0477f..6642b22 100644
+index aa7575a..4be3db1 100644
 --- a/src/var.h
 +++ b/src/var.h
 @@ -135,6 +135,7 @@ extern char linenovar[];

@@ -7,7 +7,7 @@ Subject: enable large file support when available
  1 file changed, 2 insertions(+)
 
 diff --git a/configure.ac b/configure.ac
-index 5dab5aa..a242d6d 100644
+index 52aa429..648f3d4 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -10,6 +10,8 @@ dnl Checks for programs.

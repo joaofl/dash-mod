@@ -21,10 +21,10 @@ index 7785735..9b878da 100644
  	case 'n':	value = '\n';	break;	/* newline */
  	case 'r':	value = '\r';	break;	/* carriage-return */
 diff --git a/src/dash.1 b/src/dash.1
-index 32f6ac0..b286f79 100644
+index ff02237..169d5df 100644
 --- a/src/dash.1
 +++ b/src/dash.1
-@@ -1201,6 +1201,8 @@ Subsequent output is suppressed.  This is normally used at the end of the
+@@ -1204,6 +1204,8 @@ This is normally used at the end of the
  last argument to suppress the trailing newline that
  .Ic echo
  would otherwise output.
@@ -33,7 +33,7 @@ index 32f6ac0..b286f79 100644
  .It Li \ef
  Output a form feed.
  .It Li \en
-@@ -1570,6 +1572,8 @@ The characters and their meanings are as follows:
+@@ -1574,6 +1576,8 @@ The characters and their meanings are as follows:
  Write a \*[Lt]bell\*[Gt] character.
  .It Cm \eb
  Write a \*[Lt]backspace\*[Gt] character.
