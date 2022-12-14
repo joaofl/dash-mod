@@ -1333,7 +1333,7 @@ badsub:
 			synstack->dblquote = newsyn != BASESYNTAX;
 		}
 
-		*((char *)stackblock() + typeloc) = subtype;
+		*((char *)stackblock() + typeloc) = subtype | VSBIT;
 		if (subtype != VSNORMAL) {
 			synstack->varnest++;
 			if (synstack->dblquote)
@@ -1589,9 +1589,7 @@ expandstr(const char *ps)
 	result = stackblock();
 
 out:
-	handler = savehandler;
-	if (err && exception != EXERROR)
-		longjmp(handler->loc, 1);
+	restore_handler_expandarg(savehandler, err);
 
 	doprompt = saveprompt;
 	unwindfiles(file_stop);
