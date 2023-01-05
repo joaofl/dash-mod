@@ -1,9 +1,11 @@
-dash (0.5.12-1) UNRELEASED; urgency=medium
+dash (0.5.12-1) unstable; urgency=medium
 
-  * New upstream release (Closes: #1017531, #1024635, )
+  * New upstream release (Closes: #1017531, #1024635).
   * Refresh patches.
+  * Apply upstream patches for hash, ulimit and manpages
+    (Closes: #558607, #819829, #850202, #975326).
 
- -- Andrej Shadura <andrewsh@debian.org>  Wed, 14 Dec 2022 18:31:56 +0100
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 05 Jan 2023 14:06:02 +0100
 
 dash (0.5.11+git20210903+057cd650a4ed-9) unstable; urgency=medium
 
