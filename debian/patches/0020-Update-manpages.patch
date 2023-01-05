@@ -48,7 +48,7 @@ man: Document false built-in
 man: Document ulimit -w
 
 Bug-Debian: https://bugs.debian.org/558607
-Bug-Debian: https://bugs.debian.org/850202
+Bug-Debian: https://bugs.debian.org/975325
 ---
  src/dash.1    | 97 +++++++++++++++++++++++++++++++++++++++++++----------------
  src/options.c |  2 +-
