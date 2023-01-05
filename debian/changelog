@@ -1,3 +1,9 @@
+dash (0.5.12-2) unstable; urgency=medium
+
+  * Fix the changelog entry.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Thu, 05 Jan 2023 14:20:48 +0100
+
 dash (0.5.12-1) unstable; urgency=medium
 
   * New upstream release (Closes: #1017531, #1024635).
