@@ -60,30 +60,6 @@ claim_binsh() {
 	replace_with_link $dfile $ltarget $distrib
 }
 
-unclaim_binsh() {
-	dfile=$1 ltarget=$2 distrib=${3:-$dfile.distrib}
-	diverter=$(dpkg-divert --listpackage $dfile)
-	truename=$(dpkg-divert --truename $dfile)
-
-	if [ -n "$diverter" ] && [ "$diverter" != dash ]; then
-		# good.
-		return
-	fi
-
-	if [ "$diverter" = dash ]; then
-		# Should not happen. Handle anyway.
-		dpkg-divert --package dash --no-rename --remove "$dfile"
-		if [ -n "$truename" ]; then
-			rm -f "$truename"
-		fi
-	fi
-
-	# Donate the diversion and sh symlink to the bash package.
-	ltarget=$(echo $ltarget | sed s/dash/bash/)
-	dpkg-divert --package bash --no-rename --divert $distrib --add $dfile
-	replace_with_link $dfile $ltarget $distrib
-}
-
 drop_obsolete_diversion() {
 	dfile=$1 ltarget=$2 distrib=${3:-$dfile.distrib}
 	diverter=$(dpkg-divert --listpackage "$dfile")
