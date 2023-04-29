@@ -1,3 +1,19 @@
+dash (0.5.12-3) UNRELEASED; urgency=medium
+
+  [ Andrej Shadura ]
+  * Fix bug number in the patch description
+
+  [ Helmut Grohne ]
+  * dash.postinst: Remove upgrade path from pre-sarge ash. (Closes:
+    #989419)
+  * Remove unnecessary diversion in case /bin/sh points to dash. (Closes:
+    #989632)
+
+  [ Luca Boccassi ]
+  * dash.postinst: remove unused function
+
+ -- Luca Boccassi <bluca@debian.org>  Sat, 29 Apr 2023 15:51:57 +0100
+
 dash (0.5.12-2) unstable; urgency=medium
 
   * Fix the changelog entry.
