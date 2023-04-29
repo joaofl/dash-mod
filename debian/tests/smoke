@@ -12,8 +12,8 @@ my $srcdir = getcwd;
 ok(-x '/bin/sh', '/bin/sh must be executable');
 ok(-x '/bin/dash', '/bin/dash must be executable');
 ok(-x '/bin/bash', '/bin/bash must be executable');
+ok(! -f '/bin/sh.distrib', '/bin/sh.distrib must not be present');
 diag(qx(ls -l /bin/sh));
-diag(qx(ls -l /bin/sh.distrib));
 diag(qx(ls -l /bin/dash));
 diag(qx(ls -l /bin/bash));
 
@@ -25,17 +25,10 @@ is(qx(echo hello), "hello\n");
 
 my $diverter = qx(dpkg-divert --listpackage /bin/sh);
 
-if ($diverter eq "dash\n") {
-    like(realpath('/bin/sh'), qr{^(?:/usr)?/bin/dash},
-         '/bin/sh diverted by dash');
-}
-elsif ($diverter eq "bash\n") {
-    like(realpath('/bin/sh'), qr{^(?:/usr)?/bin/dash},
-         '/bin/sh diverted by dash pretending to be bash');
-}
-else {
-    is($diverter, "LOCAL\n", '/bin/sh diverted locally');
-}
+ok($diverter eq "" or $diverter eq "LOCAL\n", '/bin/sh not diverted or local diversion');
+ok($diverter ne "dash\n", '/bin/sh not diverted by dash');
+ok($diverter ne "bash\n", '/bin/sh not diverted by bash');
+ok(like(realpath('/bin/sh'), qr{^(?:/usr)?/bin/dash}));
 
 my $tmpdir = File::Temp->newdir();
 chdir $tmpdir;
