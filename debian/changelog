@@ -1,4 +1,4 @@
-dash (0.5.12-3) UNRELEASED; urgency=medium
+dash (0.5.12-3) experimental; urgency=medium
 
   [ Andrej Shadura ]
   * Fix bug number in the patch description
@@ -12,7 +12,7 @@ dash (0.5.12-3) UNRELEASED; urgency=medium
   [ Luca Boccassi ]
   * dash.postinst: remove unused function
 
- -- Luca Boccassi <bluca@debian.org>  Sat, 29 Apr 2023 15:51:57 +0100
+ -- Andrej Shadura <andrewsh@debian.org>  Sun, 30 Apr 2023 15:53:24 +0200
 
 dash (0.5.12-2) unstable; urgency=medium
 
