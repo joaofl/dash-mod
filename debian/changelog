@@ -1,3 +1,9 @@
+dash (0.5.12-4) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Andrej Shadura <andrewsh@debian.org>  Mon, 12 Jun 2023 16:17:05 +0200
+
 dash (0.5.12-3) experimental; urgency=medium
 
   [ Andrej Shadura ]
