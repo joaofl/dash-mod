@@ -87,3 +87,13 @@ test-downgrade-with-diversion:
         - $DASH_BULLSEYE install-diversion $DASH_BOOKWORM this $DASH_BULLSEYE
         - $DASH_BULLSEYE install-diversion this $DASH_BOOKWORM
         - $DASH_BULLSEYE install-diversion this $DASH_BULLSEYE
+
+test-upgrade-excluded:
+  extends: test-upgrade
+  before_script:
+    - echo 'path-exclude=/usr/share/man/*' > /etc/dpkg/dpkg.cfg.d/dash
+
+test-upgrade-with-diversion-excluded:
+  extends: test-upgrade-with-diversion
+  before_script:
+    - echo 'path-exclude=/usr/share/man/*' > /etc/dpkg/dpkg.cfg.d/dash
