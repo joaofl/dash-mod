@@ -64,7 +64,7 @@ drop_obsolete_diversion() {
 	dfile=$1 ltarget=$2 distrib=${3:-$dfile.distrib}
 	diverter=$(dpkg-divert --listpackage "$dfile")
 	truename=$(dpkg-divert --truename "$dfile")
-	actualtarget=$(readlink "$dfile")
+	actualtarget=$(readlink "$dfile") || actualtarget=$ltarget
 
 	if [ "$diverter" != dash ] || [ "$truename" != "$distrib" ] || [ "$actualtarget" != "$ltarget" ]; then
 		# Not our diversion or a non-trivial one.
