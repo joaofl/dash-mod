@@ -1,3 +1,11 @@
+dash (0.5.12-5) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * dash.postinst: fix installing with --path-exclude=/usr/share/man/*
+    (Closes: #1038067)
+
+ -- Andrej Shadura <andrewsh@debian.org>  Sat, 17 Jun 2023 12:34:23 +0200
+
 dash (0.5.12-4) unstable; urgency=medium
 
   * Upload to unstable.
