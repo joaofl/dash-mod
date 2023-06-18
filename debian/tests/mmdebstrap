@@ -26,20 +26,11 @@ if [ "$DIST" = "UNRELEASED" ]; then
     echo "WARN: Using Distribution: $DIST instead of UNRELEASED" >&2
 fi
 
-# we need to install the chroot using the same apt sources as used by
-# the autopkgtest chroot so that the packages to be tested are
-# available
-aptsources=
-[ -e /etc/apt/sources.list ] && aptsources="/etc/apt/sources.list"
-for f in /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
-	[ -e "$f" ] || continue
-	aptsources="$aptsources $f"
-done
-
 # We cannot use debootstrap because debootstrap cannot install from multiple
 # mirrors. Since dash is Essential:yes it does not test the right thing if we
 # first install with dash from unstable and then upgrade to dash from salsaci.
-mmdebstrap --verbose --variant=essential \
+mmdebstrap --debug --variant=essential \
+	--hook-dir=/usr/share/mmdebstrap/hooks/copy-host-apt-config \
 	--hook-dir=/usr/share/mmdebstrap/hooks/file-mirror-automount \
 	--customize-hook='chroot "$1" dpkg-query --showformat "\${Status} \${Version}\n" --show dash | grep "^install ok installed '"$VERSION"'"' \
-	$DIST /dev/null $aptsources
+	'' /dev/null ''
