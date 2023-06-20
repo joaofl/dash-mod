@@ -30,7 +30,7 @@ fi
 # mirrors. Since dash is Essential:yes it does not test the right thing if we
 # first install with dash from unstable and then upgrade to dash from salsaci.
 mmdebstrap --debug --variant=essential \
-	--hook-dir=/usr/share/mmdebstrap/hooks/copy-host-apt-config \
+	--hook-dir=/usr/share/mmdebstrap/hooks/copy-host-apt-sources-and-preferences \
 	--hook-dir=/usr/share/mmdebstrap/hooks/file-mirror-automount \
 	--customize-hook='chroot "$1" dpkg-query --showformat "\${Status} \${Version}\n" --show dash | grep "^install ok installed '"$VERSION"'"' \
 	'' /dev/null ''
