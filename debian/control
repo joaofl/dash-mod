@@ -29,13 +29,3 @@ Description: POSIX-compliant shell
  Since it executes scripts faster than bash, and has fewer library
  dependencies (making it more robust against software or hardware
  failures), it is used as the default system shell on Debian systems.
-
-Package: ash
-Architecture: all
-Pre-Depends: dash
-Depends:
- ${misc:Depends},
-Description: compatibility package for dash
- This package allows upgrading ash to its replacement,
- dash. It includes the /bin/ash symlink.
- It can be removed as soon as /bin/ash is no longer used.

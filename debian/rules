@@ -30,4 +30,9 @@ override_dh_auto_configure:
 		--disable-lineno \
 		--disable-glob
 
+execute_after_dh_auto_install:
+	mkdir -p debian/dash/bin
+	mv debian/*/usr/bin/dash debian/dash/bin
+	rmdir debian/*/usr/bin
+
 .PHONY: override_dh_auto_configure
