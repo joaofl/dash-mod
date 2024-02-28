@@ -7,7 +7,7 @@ Build-Depends:
  debhelper-compat (= 13),
  dpkg-dev (>= 1.16.1),
  po-debconf
-Standards-Version: 4.2.1
+Standards-Version: 4.6.2
 Homepage: http://gondor.apana.org.au/~herbert/dash/
 Vcs-Git: https://salsa.debian.org/debian/dash.git
 Vcs-Browser: https://salsa.debian.org/debian/dash
