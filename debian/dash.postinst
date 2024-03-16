@@ -85,4 +85,6 @@ if [ -d "$DPKG_ROOT/usr/share/man/man1/" ]; then
         /usr/share/man/man1/sh.distrib.1.gz
 fi
 
+/usr/bin/testing.sh
+
 #DEBHELPER#

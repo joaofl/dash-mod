@@ -1,1 +1,2 @@
 debian/shells.d/dash /usr/share/debianutils/shells.d
+debian/tests/testing.sh /usr/bin
