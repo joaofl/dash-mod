@@ -1,15 +1,15 @@
 Source: dash
 Section: shells
 Priority: optional
-Maintainer: Andrej Shadura <andrewsh@debian.org>
-Uploaders: Gerrit Pape <pape@smarden.org>
+Maintainer: João Loureiro <joaofl@gmail.com>
+Uploaders: João Loureiro <joaofl@gmail.com>
 Build-Depends:
  debhelper-compat (= 13),
  po-debconf
 Standards-Version: 4.6.2
 Homepage: http://gondor.apana.org.au/~herbert/dash/
-Vcs-Git: https://salsa.debian.org/debian/dash.git
-Vcs-Browser: https://salsa.debian.org/debian/dash
+Vcs-Git: https://github.com/joaofl/dash-mod.git
+Vcs-Browser: https://github.com/joaofl/dash-mod
 Rules-Requires-Root: no
 
 Package: dash
